@@ -2,6 +2,8 @@
 
 Confirmation history retained verbatim from the 20 October 2026 local profile; historical statements may be superseded by later confirmations. Current facts and open questions are in [profile.md](profile.md).
 
+Merge records are independent entries, explicitly labelled by assignment and block; adjacent records do not share an employer. Ordered by assignment/role order in the current profile.
+
 ```yaml
 confirmed_history:
 - gap_id: merge_identity
@@ -98,66 +100,10 @@ confirmed_history:
     LLM summaries, not independent repository verification. Earlier assertion that Python orchestration had not
     been implemented is superseded by confirmation of runtime.py experiments.
 evidence_merges:
-- retired_evidence_id: ev_c0d17118
-  retained_evidence_ids: [ev_b8db74e1, ev_245a7416]
-  original:
-    evidence_id: ev_c0d17118
-    type: responsibility
-    text: Contributed to automation and configuration of large-scale system-level software environments, applying
-      structured troubleshooting and cross-functional collaboration to resolve data and configuration quality issues.
-  reason: Automation scope merged into development; quality issues and cross-functional troubleshooting merged into
-    root-cause analysis.
-- retired_evidence_id: ev_confirmed_ge_migration_scope
-  retained_evidence_ids: [ev_249c22bb]
-  original:
-    evidence_id: ev_confirmed_ge_migration_scope
-    type: responsibility
-    text: 'Controls team: approximately 16 in Mexico, 8 in Cincinnati. Migration platform became routine tooling
-      for all legacy ECU control projects across LMS100/LM2500/LM6000 families and model variants (including G4,
-      +G4, +); subsequent development used MATLAB/Simulink.'
-  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
-- retired_evidence_id: ev_confirmed_ge_migration_method
-  retained_evidence_ids: [ev_249c22bb]
-  original:
-    evidence_id: ev_confirmed_ge_migration_method
-    type: responsibility
-    text: Preserved existing control logic during migration. Parsed beacon7 documents/block positions using Perl
-      in Unix; defined equivalent Simulink blocks, sometimes containing C code.
-  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
-- retired_evidence_id: ev_confirmed_ge_migration_scale
-  retained_evidence_ids: [ev_249c22bb]
-  original:
-    evidence_id: ev_confirmed_ge_migration_scale
-    type: artifact
-    text: 'Simplest control package: approximately 80 modules (recollection). Significant cost savings recalled;
-      measured savings, time reductions, and total module count unavailable.'
-  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
-- retired_evidence_id: ev_confirmed_ge_staging_calibration
-  retained_evidence_ids: [ev_d19a39c7]
-  original:
-    evidence_id: ev_confirmed_ge_staging_calibration
-    type: responsibility
-    text: 'Tuned staging in performance-team simulations: calibrated operating windows for fuel-nozzle/manifold
-      transitions as power, temperature, and fuel flow changed. Physical-rig/running-engine calibration unconfirmed.'
-  reason: Combined optimization method and simulation/calibration scope.
-- retired_evidence_id: ev_f7009c9f
-  retained_evidence_ids: [ev_confirmed_ericsson_delivery_testing]
-  original:
-    evidence_id: ev_f7009c9f
-    type: responsibility
-    text: Performed hardware node testing during software delivery.
-  reason: Generic hardware-node testing is fully covered by the retained detailed delivery/testing evidence.
-- retired_evidence_id: ev_confirmed_ge_isp_design
-  retained_evidence_ids: [ev_063d8248]
-  original:
-    evidence_id: ev_confirmed_ge_isp_design
-    type: responsibility
-    text: 'Designed/implemented/validated ISP architecture with substantial autonomy; senior engineer retained final
-      accountability and supplied ideas/risk review. Selected strategy, layers, algorithms, parameters, and interfaces:
-      preprocessing, sensor voting, output integration. Supported nonredundant configurations through up to 16 sensors;
-      configurable filtering/validity thresholds and voting that downweighted drifting/discrepant readings.'
-  reason: Combined ISP redesign overview and architecture/ownership details.
 - retired_evidence_id: ev_f98ebbdf
+  assignment: Volvo Group
+  block_id: b_191aeaa5
+  project_id: p_volvo_redundancy
   retained_evidence_ids: [ev_confirmed_volvo_personal_delivery]
   original:
     evidence_id: ev_f98ebbdf
@@ -167,6 +113,84 @@ evidence_merges:
       support; maintained data integrity and specification precision.'
   reason: Consolidated Volvo overview with personal delivery; preserved fail-operational embedded C/AUTOSAR, V-cycle,
     code review, data integrity, specification precision, and all detailed tasks/ownership limits.
+- retired_evidence_id: ev_c0d17118
+  assignment: Ericsson
+  block_id: b_e884e8bc
+  retained_evidence_ids: [ev_b8db74e1, ev_245a7416]
+  original:
+    evidence_id: ev_c0d17118
+    type: responsibility
+    text: Contributed to automation and configuration of large-scale system-level software environments, applying
+      structured troubleshooting and cross-functional collaboration to resolve data and configuration quality issues.
+  reason: Automation scope merged into development; quality issues and cross-functional troubleshooting merged into
+    root-cause analysis.
+- retired_evidence_id: ev_f7009c9f
+  assignment: Ericsson
+  block_id: b_e884e8bc
+  retained_evidence_ids: [ev_confirmed_ericsson_delivery_testing]
+  original:
+    evidence_id: ev_f7009c9f
+    type: responsibility
+    text: Performed hardware node testing during software delivery.
+  reason: Generic hardware-node testing is fully covered by the retained detailed delivery/testing evidence.
+- retired_evidence_id: ev_confirmed_ge_isp_design
+  assignment: General Electric
+  block_id: b_eef28cec
+  project_id: p_lm6000_isp
+  retained_evidence_ids: [ev_063d8248]
+  original:
+    evidence_id: ev_confirmed_ge_isp_design
+    type: responsibility
+    text: 'Designed/implemented/validated ISP architecture with substantial autonomy; senior engineer retained final
+      accountability and supplied ideas/risk review. Selected strategy, layers, algorithms, parameters, and interfaces:
+      preprocessing, sensor voting, output integration. Supported nonredundant configurations through up to 16 sensors;
+      configurable filtering/validity thresholds and voting that downweighted drifting/discrepant readings.'
+  reason: Combined ISP redesign overview and architecture/ownership details.
+- retired_evidence_id: ev_confirmed_ge_migration_scope
+  assignment: General Electric
+  block_id: b_3abc60ca
+  project_id: p_ge_migration
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_scope
+    type: responsibility
+    text: 'Controls team: approximately 16 in Mexico, 8 in Cincinnati. Migration platform became routine tooling
+      for all legacy ECU control projects across LMS100/LM2500/LM6000 families and model variants (including G4,
+      +G4, +); subsequent development used MATLAB/Simulink.'
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_migration_method
+  assignment: General Electric
+  block_id: b_3abc60ca
+  project_id: p_ge_migration
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_method
+    type: responsibility
+    text: Preserved existing control logic during migration. Parsed beacon7 documents/block positions using Perl
+      in Unix; defined equivalent Simulink blocks, sometimes containing C code.
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_migration_scale
+  assignment: General Electric
+  block_id: b_3abc60ca
+  project_id: p_ge_migration
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_scale
+    type: artifact
+    text: 'Simplest control package: approximately 80 modules (recollection). Significant cost savings recalled;
+      measured savings, time reductions, and total module count unavailable.'
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_staging_calibration
+  assignment: General Electric
+  block_id: b_3abc60ca
+  project_id: p_ge_emissions
+  retained_evidence_ids: [ev_d19a39c7]
+  original:
+    evidence_id: ev_confirmed_ge_staging_calibration
+    type: responsibility
+    text: 'Tuned staging in performance-team simulations: calibrated operating windows for fuel-nozzle/manifold
+      transitions as power, temperature, and fuel flow changed. Physical-rig/running-engine calibration unconfirmed.'
+  reason: Combined optimization method and simulation/calibration scope.
 schema_changes:
 - date: '2026-10-20'
   from_version: '1.3'
