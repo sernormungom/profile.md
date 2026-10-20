@@ -268,6 +268,19 @@ schema_changes:
     formal titles.
   compatibility: Consumers must carry project.limitations into interpretation and export; adapter compatibility
     remains unverified.
+- date: '2026-10-20'
+  from_version: '1.5'
+  to_version: '1.6'
+  changes:
+  - Added role-level collaboration.context and collaboration.practices; multicultural company context and Volvo/GE
+    international collaboration owner-confirmed in chat. Ericsson cross-functional context also supported by existing
+    evidence.
+  - Removed repeated leadership prefixes; concrete actions remain. Agile/SAFe remains in processes_standards at
+    confirmed assignments.
+  - Moved unlinked AI-validation inventory into an open evidence gap. Updated target-direction gap to acknowledge
+    supplied five-track document; detailed reconciliation deferred.
+  compatibility: LLM/adapter consumers must retain role context; context does not establish personal leadership,
+    tool proficiency, or delivery maturity.
 evidence_removals:
 - removed_evidence_id: ev_confirmed_cv_pilot_feedback
   assignment: Mpya Sci & Tech
