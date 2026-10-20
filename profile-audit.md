@@ -256,4 +256,11 @@ schema_changes:
   - career_history.role_groups[0].summary
   - career_history.role_groups[2].summary
   compatibility: Adapter unavailable; schema 1.4 requires explicit import normalization, not assumed backward compatibility.
+evidence_removals:
+- removed_evidence_id: ev_confirmed_cv_pilot_feedback
+  assignment: Mpya Sci & Tech
+  block_id: b_e8bc3180
+  project_id: p_cv_tailoring
+  reason: Removed operational usability feedback/feature requests/bug backlog from expertise reference at owner
+    request; original retained in Git history.
 ```

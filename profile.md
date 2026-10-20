@@ -225,17 +225,13 @@ career_history:
           text: 'Pilot: 2 Talent Advisors, 3 consultants. Informal timings: ~15 minutes from job description to
             generated CV; one colleague took ~30 minutes to enter a LinkedIn base CV and produce a job-specific
             Mpya-format CV. No controlled benchmark or measured baseline savings.'
-        - evidence_id: ev_confirmed_cv_pilot_feedback
-          type: artifact
-          text: 'Usability feedback: users found the tool difficult to understand; Talent Advisors requested application-note
-            fields, negotiated-task field, clickable link, bug fixes, and greater stability before further use.
-            Delivery unconfirmed.'
         - evidence_id: ev_confirmed_cv_collaboration_handover
           type: responsibility
           text: 'Developer collaboration: two colleagues contributed ideas, delivery, learning, experimentation,
             and handover testing; retained product-owner decisions. Prepared maintenance handover from temporary
             administration duties between assignments: CI/CD, extensive regression testing, documentation, Markdown
-            coding-agent instructions. Another developer now adds features/fixes bugs: initial operational handover.'
+            coding-agent instructions. Initial maintenance handover demonstrated by another developer adding features/fixing
+            bugs.'
         - evidence_id: ev_confirmed_cv_ci_decisions
           type: responsibility
           text: 'CI/CD: selected approach/useful proposals and implemented pipelines with LLM assistance. GitHub
@@ -276,9 +272,8 @@ career_history:
         - evidence_id: ev_d74e1cca
           type: artifact
           text: 'Source-grounded content generation: consolidated collective agreements, Unionen, Riksdagen, Skatteverket,
-            and internal Mpya rules into a single source of truth. Handbook/articles in development; HR reviewing
-            internal-rule gaps. Automation supports generation, translation, HTML, execution validation. Reviewer
-            availability constrains progress; source gathering appears satisfactory.'
+            and internal Mpya rules into a single source of truth. Handbook in development. Automation supports
+            article generation, translation, HTML generation, execution validation.'
         - evidence_id: ev_confirmed_handbook_updates
           type: artifact
           text: 'Source-change detection: HR triggers checks at its chosen cadence (e.g. quarterly/annually); agents

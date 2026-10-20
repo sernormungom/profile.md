@@ -1,6 +1,6 @@
 # Expertise profile
 
-[profile.md](profile.md) stores facts for later CV tailoring: contributions, technical work, outcomes, ownership, uncertainty, and provenance. Keep facts once; preserve pilot/prototype status, shared contributions, and measurement limits. Requests/plans/reported safeguards are not verified delivery.
+[profile.md](profile.md) stores facts for later CV tailoring: contributions, technical work, outcomes, ownership, uncertainty, and provenance. Keep facts once; preserve pilot/prototype status, shared contributions, and measurement limits. Exclude operational status (backlogs, pending articles, reviewer availability); retain delivery maturity and evidence of use/handover. Requests/plans/reported safeguards are not verified delivery.
 
 [profile-audit.md](profile-audit.md) retains resolved confirmations, merged evidence IDs, and schema changes. Only open questions belong in the main profile.
 
