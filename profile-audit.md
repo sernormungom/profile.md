@@ -99,9 +99,7 @@ confirmed_history:
     been implemented is superseded by confirmation of runtime.py experiments.
 evidence_merges:
 - retired_evidence_id: ev_c0d17118
-  retained_evidence_ids:
-  - ev_b8db74e1
-  - ev_245a7416
+  retained_evidence_ids: [ev_b8db74e1, ev_245a7416]
   original:
     evidence_id: ev_c0d17118
     type: responsibility
@@ -109,4 +107,119 @@ evidence_merges:
       structured troubleshooting and cross-functional collaboration to resolve data and configuration quality issues.
   reason: Automation scope merged into development; quality issues and cross-functional troubleshooting merged into
     root-cause analysis.
+- retired_evidence_id: ev_confirmed_ge_migration_scope
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_scope
+    type: responsibility
+    text: 'Controls team: approximately 16 in Mexico, 8 in Cincinnati. Migration platform became routine tooling
+      for all legacy ECU control projects across LMS100/LM2500/LM6000 families and model variants (including G4,
+      +G4, +); subsequent development used MATLAB/Simulink.'
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_migration_method
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_method
+    type: responsibility
+    text: Preserved existing control logic during migration. Parsed beacon7 documents/block positions using Perl
+      in Unix; defined equivalent Simulink blocks, sometimes containing C code.
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_migration_scale
+  retained_evidence_ids: [ev_249c22bb]
+  original:
+    evidence_id: ev_confirmed_ge_migration_scale
+    type: artifact
+    text: 'Simplest control package: approximately 80 modules (recollection). Significant cost savings recalled;
+      measured savings, time reductions, and total module count unavailable.'
+  reason: Combined migration scope, method, adoption, and scale; subsequent Simulink development remains separate.
+- retired_evidence_id: ev_confirmed_ge_staging_calibration
+  retained_evidence_ids: [ev_d19a39c7]
+  original:
+    evidence_id: ev_confirmed_ge_staging_calibration
+    type: responsibility
+    text: 'Tuned staging in performance-team simulations: calibrated operating windows for fuel-nozzle/manifold
+      transitions as power, temperature, and fuel flow changed. Physical-rig/running-engine calibration unconfirmed.'
+  reason: Combined optimization method and simulation/calibration scope.
+- retired_evidence_id: ev_f7009c9f
+  retained_evidence_ids: [ev_confirmed_ericsson_delivery_testing]
+  original:
+    evidence_id: ev_f7009c9f
+    type: responsibility
+    text: Performed hardware node testing during software delivery.
+  reason: Generic hardware-node testing is fully covered by the retained detailed delivery/testing evidence.
+- retired_evidence_id: ev_confirmed_ge_isp_design
+  retained_evidence_ids: [ev_063d8248]
+  original:
+    evidence_id: ev_confirmed_ge_isp_design
+    type: responsibility
+    text: 'Designed/implemented/validated ISP architecture with substantial autonomy; senior engineer retained final
+      accountability and supplied ideas/risk review. Selected strategy, layers, algorithms, parameters, and interfaces:
+      preprocessing, sensor voting, output integration. Supported nonredundant configurations through up to 16 sensors;
+      configurable filtering/validity thresholds and voting that downweighted drifting/discrepant readings.'
+  reason: Combined ISP redesign overview and architecture/ownership details.
+schema_changes:
+- date: '2026-10-20'
+  from_version: '1.3'
+  to_version: '1.4'
+  changes:
+  - Grouped project evidence under role blocks; evidence IDs retained except documented merges.
+  - Moved CV project stack from evidence text to project.stack.
+  - Replaced repeated provenance with source_id references to top-level sources.
+  - Omitted empty fields/containers; absent values mean unspecified, not false or inapplicable.
+  - Removed is_native, derivable from proficiency == native.
+  - Removed teaching summary duplicated in ev_35900076; removed award year repetition, retaining year_approximate.
+  omitted_empty_paths:
+  - preferences.seniority_target
+  - education[0].location.city
+  - education[0].expires_at
+  - education[1].location.city
+  - education[1].expires_at
+  - education[2].field_of_study
+  - education[2].location.city
+  - education[2].location.country_code
+  - education[2].location
+  - education[2].started
+  - education[2].expires_at
+  - education[2].description
+  - education[3].field_of_study
+  - education[3].location.city
+  - education[3].location.country_code
+  - education[3].location
+  - education[3].started
+  - education[3].expires_at
+  - education[3].description
+  - education[4].field_of_study
+  - education[4].location.city
+  - education[4].location.country_code
+  - education[4].location
+  - education[4].started
+  - education[4].expires_at
+  - education[4].description
+  - education[5].field_of_study
+  - education[5].location.city
+  - education[5].location.country_code
+  - education[5].location
+  - education[5].started
+  - education[5].ended
+  - education[5].expires_at
+  - education[5].description
+  - education[6].field_of_study
+  - education[6].location.city
+  - education[6].location.country_code
+  - education[6].location
+  - education[6].started
+  - education[6].ended
+  - education[6].expires_at
+  - education[6].description
+  - education[7].field_of_study
+  - education[7].location.city
+  - education[7].location.country_code
+  - education[7].location
+  - education[7].started
+  - education[7].ended
+  - education[7].expires_at
+  - education[7].description
+  - career_history.role_groups[0].summary
+  - career_history.role_groups[2].summary
+  compatibility: Adapter unavailable; schema 1.4 requires explicit import normalization, not assumed backward compatibility.
 ```
