@@ -4,7 +4,7 @@ Factual expertise reference, updated 20 October 2026. Open questions: `gaps`; hi
 
 ```yaml
 metadata:
-  schema_version: '1.4'
+  schema_version: '1.5'
   consultant_id: norberto.munoz
   created_at: '2026-09-09T13:45:39Z'
   updated_at: '2026-10-20'
@@ -168,14 +168,8 @@ career_history:
       - Pandas
       - NumPy
       - Jupyter notebooks
-      - FastAPI
       - Claude API
-      - PostgreSQL
-      - AWS
-      - Docker
       - ECS Fargate
-      - GitHub Actions
-      - Terraform
       - Structurizr
       - Excel
       - Claude Code
@@ -212,26 +206,27 @@ career_history:
       projects:
       - project_id: p_cv_tailoring
         name: CV-tailoring platform
-        stack: [Python, FastAPI, PostgreSQL, Docker, Terraform]
+        stack: [Python, FastAPI, PostgreSQL, Docker, Terraform, AWS, GitHub Actions]
+        limitations: 'Timings informal; no controlled benchmark/measured baseline savings. Exact factual filters,
+          validation-failure behaviour, measured factual accuracy unknown. Gateway service unspecified; broader
+          observability, backups, incident/on-call ownership unconfirmed.'
         evidence_items:
         - evidence_id: ev_8a168893
           type: artifact
-          text: 'LLM-powered platform: led product decisions, software architecture, feature definition, and most
-            implementation/testing from concept to AWS-hosted early pilot. Combined LLM CV interpretation/content
-            generation with deterministic job matching. AI-assisted software development: LLMs generated most code/tests
-            under developer direction.'
+          text: 'Technical leadership: led product decisions, architecture, feature definition, most implementation/testing
+            from concept to AWS-hosted early pilot. Combined LLM CV interpretation/content generation with deterministic
+            job matching. AI-assisted software development: LLMs generated most code/tests under developer direction.'
         - evidence_id: ev_confirmed_cv_pilot_observations
           type: artifact
-          text: 'Pilot: 2 Talent Advisors, 3 consultants. Informal timings: ~15 minutes from job description to
-            generated CV; one colleague took ~30 minutes to enter a LinkedIn base CV and produce a job-specific
-            Mpya-format CV. No controlled benchmark or measured baseline savings.'
+          text: 'Pilot use: 2 Talent Advisors, 3 consultants. Informal timings: ~15 minutes from job description
+            to generated CV; one colleague took ~30 minutes to enter a LinkedIn base CV and produce a job-specific
+            Mpya-format CV.'
         - evidence_id: ev_confirmed_cv_collaboration_handover
           type: responsibility
-          text: 'Developer collaboration: two colleagues contributed ideas, delivery, learning, experimentation,
-            and handover testing; retained product-owner decisions. Prepared maintenance handover from temporary
-            administration duties between assignments: CI/CD, extensive regression testing, documentation, Markdown
-            coding-agent instructions. Initial maintenance handover demonstrated by another developer adding features/fixing
-            bugs.'
+          text: 'Developer enablement: involved two colleagues in ideas, delivery, learning, experimentation, handover
+            testing; retained product-owner decisions. Prepared maintenance handover from temporary administration
+            duties between assignments: CI/CD, extensive regression testing, documentation, Markdown coding-agent
+            instructions. Another developer adding features/fixing bugs demonstrated initial handover.'
         - evidence_id: ev_confirmed_cv_ci_decisions
           type: responsibility
           text: 'CI/CD: selected approach/useful proposals and implemented pipelines with LLM assistance. GitHub
@@ -252,38 +247,38 @@ career_history:
           source_id: s_cv_workflows
         - evidence_id: ev_reported_cv_fact_controls
           type: artifact
-          text: 'Factual safeguards: prompts, deterministic filters, structured profile data, human review/publication.
-            Exact filters, validation-failure behaviour, measured accuracy unknown.'
+          text: 'Factual safeguards: prompts, deterministic filters, structured profile data, human review/publication.'
           source_id: s_cv_safeguards
         - evidence_id: ev_confirmed_cv_cloud_scope
           type: responsibility
-          text: 'AWS operations (basic): log-based debugging, release deployment, cost monitoring, developer access.
-            Modified Terraform Infrastructure as Code to add a gateway for LLM API access (service unspecified).
-            More cloud-experienced teammate implemented initial AWS infrastructure/Terraform using AI-assisted software
-            development and handled other infrastructure/operations. Broader observability, backups, incident/on-call
-            ownership unconfirmed.'
+          text: 'Cloud operations (basic): log-based debugging, release deployment, cost monitoring, developer access.
+            Modified Terraform Infrastructure as Code to add a gateway for LLM API access. More cloud-experienced
+            teammate implemented initial AWS infrastructure/Terraform using AI-assisted software development and
+            handled other infrastructure/operations.'
         - evidence_id: ev_confirmed_cv_privacy
           type: responsibility
           text: 'Security/privacy: conducted DPIA/security analysis, investigated hosting/data transfers; implemented
             sensitive-data notices and user-data deletion on request.'
       - project_id: p_employee_handbook
         name: AI-assisted employee handbook
+        limitations: 'Chat/CLI orchestration remains experimental; current Python orchestration unconfirmed. Source
+          checks HR-triggered, no autonomous schedule. Human approval gates are workflow rules; technical enforcement
+          unverified.'
         evidence_items:
         - evidence_id: ev_d74e1cca
           type: artifact
-          text: 'Source-grounded content generation: consolidated collective agreements, Unionen, Riksdagen, Skatteverket,
-            and internal Mpya rules into a single source of truth. Handbook in development. Automation supports
-            article generation, translation, HTML generation, execution validation.'
+          text: 'Source-grounded generation: consolidated collective agreements, Unionen, Riksdagen, Skatteverket,
+            internal Mpya rules into a single source of truth. In development; automation supports article generation,
+            translation, HTML generation, execution validation.'
         - evidence_id: ev_confirmed_handbook_updates
           type: artifact
           text: 'Source-change detection: HR triggers checks at its chosen cadence (e.g. quarterly/annually); agents
-            find updated laws/source changes and update handbook. No autonomous schedule.'
+            find updated laws/source changes and update articles.'
         - evidence_id: ev_confirmed_agent_workflow_status
           type: artifact
-          text: 'Chat/CLI agent orchestration experiment: coordinator executes a skill with drafting, translation,
-            fresh independent review agents; normally researches/plans directly, optional separate planner. Review
-            rounds limited for token control. Current Python orchestration unconfirmed; earlier Python experiments
-            recorded separately.'
+          text: 'Agent orchestration: chat coordinator executes a skill with CLI drafting, translation, fresh independent
+            review agents; normally researches/plans directly, optional separate planner. Review rounds limited
+            for token control. Earlier Python experiments recorded separately.'
         - evidence_id: ev_reported_handbook_orchestration
           type: artifact
           text: 'Source-grounded generation/review: coordinator reads guidance/plans/evidence, records company decisions
@@ -303,21 +298,21 @@ career_history:
           type: artifact
           text: 'Human approval gates: acceptance/company decisions reserved for humans; commits/publication and
             HR-attestation claims require explicit authorization. Articles stay draft, reviewed_by unset pending
-            human review. Workflow rules; technical enforcement unverified.'
+            human review.'
           source_id: s_handbook_skill
       - project_id: p_agent_runtime
         name: Agentic software engineering runtime
+        limitations: Alternative experiments over time; no single production architecture asserted.
         evidence_items:
         - evidence_id: ev_991ec83a
           type: artifact
-          text: 'Agentic coding: exploratory Mpya learning runtime for AI architecture/harness design; coding-agent
+          text: 'Agentic coding: exploratory Mpya learning project in AI architecture/harness design; coding-agent
             orchestration, deterministic validation gates, evaluation, security controls. Implemented version for
             CV-adapter testing; adapted approach with different agents/processes for handbook.'
         - evidence_id: ev_confirmed_runtime_experiments
           type: artifact
           text: 'Orchestration experiments: direct chat task assignment, copied plans/metaprompts, CLI agents, runtime.py
-            asking an LLM to coordinate CLI agents. State handover: copied text, handover documents, shared JSON.
-            Alternative experiments; no single production architecture asserted.'
+            asking an LLM to coordinate CLI agents. State handover: copied text, handover documents, shared JSON.'
     - block_id: b_191aeaa5
       role_title: Senior Software Function Developer / Innovation Lead
       client:
@@ -360,15 +355,16 @@ career_history:
       evidence_items:
       - evidence_id: ev_92316952
         type: responsibility
-        text: 'AI enablement: led adoption/innovation across three embedded software teams; requirements, rollout
-          planning, training, workshops, licence onboarding.'
+        text: 'Developer enablement: led AI adoption/innovation across three embedded software teams; requirements,
+          rollout planning, training, workshops, licence onboarding.'
       - evidence_id: ev_8059f4cc
         type: achievement
-        text: Coordinated cross-team AI-enabled test-automation initiatives for embedded SIL/HIL verification.
+        text: 'Cross-functional coordination: organized cross-team AI-enabled test-automation initiatives for
+          embedded SIL/HIL verification.'
       - evidence_id: ev_56e7cbdc
         type: responsibility
-        text: Collaborated with test engineers/system architects on ISO 26262 functional-safety-compliant delivery;
-          bridged engineering and delivery stakeholders.
+        text: 'Cross-functional coordination: collaborated with test engineers/system architects on ISO 26262-compliant
+          delivery; bridged engineering/delivery stakeholders.'
       - evidence_id: ev_d7df8308
         type: responsibility
         text: 'Applied AI-assisted software development using Volvo tools: research, analysis, documentation, implementation,
@@ -379,17 +375,17 @@ career_history:
           embedded development.
       - evidence_id: ev_e743cc8d
         type: responsibility
-        text: 'Combined Innovation Lead duties with software delivery; agreed innovation capacity with Scrum Master/Product
-          Owner according to workload. Organized PI-planning-linked “Innovation Week” activities: tool exploration,
-          learning, technical discussions, brainstorming; duration varied.'
+        text: 'Innovation leadership alongside software delivery: agreed capacity with Scrum Master/Product Owner
+          according to workload. Organized PI-planning-linked “Innovation Week”: tool exploration, learning, technical
+          discussions, brainstorming; duration varied.'
       - evidence_id: ev_confirmed_advanced_engineering
         type: responsibility
-        text: 'Coordinated team participation in Volvo-funded Advanced Engineering projects beyond main-product
-          improvements: next-year proposals, acceptance tracking, progress follow-up, documentation.'
+        text: 'Technical coordination: organized team participation in Volvo-funded Advanced Engineering beyond
+          main-product improvements; next-year proposals, acceptance tracking, progress follow-up, documentation.'
       - evidence_id: ev_confirmed_patent_coordination
         type: responsibility
-        text: Guided patent-document preparation for potentially patentable Advanced Engineering work; coordinated
-          progression with Legal.
+        text: 'Patent coordination: guided patent-document preparation for potentially patentable Advanced Engineering
+          work; coordinated progression with Legal.'
       verification_validation:
       - Software-in-the-loop (SIL)
       - Hardware-in-the-loop (HIL)
@@ -400,36 +396,35 @@ career_history:
       projects:
       - project_id: p_volvo_redundancy
         name: Autonomous-truck redundancy management
+        limitations: 'Shared delivery after main policies were set; no sole redundancy-architecture ownership. Architects/safety-quality
+          specialists determined ASIL; component mapping unrecorded. No vehicle calibration. Vector issue tool/cause/resolution
+          unconfirmed. Tentative recalled expansions: VCM = Vehicle Control Module; LDC = Logic Design Component.'
         evidence_items:
         - evidence_id: ev_confirmed_volvo_redundancy_function
           type: responsibility
-          text: 'Team of approximately 3–5 developed redundancy management across approximately 8 LDCs: autonomous
-            truck with two VCMs, redundant autonomous-driving channels, steering, and longitudinal systems. System-health
-            signals governed fault responses/channel selection. Primary-channel failure switched to secondary with
-            safe-location command; loss of both triggered blind stop. Tentative recalled expansions: VCM = Vehicle
-            Control Module; LDC = Logic Design Component.'
+          text: 'Redundancy management: team ~3–5, ~8 LDCs; autonomous truck with two VCMs, redundant autonomous-driving
+            channels, steering, longitudinal systems. System-health signals governed fault responses/channel selection.
+            Primary-channel failure switched to secondary with safe-location command; loss of both triggered blind
+            stop.'
         - evidence_id: ev_confirmed_volvo_personal_delivery
           type: responsibility
-          text: 'Fail-operational embedded C/AUTOSAR development across the V-cycle: defined functions with architects,
-            mapped internal components, estimated changes; implemented fault logic, signal handlers, initialization,
+          text: 'Function development across V-cycle: defined functions with architects, mapped internal components,
+            estimated changes; implemented fail-operational embedded C/AUTOSAR fault logic, signal handlers, initialization,
             DaVinci signals. Verification and validation: logic/DaVinci read-write unit tests, SIL, code/requirements
             reviews, cross-team signal/interface checks, PIL troubleshooting, in-vehicle truck testing, HIL support.
-            Updated diagrams, Confluence/release documentation; maintained data integrity/specification precision.
-            Shared fault-handling delivery after main redundancy policies were set; no sole redundancy-architecture
-            ownership.'
+            Updated diagrams, Confluence/release documentation; maintained data integrity/specification precision.'
         - evidence_id: ev_confirmed_volvo_autosar_integration
           type: responsibility
           text: 'AUTOSAR integration: configured interfaces, inputs/outputs, platform connections in Vector DaVinci;
             generated XML integrating LDCs with platform. Troubleshot missing signals/incorrect enumerations; helped
-            debug Vector extra-bits/patching issue (tool/cause/resolution unconfirmed).'
+            debug Vector extra-bits/patching issue.'
         - evidence_id: ev_confirmed_volvo_safety_scope
           type: responsibility
-          text: 'ISO 26262 functional safety: worked on ASIL B/D components; participated in safety reviews. Requirements
-            depended on system context/incoming health signals. Architects/safety-quality specialists determined
-            ASIL; component mapping unrecorded.'
+          text: 'Functional safety: worked on ASIL B/D components; participated in safety reviews. Requirements
+            depended on system context/incoming health signals.'
         - evidence_id: ev_confirmed_volvo_calibration_scope
           type: responsibility
-          text: Redundancy management used system-health signals via CAN/AUTOSAR; no vehicle calibration performed.
+          text: 'Vehicle communication: system-health signals via CAN/AUTOSAR.'
     - block_id: b_e884e8bc
       role_title: Software Developer
       client:
@@ -465,7 +460,7 @@ career_history:
           software and data/configuration quality issues.
       - evidence_id: ev_d36eea61
         type: responsibility
-        text: Shared system-configuration/automation-tooling knowledge and supported colleagues.
+        text: 'Developer enablement: shared system-configuration/automation-tooling knowledge; supported colleagues.'
     - block_id: b_a15c5a04
       role_title: AI Assistant Exploration (openClaw)
       started: 2026-05
@@ -572,12 +567,12 @@ career_history:
           frequency-domain stability margins (phase/gain).
       - evidence_id: ev_f88f8f7f
         type: responsibility
-        text: 'Workload focal point: negotiated Mexico-team resources with US counterpart for on-time delivery/metrics
-          compliance.'
+        text: 'Resource coordination: workload focal point negotiating Mexico-team resources with US counterpart
+          for on-time delivery/metrics compliance.'
       - evidence_id: ev_dff7beef
         type: responsibility
-        text: 'Managed ongoing LM2500/LM6000 projects: negotiated scope, budget, deadlines with Engine Systems;
-          weekly follow-ups/status presentations.'
+        text: 'Project management: negotiated LM2500/LM6000 scope, budget, deadlines with Engine Systems; weekly
+          follow-ups/status presentations.'
       - evidence_id: ev_e349ef25
         type: responsibility
         text: 'Supported CF34 recertification, late 2005–early 2006: converted printed control-logic diagrams into
@@ -585,15 +580,15 @@ career_history:
       projects:
       - project_id: p_lm6000_isp
         name: LM6000 Input Signal Processing
+        limitations: Substantial design/implementation autonomy; senior engineer retained final technical accountability.
         evidence_items:
         - evidence_id: ev_063d8248
           type: artifact
-          text: 'Redesigned LM6000 Input Signal Processing (ISP): researched GE fleet/scientific literature, developed
-            concept, updated simulator, designed/implemented/validated architecture. Substantial autonomy; senior
-            engineer retained final accountability and supplied ideas/risk review. Selected strategy, layers, algorithms,
-            parameters, interfaces: preprocessing, sensor voting, output integration. Supported nonredundant configurations
-            through 16 sensors; configurable filtering/validity thresholds and voting that downweighted drifting/discrepant
-            readings.'
+          text: 'Architecture: researched GE fleet/scientific literature, developed concept, updated simulator,
+            redesigned/implemented/validated ISP. Selected strategy, layers, algorithms, parameters, interfaces:
+            preprocessing, sensor voting, output integration. Supported nonredundant configurations through 16 sensors;
+            configurable filtering/validity thresholds, voting downweighting drifting/discrepant readings. Senior
+            engineer supplied ideas/risk review.'
     - block_id: b_b63b713c
       role_title: Team Manager
       started: 2011-04
@@ -640,39 +635,39 @@ career_history:
           translation.'
       - evidence_id: ev_51207a54
         type: responsibility
-        text: Negotiated requirements/resources with US counterpart; led Agile delivery to targets.
+        text: 'Technical leadership: negotiated requirements/resources with US counterpart; led Agile delivery to
+          targets.'
       projects:
       - project_id: p_ge_migration
         name: Legacy-controls platform migration
+        limitations: Scale/cost savings recalled; measured savings, time reductions, total module count unavailable.
         evidence_items:
         - evidence_id: ev_249c22bb
           type: artifact
-          text: Led model-based development toolchain migration from Unix/beacon7 to Windows/MATLAB/Simulink for
-            controls team (~16 Mexico, ~8 Cincinnati). Built Perl translator parsing legacy documents/block positions
-            in Unix; defined equivalent Simulink blocks, sometimes containing C, preserving control logic. Developed
-            working simulation platform from initial draft, automated development, documented. Became routine tooling
-            for all legacy ECU control projects across LMS100/LM2500/LM6000 and variants (including G4, +G4, +);
-            subsequent development used MATLAB/Simulink. Simplest package ~80 modules (recollection). Significant
-            cost savings recalled; measured savings, time reductions, total module count unavailable.
+          text: 'Technical leadership: led model-based development toolchain migration from Unix/beacon7 to Windows/MATLAB/Simulink
+            for team ~16 Mexico/~8 Cincinnati. Built Perl translator parsing legacy documents/block positions in
+            Unix; equivalent Simulink blocks sometimes contained C, preserving control logic. Developed working
+            simulation platform from initial draft, automated development, documented. Routine tooling for all legacy
+            ECU control projects across LMS100/LM2500/LM6000 and variants (G4, +G4, +); subsequent development used
+            MATLAB/Simulink. Simplest package ~80 modules; significant cost savings recalled.'
       - project_id: p_fast_ferry
         name: Fast Ferry coke-avoidance controls
         evidence_items:
         - evidence_id: ev_3fa7dd5a
           type: artifact
-          text: Designed/implemented Fast Ferry coke-avoidance control software within multidisciplinary GE team
-            collaborating with DNV on change certification. Maintained requirements traceability through Software
-            Requirements/Interface Requirements Specifications, test cases, verification results, and supporting
-            evidence; worked with systems, harness, performance, field engineering, and other GE teams to demonstrate
-            requirements compliance.
+          text: 'Requirements traceability: designed/implemented control software in multidisciplinary GE team collaborating
+            with DNV on change certification. Produced Software Requirements/Interface Requirements Specifications,
+            test cases, verification results, supporting evidence; worked with systems, harness, performance, field
+            engineering, other GE teams to demonstrate compliance.'
       - project_id: p_ge_emissions
         name: Turbine staging/emissions optimization
+        limitations: Physical-rig/running-engine calibration unconfirmed.
         evidence_items:
         - evidence_id: ev_d19a39c7
           type: responsibility
-          text: Co-tuned industrial turbines to reduce staging CO/NOx emissions through simulation-based calibration
-            using performance-team models. Used MATLAB genetic algorithms to identify operating windows, with controller
-            tuning/validation; calibrated fuel-nozzle/manifold transitions as power, temperature, and fuel flow
-            changed. Physical-rig/running-engine calibration unconfirmed.
+          text: 'Simulation-based calibration: co-tuned industrial turbines to reduce staging CO/NOx emissions using
+            performance-team models. MATLAB genetic algorithms identified operating windows; controller tuning/validation
+            calibrated fuel-nozzle/manifold transitions as power, temperature, fuel flow changed.'
   - role_group_id: rg_c24009ce
     organization:
       name: ITESM (Campus Queretaro)

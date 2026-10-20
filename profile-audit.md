@@ -256,6 +256,18 @@ schema_changes:
   - career_history.role_groups[0].summary
   - career_history.role_groups[2].summary
   compatibility: Adapter unavailable; schema 1.4 requires explicit import normalization, not assumed backward compatibility.
+- date: '2026-10-20'
+  from_version: '1.4'
+  to_version: '1.5'
+  changes:
+  - Consolidated project ownership, uncertainty, and measurement qualifications into project.limitations; evidence
+    IDs and source references preserved.
+  - Removed six duplicate AI role tool-list entries in favour of the explicitly supported CV project stack. Shared
+    languages and assignment-only tools retain role scope; narrative tool mentions remain where needed for contributions/workflows.
+  - Made leadership/coordination/enablement actions explicit; shortened repeated project context without changing
+    formal titles.
+  compatibility: Consumers must carry project.limitations into interpretation and export; adapter compatibility
+    remains unverified.
 evidence_removals:
 - removed_evidence_id: ev_confirmed_cv_pilot_feedback
   assignment: Mpya Sci & Tech
