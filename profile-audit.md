@@ -157,6 +157,16 @@ evidence_merges:
       preprocessing, sensor voting, output integration. Supported nonredundant configurations through up to 16 sensors;
       configurable filtering/validity thresholds and voting that downweighted drifting/discrepant readings.'
   reason: Combined ISP redesign overview and architecture/ownership details.
+- retired_evidence_id: ev_f98ebbdf
+  retained_evidence_ids: [ev_confirmed_volvo_personal_delivery]
+  original:
+    evidence_id: ev_f98ebbdf
+    type: artifact
+    text: 'Developed fail-operational embedded C/AUTOSAR control software for autonomous-enabled trucks within the
+      V-cycle: requirements review/refinement, implementation, code review, SIL verification, and PIL troubleshooting
+      support; maintained data integrity and specification precision.'
+  reason: Consolidated Volvo overview with personal delivery; preserved fail-operational embedded C/AUTOSAR, V-cycle,
+    code review, data integrity, specification precision, and all detailed tasks/ownership limits.
 schema_changes:
 - date: '2026-10-20'
   from_version: '1.3'

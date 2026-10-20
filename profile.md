@@ -216,32 +216,30 @@ career_history:
         evidence_items:
         - evidence_id: ev_8a168893
           type: artifact
-          text: Led product decisions, software architecture, feature definition, and most implementation/testing
-            of an LLM-powered CV-tailoring platform from concept to AWS-hosted early pilot. Combined LLM-based CV
-            interpretation/content generation with deterministic job matching. LLMs generated most code/tests under
-            developer direction; a more cloud-experienced teammate implemented AWS infrastructure and Terraform
-            using AI-assisted software development.
+          text: 'LLM-powered platform: led product decisions, software architecture, feature definition, and most
+            implementation/testing from concept to AWS-hosted early pilot. Combined LLM CV interpretation/content
+            generation with deterministic job matching. AI-assisted software development: LLMs generated most code/tests
+            under developer direction.'
         - evidence_id: ev_confirmed_cv_pilot_observations
           type: artifact
-          text: 'Early testers: 2 Talent Advisors, 3 consultants. Personal observations: approximately 15 minutes
-            from job description to generated CV; one colleague took approximately 30 minutes to enter a LinkedIn
-            base CV and produce a job-specific CV in Mpya format. No controlled benchmark or baseline time-saving
-            measurement.'
+          text: 'Pilot: 2 Talent Advisors, 3 consultants. Informal timings: ~15 minutes from job description to
+            generated CV; one colleague took ~30 minutes to enter a LinkedIn base CV and produce a job-specific
+            Mpya-format CV. No controlled benchmark or measured baseline savings.'
         - evidence_id: ev_confirmed_cv_pilot_feedback
           type: artifact
-          text: Early users found the tool difficult to understand. Talent Advisors requested application-note fields,
-            a negotiated-task field, a clickable link, bug fixes, and greater stability before further use. Requests
-            are feedback; delivery unconfirmed.
+          text: 'Usability feedback: users found the tool difficult to understand; Talent Advisors requested application-note
+            fields, negotiated-task field, clickable link, bug fixes, and greater stability before further use.
+            Delivery unconfirmed.'
         - evidence_id: ev_confirmed_cv_collaboration_handover
           type: responsibility
-          text: 'Collaborated with two developers on ideas, delivery, learning, experimentation, and handover testing;
-            retained product-owner decisions. Prepared maintenance handover because administration duties were temporary
-            between consulting assignments: CI/CD, extensive regression testing, documentation, and Markdown coding-agent
-            instructions. Another developer now adds features and fixes bugs, establishing initial operational handover.'
+          text: 'Developer collaboration: two colleagues contributed ideas, delivery, learning, experimentation,
+            and handover testing; retained product-owner decisions. Prepared maintenance handover from temporary
+            administration duties between assignments: CI/CD, extensive regression testing, documentation, Markdown
+            coding-agent instructions. Another developer now adds features/fixes bugs: initial operational handover.'
         - evidence_id: ev_confirmed_cv_ci_decisions
           type: responsibility
-          text: Selected CI/CD approach and implemented pipelines with LLM assistance, choosing useful proposals.
-            GitHub Actions automates checks/container-image publication; production deployment remains manual.
+          text: 'CI/CD: selected approach/useful proposals and implemented pipelines with LLM assistance. GitHub
+            Actions automates checks/container-image publication; production deployment manual.'
         - evidence_id: ev_reported_cv_ci_gates
           type: artifact
           text: 'ci.yml: full runs on PRs, manual dispatch, and build-push.yml calls; no path filters. Separate
@@ -258,76 +256,73 @@ career_history:
           source_id: s_cv_workflows
         - evidence_id: ev_reported_cv_fact_controls
           type: artifact
-          text: 'Reported safeguards: prompts, deterministic filters, structured profile data, and human review/publication
-            of generated CVs. Exact filters, validation-failure behaviour, and measured factual accuracy unknown.'
+          text: 'Factual safeguards: prompts, deterministic filters, structured profile data, human review/publication.
+            Exact filters, validation-failure behaviour, measured accuracy unknown.'
           source_id: s_cv_safeguards
         - evidence_id: ev_confirmed_cv_cloud_scope
           type: responsibility
-          text: Basic AWS understanding. Investigated bugs through logs; deployed releases, monitored costs, granted
-            developer access, and modified Infrastructure as Code (Terraform) to add a gateway for LLM API access
-            (service unspecified). Cloud-experienced colleague handled other infrastructure/operations. Broader
-            observability, backups, and incident/on-call ownership unconfirmed.
+          text: 'AWS operations (basic): log-based debugging, release deployment, cost monitoring, developer access.
+            Modified Terraform Infrastructure as Code to add a gateway for LLM API access (service unspecified).
+            More cloud-experienced teammate implemented initial AWS infrastructure/Terraform using AI-assisted software
+            development and handled other infrastructure/operations. Broader observability, backups, incident/on-call
+            ownership unconfirmed.'
         - evidence_id: ev_confirmed_cv_privacy
           type: responsibility
-          text: Conducted CV-platform security/DPIA analysis, investigated hosting/data transfers, and implemented
-            sensitive-data notices and user-data deletion on request.
+          text: 'Security/privacy: conducted DPIA/security analysis, investigated hosting/data transfers; implemented
+            sensitive-data notices and user-data deletion on request.'
       - project_id: p_employee_handbook
         name: AI-assisted employee handbook
         evidence_items:
         - evidence_id: ev_d74e1cca
           type: artifact
-          text: Developing AI-assisted employee handbook; consolidated collective agreements, Unionen, Riksdagen,
-            Skatteverket, and internal Mpya rules as a single source of truth. HR reviewing internal-rule gaps;
-            articles in progress. Workflow automation supports article generation, translation, HTML generation,
-            and execution validation. Limited reviewer availability constrains progress; source gathering appears
-            satisfactory in current use.
+          text: 'Source-grounded content generation: consolidated collective agreements, Unionen, Riksdagen, Skatteverket,
+            and internal Mpya rules into a single source of truth. Handbook/articles in development; HR reviewing
+            internal-rule gaps. Automation supports generation, translation, HTML, execution validation. Reviewer
+            availability constrains progress; source gathering appears satisfactory.'
         - evidence_id: ev_confirmed_handbook_updates
           type: artifact
-          text: HR triggers handbook updates at its chosen cadence (e.g. quarterly/annually); agents then search
-            updated laws, detect source changes, and update articles. No autonomous schedule.
+          text: 'Source-change detection: HR triggers checks at its chosen cadence (e.g. quarterly/annually); agents
+            find updated laws/source changes and update handbook. No autonomous schedule.'
         - evidence_id: ev_confirmed_agent_workflow_status
           type: artifact
-          text: 'Current handbook experiment: chat coordinator executes a skill orchestrating CLI-based drafting,
-            translation, and fresh independent review agents. Coordinator normally researches/plans; separate planner
-            optional. Review rounds limited for token control. Earlier Python orchestration experiments do not establish
-            Python orchestration of the current workflow.'
+          text: 'Chat/CLI agent orchestration experiment: coordinator executes a skill with drafting, translation,
+            fresh independent review agents; normally researches/plans directly, optional separate planner. Review
+            rounds limited for token control. Current Python orchestration unconfirmed; earlier Python experiments
+            recorded separately.'
         - evidence_id: ev_reported_handbook_orchestration
           type: artifact
-          text: Coordinator reads guidance/plans/evidence, records company decisions in reviews/questions.yaml,
-            and initializes resumable section_run.py ledger. Drafts English articles; one fresh read-only reviewer
-            checks the batch against sources, returning JSON verdicts/evidence/findings. Corrects material errors
-            before Swedish translation; fresh bilingual reviewer checks complete pairs. English defects corrected
-            at source, affected translations regenerated. Missing verdicts never imply acceptance; unresolved articles
-            remain drafts.
+          text: 'Source-grounded generation/review: coordinator reads guidance/plans/evidence, records company decisions
+            in reviews/questions.yaml, initializes resumable section_run.py ledger. English drafts receive one fresh
+            read-only batch review: JSON verdicts/evidence/findings. Material errors corrected before Swedish translation;
+            fresh bilingual review of complete pairs. English defects corrected at source, affected translations
+            regenerated. Missing verdicts never imply acceptance; unresolved articles remain drafts.'
           source_id: s_handbook_skill
         - evidence_id: ev_reported_handbook_budget_recovery
           type: artifact
-          text: 'Default call budget: 2 × article count + 5; maximum one correction review per gate. Ledger tracks
-            call starts/finishes for resumption; no automatic retries, duplicate calls, or counter resets. Quota/unknown
-            failures require human decisions. section_metrics.py reports attempts/cost. Final steps: validation,
-            preview/site/review-sheet rendering, visual inspection, handoff of outcomes/questions/checks/cost/next
-            steps.'
+          text: 'Execution budgets/recovery: default 2 × article count + 5 calls; at most one correction review
+            per gate. Resumable ledger tracks call starts/finishes; no automatic retries, duplicate calls, counter
+            resets. Quota/unknown failures require human decisions. section_metrics.py reports attempts/cost. Validate/render
+            previews, site, review sheets; visually inspect; hand off outcomes/questions/checks/cost/next steps.'
           source_id: s_handbook_skill
         - evidence_id: ev_reported_handbook_human_authority
           type: artifact
-          text: Workflow rules reserve acceptance/company decisions for humans; require explicit commit/publication
-            authorization and authorization for HR-attestation claims. Articles remain draft with reviewed_by unset
-            pending human review. Rules, not independently verified enforcement.
+          text: 'Human approval gates: acceptance/company decisions reserved for humans; commits/publication and
+            HR-attestation claims require explicit authorization. Articles stay draft, reviewed_by unset pending
+            human review. Workflow rules; technical enforcement unverified.'
           source_id: s_handbook_skill
       - project_id: p_agent_runtime
         name: Agentic software engineering runtime
         evidence_items:
         - evidence_id: ev_991ec83a
           type: artifact
-          text: 'Developing exploratory agentic software engineering runtime for Mpya learning in AI architecture/harness
-            design: coding-agent orchestration (agentic coding), deterministic validation gates, evaluation, security
-            controls. Implemented a version for CV-adapter testing; adapted the approach with different agents/processes
-            for the handbook.'
+          text: 'Agentic coding: exploratory Mpya learning runtime for AI architecture/harness design; coding-agent
+            orchestration, deterministic validation gates, evaluation, security controls. Implemented version for
+            CV-adapter testing; adapted approach with different agents/processes for handbook.'
         - evidence_id: ev_confirmed_runtime_experiments
           type: artifact
-          text: 'Agent-orchestration experiments: direct chat task assignment, copied plans/metaprompts, CLI agents,
-            and runtime.py asking an LLM to coordinate CLI agents. State handover via copied text, handover documents,
-            and shared JSON. Alternative experiments over time; no single production architecture asserted.'
+          text: 'Orchestration experiments: direct chat task assignment, copied plans/metaprompts, CLI agents, runtime.py
+            asking an LLM to coordinate CLI agents. State handover: copied text, handover documents, shared JSON.
+            Alternative experiments; no single production architecture asserted.'
     - block_id: b_191aeaa5
       role_title: Senior Software Function Developer / Innovation Lead
       client:
@@ -370,8 +365,8 @@ career_history:
       evidence_items:
       - evidence_id: ev_92316952
         type: responsibility
-        text: 'Led AI enablement and innovation across three embedded software teams: requirements, rollout planning,
-          training, workshops, and licence onboarding.'
+        text: 'AI enablement: led adoption/innovation across three embedded software teams; requirements, rollout
+          planning, training, workshops, licence onboarding.'
       - evidence_id: ev_8059f4cc
         type: achievement
         text: Coordinated cross-team AI-enabled test-automation initiatives for embedded SIL/HIL verification.
@@ -411,11 +406,6 @@ career_history:
       - project_id: p_volvo_redundancy
         name: Autonomous-truck redundancy management
         evidence_items:
-        - evidence_id: ev_f98ebbdf
-          type: artifact
-          text: 'Developed fail-operational embedded C/AUTOSAR control software for autonomous-enabled trucks within
-            the V-cycle: requirements review/refinement, implementation, code review, SIL verification, and PIL
-            troubleshooting support; maintained data integrity and specification precision.'
         - evidence_id: ev_confirmed_volvo_redundancy_function
           type: responsibility
           text: 'Team of approximately 3–5 developed redundancy management across approximately 8 LDCs: autonomous
@@ -425,23 +415,23 @@ career_history:
             Control Module; LDC = Logic Design Component.'
         - evidence_id: ev_confirmed_volvo_personal_delivery
           type: responsibility
-          text: 'Joined after main redundancy policies were set; shared subsequent fault-handling delivery. Defined
-            functions with architects, decomposed into internal components, estimated changes. Personal tasks: DaVinci
-            signals, signal handlers, fault logic, initialization, logic/DaVinci read-write unit tests, SIL tests,
-            requirements reviews, diagram/Confluence/release-document updates, cross-team signal/interface verification,
-            PIL troubleshooting, in-vehicle truck testing, HIL support. Shared delivery; no sole redundancy-architecture
+          text: 'Fail-operational embedded C/AUTOSAR development across the V-cycle: defined functions with architects,
+            mapped internal components, estimated changes; implemented fault logic, signal handlers, initialization,
+            DaVinci signals. Verification and validation: logic/DaVinci read-write unit tests, SIL, code/requirements
+            reviews, cross-team signal/interface checks, PIL troubleshooting, in-vehicle truck testing, HIL support.
+            Updated diagrams, Confluence/release documentation; maintained data integrity/specification precision.
+            Shared fault-handling delivery after main redundancy policies were set; no sole redundancy-architecture
             ownership.'
         - evidence_id: ev_confirmed_volvo_autosar_integration
           type: responsibility
-          text: 'Performed AUTOSAR interface configuration and integration using Vector DaVinci: component interfaces,
-            inputs/outputs, platform connections, XML descriptions integrating LDCs with platform. Troubleshot missing
-            signals/incorrect enumerations; helped debug a Vector-tooling issue involving extra bits/patching (exact
-            tool, cause, resolution unconfirmed).'
+          text: 'AUTOSAR integration: configured interfaces, inputs/outputs, platform connections in Vector DaVinci;
+            generated XML integrating LDCs with platform. Troubleshot missing signals/incorrect enumerations; helped
+            debug Vector extra-bits/patching issue (tool/cause/resolution unconfirmed).'
         - evidence_id: ev_confirmed_volvo_safety_scope
           type: responsibility
-          text: Applied ISO 26262 functional safety on components including ASIL B/D; participated in safety reviews.
-            Requirements depended on system context/incoming health signals. Architects/safety-quality specialists
-            determined ASIL; exact component mapping unrecorded.
+          text: 'ISO 26262 functional safety: worked on ASIL B/D components; participated in safety reviews. Requirements
+            depended on system context/incoming health signals. Architects/safety-quality specialists determined
+            ASIL; component mapping unrecorded.'
         - evidence_id: ev_confirmed_volvo_calibration_scope
           type: responsibility
           text: Redundancy management used system-health signals via CAN/AUTOSAR; no vehicle calibration performed.
@@ -571,7 +561,8 @@ career_history:
       - evidence_id: ev_5c22a45f
         type: responsibility
         text: 'Delivered Software Change Requests (SCRs) across the V-cycle: concept/software design, implementation,
-          integration, verification and validation, repository upload, presentations to technical/systems review boards.'
+          integration, verification and validation, repository upload, presentations to technical/systems review
+          boards.'
       - evidence_id: ev_5a18fe6a
         type: responsibility
         text: Defined software qualification tests for SCRs; supplied to external software vendor, executed locally
