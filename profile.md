@@ -1,13 +1,13 @@
 # Consultant Profile - Norberto Munoz Gomez
 
-Factual expertise reference, updated 20 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
+Factual expertise reference, updated 23 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
 
 ```yaml
 metadata:
   schema_version: '1.6'
   consultant_id: norberto.munoz
   created_at: '2026-09-09T13:45:39Z'
-  updated_at: '2026-10-20'
+  updated_at: '2026-10-23'
   as_of: 2026-10
 identity:
   full_name: Norberto Munoz Gomez
@@ -27,6 +27,9 @@ identity:
     proficiency: fluent
   - language: Swedish
     proficiency: conversational
+  driving_licences:
+  - country_code: SE
+    categories: [AM, B]
   personal_interests:
   - programming
   - science & technology
@@ -103,6 +106,67 @@ education:
   type: course
   institution: Udemy
   qualification: GitHub Copilot
+- education_id: e_codex_get_started
+  type: course
+  institution: OpenAI Academy
+  qualification: Get started with Codex
+  needs_review: false
+  ended: 2026-10
+- education_id: e_codex_extend_workflows
+  type: course
+  institution: OpenAI Academy
+  qualification: Extend Codex Workflows
+  needs_review: false
+  ended: 2026-10
+- education_id: e_volvo_iso26262
+  type: training
+  institution: Volvo Group
+  qualification: Functional Safety with ISO 26262 (internal training)
+  needs_review: true
+  ended: '2024'
+- education_id: e_volvo_hil_canoe
+  type: training
+  institution: Volvo Group
+  qualification: HIL Testing with CANoe (internal training)
+  needs_review: true
+  ended: '2025'
+- education_id: e_volvo_systemweaver_requirements
+  type: training
+  institution: Volvo Group
+  qualification: Requirements Writing in SystemWeaver (internal training)
+  needs_review: true
+  ended: '2025'
+- education_id: e_volvo_innovation
+  type: training
+  institution: Volvo Group
+  qualification: How to Innovate at Volvo (internal training)
+  needs_review: true
+  ended: '2025'
+- education_id: e_volvo_innovation_leaders
+  type: training
+  institution: Volvo Group
+  qualification: Innovation for Leaders (internal training)
+  description: Promoting innovation within one's team as a leader.
+  needs_review: true
+  ended: '2025'
+- education_id: e_volvo_github_copilot
+  type: training
+  institution: Volvo Group
+  qualification: GitHub Copilot (internal training)
+  needs_review: true
+  ended: '2026'
+- education_id: e_volvo_microsoft_copilot
+  type: training
+  institution: Volvo Group
+  qualification: Microsoft Copilot (internal training)
+  needs_review: true
+  ended: '2026'
+- education_id: e_volvo_advanced_prompting
+  type: training
+  institution: Volvo Group
+  qualification: Advanced Prompting with Volvo GPT (internal training)
+  needs_review: true
+  ended: '2026'
 - education_id: e_71ad6e63
   type: course
   institution: Ericsson
@@ -477,26 +541,26 @@ career_history:
           personal goal management.'
       collaboration:
         context: [multicultural]
-  - role_group_id: rg_confirmed_story_franchise
+  - role_group_id: rg_confirmed_career_break_sweden
     organization:
-      name: Personalised Children's Stories Franchise Venture
-      country_code: MX
-      industries: [publishing]
-    display_role_title: Franchise Venture / Business Development
+      name: Career break (relocation to Sweden)
+      country_code: SE
+      city: Gothenburg
+    display_role_title: Career Break / Relocation to Sweden
     started: 2020-02
     ended: 2021-09
     employment_type: other
     blocks:
-    - block_id: b_confirmed_story_franchise
-      role_title: Franchise Business Development
+    - block_id: b_confirmed_career_break_sweden
+      role_title: Career Break
       started: 2020-02
       ended: 2021-09
-      domains: [business development, commercialisation]
+      domains: [relocation, Swedish language studies, creative writing]
       evidence_items:
-      - evidence_id: ev_confirmed_story_franchise
+      - evidence_id: ev_confirmed_career_break_sweden
         type: responsibility
-        text: Pursued personalised children’s stories franchise commercialization in Celaya and surrounding Mexican
-          cities.
+        text: Relocated with family from Mexico to Sweden in January 2020. Studied Swedish (SFI Kurs D), supported children's
+          adaptation, wrote a novel, explored social media writing, and searched for work in Sweden.
   - role_group_id: rg_381b96ae
     organization:
       name: General Electric
@@ -574,8 +638,8 @@ career_history:
           compliance.'
       - evidence_id: ev_dff7beef
         type: responsibility
-        text: Managed LM2500/LM6000 projects; negotiated scope, budget, deadlines with Engine Systems; weekly follow-ups/status
-          presentations.
+        text: 'LM6000 family leader: project manager for LM6000 control software projects in the Mexico cost center;
+          negotiated scope, budget, deadlines with Engine Systems; weekly follow-ups/status presentations.'
       - evidence_id: ev_e349ef25
         type: responsibility
         text: 'Supported CF34 recertification, late 2005–early 2006: converted printed control-logic diagrams into
@@ -618,7 +682,7 @@ career_history:
         text: Allocated individual promotions/salary increases within upper-management budget.
       - evidence_id: ev_2cf238e3
         type: responsibility
-        text: Supported career planning, annual appraisals, conflict resolution, and coaching.
+        text: Coached engineers on career planning; ran annual appraisals; resolved conflicts; set team goals.
       - evidence_id: ev_523e88e7
         type: responsibility
         text: Communicated company initiatives; ensured team policy compliance.
@@ -629,10 +693,11 @@ career_history:
       block_type: technical_leadership
       seniority: lead
       domains: [embedded systems, control systems, turbine engine control, model-based development (MBD)]
-      industries: [power_generation, defense]
+      industries: [power_generation, marine]
       languages: [Perl, Visual Basic, MATLAB, C, Fortran, Kornshell]
-      tools: [beacon7, MATLAB/Simulink, Neural Network Toolbox, GAP, Toolbox, CIMPLICITY, MarkVIe ECU, RIG, Git]
-      processes_standards: [V-model, Agile, Scrum, ISO 9001, Six Sigma (DMAIC), TOPS 8D]
+      tools: [beacon7, MATLAB/Simulink, Neural Network Toolbox, GAP, Toolbox, CIMPLICITY, MarkVIe ECU, RIG, IBM Synergy]
+      processes_standards: [V-model, ISO 9001, Six Sigma (DMAIC), TOPS 8D]
+      verification_validation: [Certification testing (DNV)]
       evidence_items:
       - evidence_id: ev_confirmed_ge_model_build_testing
         type: responsibility
@@ -642,7 +707,7 @@ career_history:
           translation.'
       - evidence_id: ev_51207a54
         type: responsibility
-        text: Negotiated requirements/resources with US counterpart; led Agile delivery to targets.
+        text: Negotiated requirements/resources with US counterpart; led delivery to targets.
       projects:
       - project_id: p_ge_migration
         name: Legacy-controls platform migration
@@ -665,15 +730,20 @@ career_history:
             with DNV on change certification. Produced Software Requirements/Interface Requirements Specifications,
             test cases, verification results, supporting evidence; worked with systems, harness, performance, field
             engineering, other GE teams to demonstrate compliance.'
+        - evidence_id: ev_confirmed_fast_ferry_cert_testing
+          type: responsibility
+          text: 'Certification testing: proposed tests exercising the control logic so the certifier (DNV) could verify
+            the logic was correct.'
       - project_id: p_ge_emissions
         name: Turbine staging/emissions optimization
-        limitations: Physical-rig/running-engine calibration unconfirmed.
+        limitations: Calibration performed in simulation; physical-rig/running-engine calibration unconfirmed.
         evidence_items:
         - evidence_id: ev_d19a39c7
           type: responsibility
-          text: 'Simulation-based calibration: co-tuned industrial turbines to reduce staging CO/NOx emissions using
-            performance-team models. MATLAB genetic algorithms identified operating windows; controller tuning/validation
-            calibrated fuel-nozzle/manifold transitions as power, temperature, fuel flow changed.'
+          text: 'Simulation-based auto-calibration: developed an algorithm to auto-calibrate industrial-turbine fuel
+            staging in simulation to reduce CO/NOx emissions, using performance-team models. MATLAB genetic algorithms
+            identified operating windows; controller tuning/validation calibrated fuel-nozzle/manifold transitions as
+            power, temperature, fuel flow changed.'
       collaboration:
         context: [multicultural, cross-functional, international collaboration]
   - role_group_id: rg_c24009ce
@@ -700,6 +770,26 @@ career_history:
         type: responsibility
         text: Taught Introduction to Robotics and Controls part-time alongside GE employment; coached servo/contact-sensor/Arduino
           robotic applications.
+  - role_group_id: rg_confirmed_story_franchise
+    organization:
+      name: Personalised Children's Stories Franchise Venture
+      country_code: MX
+      industries: [publishing]
+    display_role_title: Franchise Venture / Business Development
+    started: '2000'
+    ended: '2001'
+    employment_type: other
+    blocks:
+    - block_id: b_confirmed_story_franchise
+      role_title: Franchise Business Development
+      started: '2000'
+      ended: '2001'
+      domains: [business development, commercialisation]
+      evidence_items:
+      - evidence_id: ev_confirmed_story_franchise
+        type: responsibility
+        text: Pursued personalised children’s stories franchise commercialization in Celaya and surrounding Mexican
+          cities.
   - role_group_id: rg_51aa11cd
     organization:
       name: EQUINOX

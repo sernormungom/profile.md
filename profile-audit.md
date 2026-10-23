@@ -99,6 +99,24 @@ confirmed_history:
     releases, orchestration experiments, and current handbook workflow. Detailed CI and skill descriptions are owner-supplied
     LLM summaries, not independent repository verification. Earlier assertion that Python orchestration had not
     been implemented is superseded by confirmation of runtime.py experiments.
+- gap_id: franchise_dates_correction
+  status: resolved
+  description: Owner corrected franchise venture dates on 2026-10-21 from 2020-02 to 2021-09 to 2000 to 2001; months
+    not recalled and remain unspecified. Role group moved to its chronological position. The 2020-02 to 2021-09 period
+    is not franchise work.
+- gap_id: career_break_sweden
+  status: resolved
+  description: Owner confirmed on 2026-10-21 relocation with family from Mexico to Sweden in January 2020 and a career
+    break from 2020-02 to 2021-09 in Gothenburg covering Swedish studies (SFI Kurs D), supporting children's adaptation,
+    writing a novel, exploring social media writing, and job search in Sweden.
+- gap_id: ge_cv_review_corrections
+  status: resolved
+  description: 'Owner corrected GE records on 2026-10-23: Agile and Scrum were not used at GE (removed from Technical
+    Software Lead processes and ev_51207a54); emissions work was an algorithm that auto-calibrated fuel staging in
+    simulation (ev_d19a39c7); owner proposed certification tests exercising Fast Ferry logic for DNV (added
+    ev_confirmed_fast_ferry_cert_testing and Certification testing); manager duties include setting team goals
+    (ev_2cf238e3); project management covered LM6000 only, as family leader for LM6000 control software in the Mexico
+    cost center, not LM2500 (ev_dff7beef).'
 evidence_merges:
 - retired_evidence_id: ev_f98ebbdf
   assignment: Volvo Group
