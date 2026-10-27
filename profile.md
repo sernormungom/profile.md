@@ -90,6 +90,11 @@ education:
   qualification: 'ML: Data Science in Python'
   needs_review: false
   ended: 2021-10
+- education_id: e_ge_six_sigma_green_belt
+  type: certification
+  institution: General Electric
+  qualification: Six Sigma Green Belt
+  needs_review: true
 - education_id: e_dba787af
   type: training
   institution: General Electric
@@ -564,12 +569,15 @@ career_history:
   - role_group_id: rg_381b96ae
     organization:
       name: General Electric
+      division: GE Aviation
       country_code: MX
+      city: Queretaro
       industries: [power_generation, aerospace, defense, manufacturing]
     display_role_title: Embedded Control SW Developer / Team Manager / Technical Software Lead / Controls SW Designer
     started: 2005-09
     ended: 2020-01
     employment_type: permanent
+    notes: Previously listed on LinkedIn as one role, "Team Manager & Control Software Engineer", Queretaro, Mexico.
     awards:
     - evidence_id: ev_confirmed_egbert_finalist
       title: Perry T. Egbert Award
@@ -603,7 +611,7 @@ career_history:
       industries: [power_generation, aerospace, manufacturing]
       languages: [C, Fortran, Perl, Kornshell, Visual Basic]
       tools: [beacon7, IBM Synergy, Unix, FSIM, GAP, Toolbox, Excel, RIG (HIL), ECU (HIL), MS Office]
-      processes_standards: [V-model, Six Sigma (DMAIC), Aviation programme verification support (CF34)]
+      processes_standards: [V-model, Six Sigma (DMAIC), TOPS 8D, Lean, FastWorks, New Product Introduction (NPI), Aviation programme verification support (CF34)]
       verification_validation: [Software-in-the-loop (SIL), Hardware-in-the-loop (HIL), Unit testing]
       evidence_items:
       - evidence_id: ev_dec178e4
@@ -686,6 +694,10 @@ career_history:
       - evidence_id: ev_523e88e7
         type: responsibility
         text: Communicated company initiatives; ensured team policy compliance.
+      - evidence_id: ev_linkedin_ge_mgr_priorities
+        type: responsibility
+        text: Set priorities, resources and goals with multidisciplinary global teams; managed red flags and reported
+          team status.
     - block_id: b_3abc60ca
       role_title: Technical Software Lead
       started: 2014-02
@@ -696,7 +708,7 @@ career_history:
       industries: [power_generation, marine]
       languages: [Perl, Visual Basic, MATLAB, C, Fortran, Kornshell]
       tools: [beacon7, MATLAB/Simulink, Neural Network Toolbox, GAP, Toolbox, CIMPLICITY, MarkVIe ECU, RIG, IBM Synergy]
-      processes_standards: [V-model, ISO 9001, Six Sigma (DMAIC), TOPS 8D]
+      processes_standards: [V-model, ISO 9001, Six Sigma (DMAIC), TOPS 8D, Lean, FastWorks, New Product Introduction (NPI)]
       verification_validation: [Certification testing (DNV)]
       evidence_items:
       - evidence_id: ev_confirmed_ge_model_build_testing
@@ -708,6 +720,17 @@ career_history:
       - evidence_id: ev_51207a54
         type: responsibility
         text: Negotiated requirements/resources with US counterpart; led delivery to targets.
+      - evidence_id: ev_linkedin_ge_concept_proposals
+        type: responsibility
+        text: 'Across GE technical roles (2005–2011, 2014–2020): analysed project features to propose conceptual solutions
+          with cost, scope and dates; agreed requirements at different hierarchy levels.'
+      - evidence_id: ev_linkedin_ge_npi_tollgates
+        type: responsibility
+        text: 'Across GE technical roles: ran applicable tollgates of the GE Aviation New Product Introduction (NPI)
+          development process; managed software versions.'
+      - evidence_id: ev_linkedin_ge_training_automation
+        type: responsibility
+        text: 'Across GE technical roles: trained team members; developed process-automation tools and process improvements.'
       projects:
       - project_id: p_ge_migration
         name: Legacy-controls platform migration
