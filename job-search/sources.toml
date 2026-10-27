@@ -1,0 +1,85 @@
+# Where jobsearch.py collects ads. Add a [[source]] block to search a new site.
+#
+# Every source needs: id (unique), site (ads with the same site and ad ID are the same ad,
+# even when two sources find them), type, and the fields that type uses:
+#   rss      feeds = [...]                fixed RSS URLs, and/or
+#            search_url, query,           a search feed ({q} = query); SuccessFactors caps each feed at
+#            split_terms = [...]          20 items, so a full feed is split on split_terms until complete
+#   pages    file = "inbox/....txt"       one ad URL per line; content_class = CSS class of the ad body
+#   jobtech  queries = [...]              Platsbanken free-text queries (JobTech JobSearch API)
+#            params = { ... }             extra API parameters sent with every query, e.g. municipality
+#                                         codes (a list repeats the parameter)
+#   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
+# Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
+# enabled = false.
+#
+# Each site has its own query syntax, so the query is written here in the site's own terms and the
+# adapter sends it unchanged. The index records which queries found each ad (`queries`).
+
+[screening]
+effort = "low"
+# screen-cli: claude -p on the Claude subscription (no API charges).
+cli_model = "haiku"
+cli_parallel = 3            # ads screened at the same time
+claude_command = "claude"   # else ~/.local/bin/claude, else the VS Code extension's binary
+# batch-submit: Message Batches API, billed to an API account.
+model = "claude-haiku-5-5"
+max_tokens = 4096
+
+[filters]
+# Titles matching any of these are recorded but never screened.
+exclude_title = [
+  '(?i)\b(thesis|exjobb|examensarbete|internship|intern|trainee|graduate program|summer|sommarjobb|praktik|apprentice|student)\b',
+]
+
+[[source]]
+id = "volvo-group-rss"
+site = "volvo-group"
+type = "rss"
+employer = "Volvo Group"
+location_regex = '(?i)g(ö|o|&#xf6;)teborg|gothenburg'
+# Every Göteborg ad except thesis/graduate ones. The feed returns at most 20 items and cannot be
+# paged, so the script splits the query on split_terms until each part is under the cap.
+# Syntax: a plain word matches the whole ad text, "title:word" matches the title only (stemmed, so
+# title:developer also matches "development"). "-title:word" excludes by title, which keeps real jobs
+# that merely mention thesis, student or intern in their body. "title:Göteborg" does not work: the
+# location is not part of the indexed title, so Göteborg stays a full-text term.
+search_url = "https://jobs.volvogroup.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "(Göteborg) -title:thesis -title:graduate -title:student -title:internship -title:intern -title:trainee -title:apprentice -title:exjobb -title:examensarbete -title:sommarjobb -title:praktik"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
+
+[[source]]
+# For the backlog the feeds cannot reach: paste ad links from jobs.volvogroup.com, one per line.
+id = "volvo-group-links"
+site = "volvo-group"
+type = "pages"
+employer = "Volvo Group"
+file = "inbox/volvo-links.txt"
+content_class = "jobdescription"
+
+[[source]]
+id = "platsbanken-gbg"
+site = "platsbanken"
+type = "jobtech"
+location_regex = '(?i)göteborg|mölndal|partille|kungälv|lerum|härryda'
+max_per_query = 200
+# Free-text queries over the whole ad. Location is a server-side filter (SCB municipality codes:
+# Göteborg, Mölndal, Partille, Kungälv, Lerum, Härryda), not a word in the query.
+params = { municipality = ["1480", "1481", "1402", "1482", "1441", "1401"] }
+queries = [
+  "embedded",
+  "simulink",
+  "autosar",
+  "c++",
+  "reglerteknik",
+  "ai engineer",
+  "llm",
+  "medicinteknik mjukvara",
+]
+
+[[source]]
+# Consultant assignments and other ads that only arrive by email or PDF: save each as a .md file here.
+id = "manual"
+site = "manual"
+type = "folder"
+path = "inbox/manual"
