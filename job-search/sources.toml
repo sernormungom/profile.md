@@ -11,6 +11,10 @@
 #                                         codes (a list repeats the parameter)
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
+# exclude_employer = [...] (regexes on the advertiser's name), exclude_text = [...] with text_exceptions
+# (regexes on the ad body; a match next to an exception word, e.g. "meriterande", is ignored). The exclude_*
+# lists are also allowed under [filters]. After changing any filter, run `refilter` to apply it to ads already
+# in the index (fetch only filters ads it has not seen before).
 # incremental = true (jobtech only: fetch only ads published since the last successful run),
 # enabled = false.
 #
@@ -70,16 +74,41 @@ incremental = true
 # Free-text queries over the whole ad. Location is a server-side filter (SCB municipality codes:
 # Göteborg, Mölndal, Partille, Kungälv, Lerum, Härryda), not a word in the query.
 params = { municipality = ["1480", "1481", "1402", "1482", "1441", "1401"] }
+# Consultancies and staffing firms (direct employment only). Checked 2026-10-27 against their ads and
+# the web. Oddwork and XLNT Search are recruiters, listed because their clients here are consultancies
+# (Excipio, Bit Addict, Accenture). Combitech, an Mpya partner, is deliberately not listed.
+exclude_employer = [
+  '(?i)\b(capgemini|alten|mpya|knightec|hykmann|integro consulting|friday väst|oddwork|eccera|together tech)\b',
+  '(?i)\b(avl mtc|bertrandt|sigma embedded|framtiden i sverige|tech talents|syntronic|knowit|nexer|edag)\b',
+  '(?i)\b(afry|infotiv|xlnt search|veritaz|avatron|techrytera|software by quokka)\b',
+  '(?i)\b(m for solutions|astek|mcub|ictech|castra)\b',
+]
+# Roles that are not engineering or software work. Tested on 208 screened ads: 34 hits, all skips.
+exclude_title = [
+  '(?i)\b(servicetekniker|supporttekniker|technical support|teknisk support|it support|kundtjänst\w*|produktionsmedarbetare)\b',
+  '(?i)\b(underhåll\w*|drifttekniker|driftspecialist|felsökare|mekaniker|kyltekniker|montör|production engineer)\b',
+  '(?i)\b(tekniker|\w+tekniker|lärare|inköp\w*|account manager|head of sales|verksamhetschef)\b',
+  '(?i)\b(data engineer|business analyst)\b',
+]
+# Hard requirements in the ad body that he cannot meet: security clearance, Swedish citizenship, fluent
+# Swedish. A match is ignored when text_exceptions appears within 150 characters (a merit, not a gate).
+# Tested on 208 screened ads: 35 hits, all skips. The excluded phrase is recorded as the reason.
+exclude_text = [
+  '(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll',
+  '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen',
+  '(?i)flytande svenska|goda kunskaper i svenska|mycket goda kunskaper i svenska|svenska i tal och skrift|svenska och engelska i tal och skrift|fluent (in )?swedish|swedish (is|being) (a )?(must|required)|professional swedish|goda kunskaper i det svenska',
+]
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
 queries = [
   "embedded",
   "simulink",
   "autosar",
   "c++",
-  "reglerteknik",
   "ai engineer",
   "llm",
-  "medicinteknik mjukvara",
 ]
+# Dropped after the first screening run: "medicinteknik mjukvara" and "reglerteknik" returned 56 ads that
+# no other query found, and 55 of them were skips.
 
 [[source]]
 # Consultant assignments and other ads that only arrive by email or PDF: save each as a .md file here.

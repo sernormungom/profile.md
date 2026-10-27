@@ -4,6 +4,7 @@ Screening runs either through Claude Code agents (the job-search skill) or throu
 batch-* commands below. Sources are configured in sources.toml; state lives in data/.
 
     python3 jobsearch.py fetch [--source ID ...] [--review] [--full]
+    python3 jobsearch.py refilter [--site SITE] [--dry-run]
     python3 jobsearch.py pending [--site SITE] [--limit N]
     python3 jobsearch.py screen-cli [--site SITE] [--limit N]
     python3 jobsearch.py batch-submit [--site SITE] [--limit N]
@@ -47,6 +48,7 @@ REPORTS = DATA / "reports"
 BATCHES = DATA / "batches"
 
 USER_AGENT = "Mozilla/5.0 (compatible; personal job search script)"
+EXCLUSION_KINDS = ("title", "employer", "location", "text", "duplicate")
 VERDICTS = {"deep_match": 0, "maybe": 1, "skip": 2}
 REQUIRED_KEYS = {"archetype", "fit", "interest", "verdict", "strongest_angle", "main_risk"}
 
@@ -298,13 +300,33 @@ def load_triage(uid):
     return result
 
 
+def text_exclusion(text, patterns, exceptions):
+    """The first phrase in the ad text that matches a pattern, unless a word from `exceptions` (meriterande,
+    plus, vid behov ...) sits within 150 characters of it: then the ad only prefers it, it does not require it."""
+    for pattern in patterns:
+        for match in re.finditer(pattern, text):
+            around = text[max(0, match.start() - 150): match.end() + 150]
+            if not (exceptions and re.search(exceptions, around)):
+                return match.group(0).lower()
+    return None
+
+
 def exclusion_reason(ad, src, filters):
+    """Why an ad is dropped, as '<kind>: <detail>' with kind one of EXCLUSION_KINDS, or None to keep it."""
     for pattern in filters.get("exclude_title", []) + src.get("exclude_title", []):
         if re.search(pattern, ad["title"]):
             return "title: " + pattern
+    for pattern in filters.get("exclude_employer", []) + src.get("exclude_employer", []):
+        if ad["employer"] and re.search(pattern, ad["employer"]):
+            return "employer: " + ad["employer"]
     location_pattern = src.get("location_regex")
     if location_pattern and ad["location"] and not re.search(location_pattern, ad["location"]):
         return "location: " + ad["location"]
+    patterns = filters.get("exclude_text", []) + src.get("exclude_text", [])
+    if patterns:
+        phrase = text_exclusion(ad["text"], patterns, src.get("text_exceptions") or filters.get("text_exceptions"))
+        if phrase:
+            return "text: " + phrase
     return None
 
 
@@ -353,7 +375,8 @@ def print_review(added):
     print(f"\nExcluded ({len(dropped)}):")
     for e in sorted(dropped, key=lambda e: (e["reason"].split()[0], e["title"])):
         reason = e["reason"].split()[0].rstrip(":")
-        detail = e["reason"].split(" of ")[-1] if reason == "duplicate" else e["location"]
+        detail = {"duplicate": e["reason"].split(" of ")[-1], "employer": e["employer"],
+                  "text": e["reason"].partition(": ")[2]}.get(reason, e["location"])
         print(f"  [{reason}] {e['title'][:60]:60}  {detail[:40]}")
 
 
@@ -411,17 +434,59 @@ def cmd_fetch(args):
         total = collections.Counter()
         for counts in stats.values():
             total.update(counts)
-        excluded = total["title"] + total["location"] + total["duplicate"]
+        excluded = sum(total[kind] for kind in EXCLUSION_KINDS)
         note = f" (published since {after})" if since else ""
         print(f"{src['id']}: {total['new']} new, {excluded} excluded, {total['known']} already known{note}")
         for query, c in stats.items():
             if query:
-                print(f"  {c['found']:4} found | {c['new']:3} new | {c['title']:3} title | {c['location']:3} location | "
-                      f"{c['duplicate']:3} duplicate | {c['known']:3} known | {query[:60]}")
+                print(f"  {c['found']:4} found | {c['new']:3} new | {c['title']:3} title | {c['employer']:3} employer | "
+                      f"{c['location']:3} location | {c['text']:3} text | {c['duplicate']:3} duplicate | "
+                      f"{c['known']:3} known | {query[:60]}")
         save_index(index)
         save_state(state)
     if args.review:
         print_review(added)
+
+
+def read_ad_text(uid):
+    """The ad body from data/ads/, without the header that write_ad_file adds."""
+    path = ADS / (safe_name(uid) + ".md")
+    if not path.exists():
+        return None
+    return re.split(r"^- URL: .*\n\n", path.read_text(encoding="utf-8"), maxsplit=1, flags=re.M)[-1]
+
+
+def cmd_refilter(args):
+    """Apply the current filters to ads that are already in the index and still 'new'."""
+    config = load_config()
+    filters = config.get("filters", {})
+    sources = {s["id"]: s for s in config["source"]}
+    index = load_index()
+    kinds, lost, checked = collections.Counter(), [], 0
+    for uid, e in index.items():
+        if e["status"] != "new" or (args.site and e["site"] != args.site):
+            continue
+        src, text = sources.get(e["source"]), read_ad_text(uid)
+        if src is None or text is None:
+            continue
+        checked += 1
+        reason = exclusion_reason({**{k: e[k] for k in ("title", "employer", "location")}, "text": text}, src, filters)
+        if not reason:
+            continue
+        kinds[reason.split()[0].rstrip(":")] += 1
+        triage = load_triage(uid)
+        if triage and triage["verdict"] != "skip":
+            lost.append(f"  {triage['verdict']:10} {e['title'][:50]:50} {e['employer'][:25]:25} {reason[:50]}")
+        if not args.dry_run:
+            e.update(status="excluded", reason=reason)
+    verb = "would exclude" if args.dry_run else "excluded"
+    print(f"{checked} new ads checked: {verb} {sum(kinds.values())} "
+          f"({', '.join(f'{n} {k}' for k, n in kinds.items()) or 'none'}), {checked - sum(kinds.values())} kept")
+    if lost:
+        print(f"Already screened as deep_match or maybe and {verb}:")
+        print("\n".join(lost))
+    if not args.dry_run and kinds:
+        save_index(index)
 
 
 def pending_entries(site=None, limit=None):
@@ -747,6 +812,10 @@ def main():
     p.add_argument("--review", action="store_true", help="afterwards list the ads added by this run, new and excluded")
     p.add_argument("--full", action="store_true", help="ignore the last fetch date of incremental sources")
     p.set_defaults(func=cmd_fetch)
+    p = sub.add_parser("refilter", help="apply the current filters to ads already in the index")
+    p.add_argument("--site")
+    p.add_argument("--dry-run", action="store_true", help="only report what would be excluded")
+    p.set_defaults(func=cmd_refilter)
     p = sub.add_parser("pending", help="list ads that still need screening, as 'ad-file<TAB>triage-file'")
     p.add_argument("--site")
     p.add_argument("--limit", type=int)
