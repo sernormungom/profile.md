@@ -1,6 +1,6 @@
 # Match card: Norberto Munoz Gomez
 
-Compressed from [profile.md](../profile.md) and [Job Requirement Archetypes — 5 CV Tracks.md](../Job%20Requirement%20Archetypes%20—%205%20CV%20Tracks.md) on 2026-10-23, for the job-ad triage step only. It is not a source of facts for CVs. When either source file changes, regenerate this card from them and update the date.
+Compressed from [profile.md](../profile.md) and [Job Requirement Archetypes — 5 CV Tracks.md](../Job%20Requirement%20Archetypes%20—%205%20CV%20Tracks.md) on 2026-10-27, for the job-ad triage step only. It is not a source of facts for CVs. When either source file changes, regenerate this card from them and update the date.
 
 ## Conditions
 - Based in Gothenburg, Sweden. Onsite, hybrid and remote all work. Temporary travel of up to 3 months is fine; relocating away from Gothenburg is not.
@@ -21,6 +21,7 @@ Compressed from [profile.md](../profile.md) and [Job Requirement Archetypes — 
 - BEng in Electronic Engineering.
 - Not a CS or Data Science degree: score such gates as partial.
 - Coursera: Deep Learning and AI for Medicine specialisations.
+- Six Sigma Green Belt (General Electric): recorded in the profile but not yet verified, so treat a Green Belt gate as partial.
 
 ## Strongest evidence (Owned or Taught)
 - **Model-based controls, GE gas turbines (14 years):**
@@ -30,6 +31,7 @@ Compressed from [profile.md](../profile.md) and [Job Requirement Archetypes — 
   - Auto-calibrated fuel staging in simulation using genetic algorithms to cut CO/NOx emissions.
   - DNV certification documentation and tests; supported CF34 aviation recertification.
   - Led a toolchain migration to Simulink for about 24 engineers.
+  - Process work at GE Aviation: Six Sigma (DMAIC), TOPS 8D, Lean, FastWorks; ran New Product Introduction (NPI) tollgates; proposed conceptual solutions with cost, scope and dates; set priorities and reported status with global multidisciplinary teams.
 - **Volvo, autonomous-truck fail-operational redundancy (C/AUTOSAR):**
   - ASIL B/D components; ISO 26262; Vector DaVinci integration; CANoe; SystemWeaver.
   - SIL, HIL and in-vehicle testing.
