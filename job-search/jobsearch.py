@@ -3,7 +3,7 @@
 Screening runs either through Claude Code agents (the job-search skill) or through the
 batch-* commands below. Sources are configured in sources.toml; state lives in data/.
 
-    python3 jobsearch.py fetch [--source ID ...]
+    python3 jobsearch.py fetch [--source ID ...] [--review] [--full]
     python3 jobsearch.py pending [--site SITE] [--limit N]
     python3 jobsearch.py screen-cli [--site SITE] [--limit N]
     python3 jobsearch.py batch-submit [--site SITE] [--limit N]
@@ -16,9 +16,11 @@ API instead (billed to an API account) and need the anthropic package (requireme
 """
 
 import argparse
+import collections
 import concurrent.futures
 import datetime as dt
 import email.utils
+import hashlib
 import html
 import json
 import os
@@ -38,6 +40,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 INDEX = DATA / "index.jsonl"
+STATE = DATA / "fetch-state.json"
 ADS = DATA / "ads"
 TRIAGE = DATA / "triage"
 REPORTS = DATA / "reports"
@@ -323,40 +326,102 @@ def write_ad_file(uid, ad):
 
 # ---------------------------------------------------------------- commands
 
+def text_hash(text):
+    return hashlib.md5(re.sub(r"\s+", " ", text).strip().lower().encode()).hexdigest()[:12]
+
+
+def duplicate_key(entry):
+    """Reposts: the same employer, title and text under a new ad ID."""
+    return (entry["site"], entry["employer"].lower(), entry["title"].lower(), entry.get("text_hash"))
+
+
+def load_state():
+    return json.loads(STATE.read_text(encoding="utf-8")) if STATE.exists() else {}
+
+
+def save_state(state):
+    DATA.mkdir(exist_ok=True)
+    STATE.write_text(json.dumps(state, indent=2), encoding="utf-8")
+
+
+def print_review(added):
+    kept = [e for e in added if e["status"] == "new"]
+    print(f"\nNew ads to screen ({len(kept)}):")
+    for e in sorted(kept, key=lambda e: e["published"], reverse=True):
+        print(f"  {e['published']}  {e['title'][:60]:60}  {e['location'][:22]:22}  {e['employer'][:24]}")
+    dropped = [e for e in added if e["status"] == "excluded"]
+    print(f"\nExcluded ({len(dropped)}):")
+    for e in sorted(dropped, key=lambda e: (e["reason"].split()[0], e["title"])):
+        reason = e["reason"].split()[0].rstrip(":")
+        detail = e["reason"].split(" of ")[-1] if reason == "duplicate" else e["location"]
+        print(f"  [{reason}] {e['title'][:60]:60}  {detail[:40]}")
+
+
 def cmd_fetch(args):
     config = load_config()
     filters = config.get("filters", {})
     index = load_index()
+    state = load_state()
+    duplicates = {duplicate_key(e): uid for uid, e in index.items()
+                  if e["status"] == "new" and e.get("text_hash") and e["employer"]}
     sources = [s for s in config["source"] if s.get("enabled", True)]
     if args.source:
         sources = [s for s in config["source"] if s["id"] in args.source]
+    added = []
     for src in sources:
-        new = excluded = seen = 0
+        stats = {}
+        started = today()
+        since = state.get(src["id"]) if src.get("incremental") and not args.full else None
+        run = src
+        if since:  # a day of overlap; ads already in the index are skipped anyway
+            after = (dt.date.fromisoformat(since) - dt.timedelta(days=1)).isoformat()
+            run = {**src, "params": {**src.get("params", {}), "published-after": after + "T00:00:00"}}
         try:
-            for ad in ADAPTERS[src["type"]](src):
+            for ad in ADAPTERS[src["type"]](run):
                 uid = f"{src['site']}:{ad['id']}"
                 query = ad.get("query")
+                counts = stats.setdefault(query or "", collections.Counter())
+                counts["found"] += 1
                 if uid in index:
                     index[uid]["last_seen"] = today()
                     if query and query not in index[uid].setdefault("queries", []):
                         index[uid]["queries"].append(query)
-                    seen += 1
+                    counts["known"] += 1
                     continue
-                reason = exclusion_reason(ad, src, filters)
                 entry = {k: ad[k] for k in ("title", "employer", "location", "url", "published")}
                 entry.update(uid=uid, site=src["site"], source=src["id"], first_seen=today(), last_seen=today(),
-                             status="excluded" if reason else "new", reason=reason or "",
-                             queries=[query] if query else [])
+                             text_hash=text_hash(ad["text"]), queries=[query] if query else [])
+                key = duplicate_key(entry)
+                reason = exclusion_reason(ad, src, filters)
+                if not reason and entry["employer"] and key in duplicates:
+                    reason = "duplicate of " + duplicates[key]
+                entry.update(status="excluded" if reason else "new", reason=reason or "")
                 index[uid] = entry
+                added.append(entry)
                 if reason:
-                    excluded += 1
+                    counts[reason.split()[0].rstrip(":")] += 1
                 else:
                     write_ad_file(uid, ad)
-                    new += 1
+                    duplicates[key] = uid
+                    counts["new"] += 1
         except Exception as exc:  # one broken source must not stop the others
             print(f"{src['id']}: FAILED ({exc})", file=sys.stderr)
-        print(f"{src['id']}: {new} new, {excluded} excluded, {seen} already known")
+        else:
+            state[src["id"]] = started
+        total = collections.Counter()
+        for counts in stats.values():
+            total.update(counts)
+        excluded = total["title"] + total["location"] + total["duplicate"]
+        note = f" (published since {after})" if since else ""
+        print(f"{src['id']}: {total['new']} new, {excluded} excluded, {total['known']} already known{note}")
+        for query, c in stats.items():
+            if query:
+                print(f"  {c['found']:4} found | {c['new']:3} new | {c['title']:3} title | {c['location']:3} location | "
+                      f"{c['duplicate']:3} duplicate | {c['known']:3} known | {query[:60]}")
         save_index(index)
+        save_state(state)
+    if args.review:
+        print_review(added)
 
 
 def pending_entries(site=None, limit=None):
@@ -642,6 +707,25 @@ def cmd_report(args):
     out.append("")
     if waiting:
         out += [f"## Not screened yet ({len(waiting)})", ""] + [f"- {link(e)}" for e, _ in waiting] + [""]
+    by_query = {}
+    for e in rows:
+        for q in e.get("queries", []):
+            c = by_query.setdefault(q, collections.Counter())
+            c["found"] += 1
+            c["only"] += e["queries"] == [q]
+            result = load_triage(e["uid"]) if e["status"] == "new" else None
+            c["filtered" if e["status"] == "excluded" else result["verdict"] if result else "waiting"] += 1
+    if by_query:
+        out += ["## Yield per query", "",
+                "| Query | Found | Only here | Filtered out | Deep match | Maybe | Skip | Waiting |",
+                "|---|---|---|---|---|---|---|---|"]
+        for q, c in sorted(by_query.items(), key=lambda kv: (-kv[1]["deep_match"], -kv[1]["maybe"], -kv[1]["found"])):
+            cells = [q if len(q) <= 50 else q[:49] + "…", c["found"], c["only"], c["filtered"], c["deep_match"],
+                     c["maybe"], c["skip"], c["waiting"]]
+            out.append("| " + " | ".join(str(x).replace("|", "/") for x in cells) + " |")
+        unlogged = sum(not e.get("queries") for e in rows)
+        out += ["", "Ads found by several queries count under each; \"Only here\" ads were found by that query alone."
+                + (f" {unlogged} ads have no recorded query (saved by hand, or fetched before queries were recorded) and are not counted." if unlogged else ""), ""]
     if excluded:
         by_title = sum(e["reason"].startswith("title") for e in excluded)
         out += [f"## Filtered out before screening ({len(excluded)})", "",
@@ -660,6 +744,8 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("fetch", help="collect new ads from the configured sources")
     p.add_argument("--source", action="append", help="source id from sources.toml (repeatable; default: all enabled)")
+    p.add_argument("--review", action="store_true", help="afterwards list the ads added by this run, new and excluded")
+    p.add_argument("--full", action="store_true", help="ignore the last fetch date of incremental sources")
     p.set_defaults(func=cmd_fetch)
     p = sub.add_parser("pending", help="list ads that still need screening, as 'ad-file<TAB>triage-file'")
     p.add_argument("--site")

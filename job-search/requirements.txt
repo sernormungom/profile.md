@@ -1,0 +1,2 @@
+# Only the batch-submit and batch-collect commands need this.
+anthropic

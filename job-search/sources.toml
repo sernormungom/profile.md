@@ -11,6 +11,7 @@
 #                                         codes (a list repeats the parameter)
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
+# incremental = true (jobtech only: fetch only ads published since the last successful run),
 # enabled = false.
 #
 # Each site has its own query syntax, so the query is written here in the site's own terms and the
@@ -37,7 +38,7 @@ id = "volvo-group-rss"
 site = "volvo-group"
 type = "rss"
 employer = "Volvo Group"
-location_regex = '(?i)g(ö|o|&#xf6;)teborg|gothenburg'
+location_regex = '(?i)g(ö|o|&#xf6;)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
 # Every Göteborg ad except thesis/graduate ones. The feed returns at most 20 items and cannot be
 # paged, so the script splits the query on split_terms until each part is under the cap.
 # Syntax: a plain word matches the whole ad text, "title:word" matches the title only (stemmed, so
@@ -63,6 +64,9 @@ site = "platsbanken"
 type = "jobtech"
 location_regex = '(?i)göteborg|mölndal|partille|kungälv|lerum|härryda'
 max_per_query = 200
+# After the first run, ask only for ads published since the last successful fetch (a day of overlap).
+# `fetch --full` ignores this and asks for everything.
+incremental = true
 # Free-text queries over the whole ad. Location is a server-side filter (SCB municipality codes:
 # Göteborg, Mölndal, Partille, Kungälv, Lerum, Härryda), not a word in the query.
 params = { municipality = ["1480", "1481", "1402", "1482", "1441", "1401"] }
