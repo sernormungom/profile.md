@@ -117,6 +117,18 @@ confirmed_history:
     ev_confirmed_fast_ferry_cert_testing and Certification testing); manager duties include setting team goals
     (ev_2cf238e3); project management covered LM6000 only, as family leader for LM6000 control software in the Mexico
     cost center, not LM2500 (ev_dff7beef).'
+- gap_id: ge_team_manager_interview
+  status: resolved
+  description: 'Owner interview on 2026-10-29 about the GE Team Manager role (b_b63b713c). Corrected industry from
+    power_generation to aerospace and domains from control systems to avionics/FMS: the three Mexico teams supported
+    the GE Aviation Grand Rapids (US) team on a flight management system acquired from Smiths Aerospace (owner-confirmed
+    in follow-up). Teams worked to DO-178; owner managed them and did not personally implement or verify, so DO-178
+    is recorded with that qualifier. Added travel (two Grand Rapids trips, one Miami trip; US visits 3–4 times a
+    year) and the start-up invitation from a former report during the career break (ev_confirmed_startup_invitation;
+    a couple of weeks of remote work, then declined). Corrected team name to Validation & Verification and head-count source to US
+    support requests (ev_178ea872). Added team scope, resourcing, hiring (~10 hires, STAR interviewing), career-growth
+    follow-up with one report promoted to team manager, performance handling, and reporting line/forums (ev_confirmed_ge_mgr_*).
+    Recorded the 2014 move to Technical Software Lead as the owner''s own decision (role-group notes).'
 evidence_merges:
 - retired_evidence_id: ev_f98ebbdf
   assignment: Volvo Group

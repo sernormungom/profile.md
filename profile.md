@@ -1,13 +1,13 @@
 # Consultant Profile - Norberto Munoz Gomez
 
-Factual expertise reference, updated 23 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
+Factual expertise reference, updated 29 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
 
 ```yaml
 metadata:
   schema_version: '1.6'
   consultant_id: norberto.munoz
   created_at: '2026-09-09T13:45:39Z'
-  updated_at: '2026-10-23'
+  updated_at: '2026-10-29'
   as_of: 2026-10
 identity:
   full_name: Norberto Munoz Gomez
@@ -566,6 +566,10 @@ career_history:
         type: responsibility
         text: Relocated with family from Mexico to Sweden in January 2020. Studied Swedish (SFI Kurs D), supported children's
           adaptation, wrote a novel, explored social media writing, and searched for work in Sweden.
+      - evidence_id: ev_confirmed_startup_invitation
+        type: achievement
+        text: Invited by a former GE direct report to join his start-up as team manager. Worked there remotely
+          for a couple of weeks, then declined because a remote role was a poor fit right after moving to Sweden.
   - role_group_id: rg_381b96ae
     organization:
       name: General Electric
@@ -578,6 +582,7 @@ career_history:
     ended: 2020-01
     employment_type: permanent
     notes: Previously listed on LinkedIn as one role, "Team Manager & Control Software Engineer", Queretaro, Mexico.
+      Moved from Team Manager to Technical Software Lead in 2014 by own decision, to pursue technical interests.
     awards:
     - evidence_id: ev_confirmed_egbert_finalist
       title: Perry T. Egbert Award
@@ -673,24 +678,62 @@ career_history:
       ended: 2014-01
       block_type: people_management
       seniority: manager
-      domains: [embedded systems, control systems]
-      industries: [power_generation]
+      domains: [embedded systems, avionics, flight management systems (FMS), low-level embedded software, verification and requirements traceability]
+      industries: [aerospace]
+      processes_standards: [DO-178 (teams' standard; managed, not personally performed), FAA regulatory compliance, Requirements-based test traceability, GE career-growth and appraisal process, GE behavioural (STAR) interviewing]
       collaboration:
-        stakeholders: [US counterpart leadership, HR]
+        stakeholders: [Grand Rapids (US) engineering team and team leaders, Sub-section manager, Peer team managers, HR]
         context: [multicultural, cross-functional, international collaboration]
+        practices: [line management, recruitment, resource allocation, career development, cross-site coordination]
       evidence_items:
       - evidence_id: ev_178ea872
         type: responsibility
-        text: 'Simultaneously managed Platforms, Navigation & Guidance, and Verification teams: 24 direct reports
-          total; team sizes varied and were set by upper management. Decided membership subject to manager/HR approval;
-          hired, handled one performance dismissal and one relocation resignation. US stakeholders assigned Mexico
-          workload; team/manager organized internal execution.'
+        text: 'Simultaneously managed Platforms, Navigation & Guidance, and Validation & Verification teams: 24 direct
+          reports total; head count followed the support requested by the US team. Decided membership subject to
+          manager/HR approval; hired, handled one performance dismissal and one relocation resignation. US stakeholders
+          assigned Mexico workload; team/manager organized internal execution.'
+      - evidence_id: ev_confirmed_ge_mgr_team_scope
+        type: responsibility
+        text: 'Mexico cost center supporting the GE Aviation Grand Rapids (US) team on a flight management system
+          (FMS) acquired from Smiths Aerospace and being transitioned for large commercial airlines. Team work: Platforms
+          on low-level software close to hardware (bootstrap sequence, watchdog); Navigation & Guidance on flight
+          legs/routes and an auto-taxi feature guiding the aircraft from landing to its final destination; Validation
+          & Verification on test support and test-to-requirement traceability for FAA compliance. Teams worked to
+          DO-178 (version and level unspecified); owner managed the teams and did not personally implement features
+          or perform verification.'
+      - evidence_id: ev_confirmed_ge_mgr_resourcing
+        type: responsibility
+        text: 'Annual target-setting with US/Mexico team leaders; US set delivery goals and requested head count.
+          Hired to meet US targets, followed up delivery progress, and moved engineers between the three teams or
+          hired an extra developer when a team needed support.'
+      - evidence_id: ev_confirmed_ge_mgr_hiring
+        type: responsibility
+        text: 'Hired around 10 engineers. Wrote job descriptions a couple of times (otherwise supplied by HR or US);
+          HR pre-selected candidates. Interviewed with HR, own manager and technical interviewers from own teams,
+          using GE behavioural (STAR) interviewing.'
       - evidence_id: ev_confirmed_ge_compensation
         type: responsibility
         text: Allocated individual promotions/salary increases within upper-management budget.
       - evidence_id: ev_2cf238e3
         type: responsibility
         text: Coached engineers on career planning; ran annual appraisals; resolved conflicts; set team goals.
+      - evidence_id: ev_confirmed_ge_mgr_career_growth
+        type: achievement
+        text: 'Agreed career-growth goals with each team member at the start of the year (GE process) and followed
+          up quarterly. Supported a team member aiming for management, involving own manager; he became team manager
+          of another team.'
+      - evidence_id: ev_confirmed_ge_mgr_performance
+        type: responsibility
+        text: 'Gave candid appraisal feedback when goals were not met and offered help and support. In the performance
+          dismissal, discussed poor performance, learned the employee was unhappy with the work, and offered an open
+          door to leave, which he accepted.'
+      - evidence_id: ev_confirmed_ge_mgr_org_forums
+        type: responsibility
+        text: 'Reported to a sub-section manager as one of 4–5 team managers in the GE Querétaro organisation. Met
+          the US team twice a month; the US team visited Querétaro 3–4 times a year, and owner travelled twice to
+          Grand Rapids and once to Miami. Represented own teams in cross-site collaboration with Grand Rapids and in
+          cross-functional resource sharing within the Querétaro section; organised technical meetings when needed
+          and followed up agreements.'
       - evidence_id: ev_523e88e7
         type: responsibility
         text: Communicated company initiatives; ensured team policy compliance.
