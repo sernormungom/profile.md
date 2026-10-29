@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A single consultant's (Norberto Munoz Gomez, Mpya Sci & Tech) career data plus two workflows built on it:
 
-1. **CV tailoring**: `profile.md` (facts) + `Job Requirement Archetypes — 5 CV Tracks.md` (what five job types, A–E, require) → archetype CVs. Driven by the `archetype-cv` skill in `.claude/skills/archetype-cv/`.
+1. **CV tailoring**: `profile.md` (facts) + `Job Requirement Archetypes — 5 CV Tracks.md` (what five job types, A–E, require) → archetype CVs. Further archetypes, starting with F (Engineering Manager), each have their own file in `archetypes/`. Driven by the `archetype-cv` skill in `.claude/skills/archetype-cv/`.
 2. **Job search funnel**: `job-search/` collects job ads, filters them, screens them with a small model against a compressed match card, and writes a ranked report. Driven by the `job-search` skill in `.claude/skills/job-search/` plus `job-search/jobsearch.py`.
 
 Use those skills for those tasks; their `SKILL.md` files hold the detailed rules and are the source of truth for the workflows.
