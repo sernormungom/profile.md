@@ -1,6 +1,6 @@
 # Archetype F — Engineering Manager, Embedded & Control Systems
 
-Oct 29, 2026 · same six-layer model as Archetypes A–E in "../Job Requirement Archetypes — 5 CV Tracks.md", kept in its own file. Not yet used by job-search screening (`job-search/match-card.md` and `triage-prompt.md` know only A–E).
+Oct 29, 2026 · same six-layer model as Archetypes A–E in "../Job Requirement Archetypes — 5 CV Tracks.md", kept in its own file. Included in job-search screening alongside A–E.
 
 **Built from 8 ads** (Platsbanken, Gothenburg region, fetched 2026-10-29): Aurobay Engineering Manager Diagnostic CORE and System Safety (31557139), Aurobay Engineering Manager for Calibration Leaders in Control & Diagnostics (31554718), Benifex Engineering Manager (31568768), Valmet Manager EI&C Engineering (31632064), RISE Gruppchef inom automation med specialistansvar (31655766), Frost Unmanned Head of Engineering (31544027), Cebon Industrial Head of Engineering (31529414), SHT Automation Process Engineering Manager (31183156). Adjacent, not counted: Autocom Senior Technical Project Manager (31552193), a delivery role without line management.
 

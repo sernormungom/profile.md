@@ -22,15 +22,15 @@ You screen job ads for one candidate. The card below is your only source of fact
 
 For each ad:
 
-1. **Classify.** Read the body, not the title, and pick the closest archetype: A, B, C, D, E, or `none`. If the ad clearly spans two archetypes, also give a secondary one. Set `title_trap` to true only when the title points to a different archetype or kind of work than the body does. An unfamiliar title that describes the body accurately is not a trap.
-2. **Check conditions.** Location, onsite rules, required language, citizenship or security clearance, driving licence, travel and duration. List only the conditions the ad actually states. The one exception is location: if the ad doesn't state it, add a single `unclear` location item. One `fail` here makes the verdict `skip`, whatever the other scores are.
+1. **Classify.** Read the body, not the title, and pick the closest archetype: A, B, C, D, E, F, or `none`. If the ad clearly spans two archetypes, also give a secondary one. Set `title_trap` to true only when the title points to a different archetype or kind of work than the body does. An unfamiliar title that describes the body accurately is not a trap.
+2. **Check conditions.** Location, onsite rules, required language, citizenship or security clearance, driving licence, travel and duration. List only the conditions the ad actually states. Advanced Swedish does not establish fluency: mark an explicit fluent/native Swedish condition `unclear` unless the card provides that evidence. An ad written in Swedish is not itself a language gate. The one exception is location: if the ad doesn't state it, add a single `unclear` location item. One `fail` here makes the verdict `skip`, whatever the other scores are.
 3. **Check gates.** List the ad's hard requirements: years of experience, degree, named tools or languages, domain experience, anything marked "must" or "krav". Ignore items marked "meriterande", "nice to have" or "a plus". Give each one a status:
    - `pass`: the card shows it directly.
    - `partial`: the card shows adjacent evidence, such as turbine controls for an automotive-controls gate, or a PhD in control for a CS-degree gate.
    - `fail`: the card shows it is missing, or lists it as a gap. The card lists all of his real strengths, so a named tool, language, platform or kind of experience that the card does not mention also counts as `fail`.
    - `unknown`: only for personal facts the card doesn't cover, such as salary expectations or a willingness the ad asks about.
 
-   For "N years in role X" (for example product management, DevOps or architecture), count only the years in which the card shows him working in role X. Adjacent roles can make it `partial` only if they add up to at least half of N. If the card shows no role of that kind, the gate fails.
+   For "N years in role X" (for example product management, DevOps or architecture), count only the years in which the card shows him working in role X. Adjacent roles can make it `partial` only if they add up to at least half of N. If the card shows no role of that kind, the gate fails. For track F, distinguish line management from technical leadership: count only April 2011–January 2014 as demonstrated line-management tenure. Later technical leadership does not establish recent line management, Swedish work-environment responsibility, or full budget ownership.
 4. **Score fit from 0 to 5.** Fit measures whether he could do the job and get past the screen:
    - 5: every gate passes, and the core work matches his Owned evidence.
    - 4: gates pass or are partial, and the core work largely matches.
@@ -53,8 +53,8 @@ Be concise. Return only the JSON object, with no prose before or after it.
   "title": "string",
   "employer": "string or null",
   "ad_language": "sv | en | other",
-  "archetype": "A | B | C | D | E | none",
-  "secondary_archetype": "A | B | C | D | E | null",
+  "archetype": "A | B | C | D | E | F | none",
+  "secondary_archetype": "A | B | C | D | E | F | null",
   "title_trap": false,
   "conditions": [
     { "item": "string", "status": "ok | fail | unclear", "note": "string, max 12 words" }

@@ -199,18 +199,47 @@ def fetch_pages(src):
         if not url or url.startswith("#"):
             continue
         page = http_get(url)
+        # Public structured metadata supplies location/date on sites such as Teamtailor.
+        # Keep CSS body extraction: it preserves the original requirements and conditions.
+        posting = {}
+        for raw in re.findall(r'<script\b[^>]*type=[\"\x27]application/ld\+json[\"\x27][^>]*>(.*?)</script>', page, re.S | re.I):
+            try:
+                value = json.loads(raw)
+            except (ValueError, TypeError):
+                continue
+            candidates = value if isinstance(value, list) else [value]
+            for candidate in candidates:
+                if isinstance(candidate, dict):
+                    graph = candidate.get("@graph")
+                    if isinstance(graph, list):
+                        candidates.extend(graph)
+                    if candidate.get("@type") == "JobPosting":
+                        posting = candidate
+                        break
+            if posting:
+                break
+        locations = posting.get("jobLocation", [])
+        if isinstance(locations, dict):
+            locations = [locations]
+        elif not isinstance(locations, list):
+            locations = []
+        locality = ", ".join(dict.fromkeys(
+            loc.get("address", {}).get("addressLocality", "") for loc in locations
+            if isinstance(loc, dict) and isinstance(loc.get("address"), dict)
+            and loc["address"].get("addressLocality")))
         title_m = re.search(r'itemprop="title"[^>]*>(.*?)<', page, re.S) or re.search(r"<title>(.*?)</title>", page, re.S)
         loc_m = re.search(r'class="jobGeoLocation"[^>]*>([^<]+)<', page)
+        fallback_location = urllib.parse.unquote(url).split("/job/", 1)[1].split("-", 1)[0] if "/job/" in url else ""
         date_m = re.search(r'itemprop="datePosted"[^>]*content="([^"]*)"', page)
         id_match = re.search(r"/(\d+)/?$", url)
         text = html_to_text(page, src.get("content_class")) if src.get("content_class") else ""
         yield {
             "id": id_match.group(1) if id_match else url,
-            "title": html.unescape(title_m.group(1)).strip() if title_m else url,
+            "title": html.unescape(posting.get("title") or (title_m.group(1) if title_m else url)).strip(),
             "employer": src.get("employer", ""),
-            "location": html.unescape(loc_m.group(1)).strip() if loc_m else urllib.parse.unquote(url).split("/job/")[-1].split("-")[0],
+            "location": locality or (html.unescape(loc_m.group(1)).strip() if loc_m else fallback_location),
             "url": url,
-            "published": date_m.group(1) if date_m else "",
+            "published": (posting.get("datePosted") or (date_m.group(1) if date_m else ""))[:10],
             "text": text or html_to_text(page),
         }
         time.sleep(1)
@@ -295,7 +324,10 @@ def load_triage(uid):
         result = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return None
-    if not REQUIRED_KEYS <= result.keys() or result["verdict"] not in VERDICTS:
+    if (not isinstance(result, dict) or not REQUIRED_KEYS <= result.keys()
+            or result["verdict"] not in VERDICTS
+            or result["archetype"] not in ENUM_ARCHETYPE
+            or result.get("secondary_archetype") not in [None, *ENUM_ARCHETYPE[:-1]]):
         return None
     return result
 
@@ -509,7 +541,7 @@ def cmd_pending(args):
 
 # ---------------------------------------------------------------- batch screening
 
-ENUM_ARCHETYPE = ["A", "B", "C", "D", "E", "none"]
+ENUM_ARCHETYPE = ["A", "B", "C", "D", "E", "F", "none"]
 TRIAGE_SCHEMA = {
     "type": "object",
     "properties": {
@@ -518,7 +550,7 @@ TRIAGE_SCHEMA = {
         "employer": {"anyOf": [{"type": "string"}, {"type": "null"}]},
         "ad_language": {"type": "string", "enum": ["sv", "en", "other"]},
         "archetype": {"type": "string", "enum": ENUM_ARCHETYPE},
-        "secondary_archetype": {"anyOf": [{"type": "string", "enum": ENUM_ARCHETYPE[:5]}, {"type": "null"}]},
+        "secondary_archetype": {"anyOf": [{"type": "string", "enum": ENUM_ARCHETYPE[:-1]}, {"type": "null"}]},
         "title_trap": {"type": "boolean"},
         "conditions": {"type": "array", "items": {
             "type": "object",
@@ -792,11 +824,12 @@ def cmd_report(args):
         out += ["", "Ads found by several queries count under each; \"Only here\" ads were found by that query alone."
                 + (f" {unlogged} ads have no recorded query (saved by hand, or fetched before queries were recorded) and are not counted." if unlogged else ""), ""]
     if excluded:
-        by_title = sum(e["reason"].startswith("title") for e in excluded)
-        out += [f"## Filtered out before screening ({len(excluded)})", "",
-                f"- {by_title} by title (thesis, graduate programme, internship and similar)",
-                f"- {len(excluded) - by_title} outside the source's location", "",
-                "The full list, with reasons, is in data/index.jsonl.", ""]
+        reasons = collections.Counter(e["reason"].split()[0].rstrip(":") for e in excluded)
+        labels = {"title": "by title", "employer": "by employer", "location": "outside the source's location",
+                  "text": "by ad-text requirements", "duplicate": "as duplicates"}
+        out += [f"## Filtered out before screening ({len(excluded)})", ""]
+        out += [f"- {n} {labels.get(kind, kind)}" for kind, n in sorted(reasons.items())]
+        out += ["", "The full list, with reasons, is in data/index.jsonl.", ""]
 
     REPORTS.mkdir(parents=True, exist_ok=True)
     path = REPORTS / f"{today()}{'-' + args.site if args.site else ''}.md"

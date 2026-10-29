@@ -82,6 +82,8 @@ When the user picks an ad, compare it with the full `profile.md`, not the card, 
 
 ## Adding a site
 
+For a bookmark export or several candidate sites, first follow `job-search/source-review.md` (repo-relative). Run `python3 -I bookmark_inventory.py inbox/bookmarks.html` from `job-search/` to inventory the original export locally. Test incremental coverage against the index and targeted JobTech checks before adding sources; keep every decision in the ledger. Never substitute guessed screenshot URLs for the export. Keep unrelated/private bookmarks in gitignored inputs/inventory. The first pass reviews at most six employer groups and adds no adapters. Pilot queries separately, validate extracted ads and deduplication, and screen at most 20 newly discovered ads on the subscription. `pages` requires supplied links, not automatic listing discovery. A public API requires an implemented compatible adapter; `rss` does not collect arbitrary JSON APIs.
+
 Add a `[[source]]` block to `sources.toml`. The comments at the top of that file list the fields. Choose the type:
 1. **The site has an RSS feed or a public API.** Use `rss` (SuccessFactors career sites use `/services/rss/job/?locale=en_GB&keywords=<word>`), or `jobtech` for Platsbanken. Prefer this.
 2. **Ad pages contain the text in their HTML, but the list is built with JavaScript.** Use `pages` with a links file. Find the CSS class of the ad body (`content_class`) by fetching one ad page.
