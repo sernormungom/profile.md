@@ -12,6 +12,7 @@
 - `projects[].stack` identifies technologies explicitly linked to that project. Role-level technology lists retain assignment scope and must not be attributed to every project.
 - `projects[].limitations` qualifies every evidence item in that project. Preserve these ownership, uncertainty, and measurement limits when interpreting or exporting evidence.
 - `source_id` resolves to the verbatim provenance statement in top-level `sources`. Resolve it when interpreting or exporting each evidence item; it preserves the evidence's verification limits.
+- Top-level `publications` lists papers and reports with authors in published order; `title_en` is a translation for non-English titles, not the published title.
 - Native-language status derives from `proficiency: native`. Approximate dates remain explicit, e.g. `year_approximate`.
 - Scalar lists may use inline YAML notation; this changes presentation only.
 - IDs remain stable except audited evidence merges; follow their retained-ID mappings.

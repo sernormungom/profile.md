@@ -73,6 +73,7 @@ Give the user a short summary in chat:
 - **Deep match** and **maybe** ads in a table: title with link, fit, interest, archetype, and main risk.
 - Skipped ads as one count, plus a mention of any skip that was close: fit or interest of 4 or more.
 - Link to the report file.
+- Deep matches the user hasn't applied for yet, from `jobsearch.py unapplied` (it checks `applications/applications.md`). Leave out ads the tracker already lists.
 
 Before presenting the results, spot-check the deep matches against the triage rules. Look especially at gates scored `partial` that should be `fail`: years in a role type he has never held, or tools the card doesn't name. Correct a verdict you disagree with by editing its triage file, and say that you did.
 

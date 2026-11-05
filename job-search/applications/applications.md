@@ -1,0 +1,25 @@
+# Applications
+
+One row per position. Keep the table as the only data in this file so agents can parse it for a dashboard.
+
+- **Date**: `YYYY-MM-DD` when the application was sent; empty if not sent or not known.
+- **Consultancy**: `yes` if the advertiser is a consultancy, staffing or recruitment firm rather than the end employer, otherwise `no`. Once a CV has gone to a consultancy, add it to `exclude_employer` in the Platsbanken source in `sources.toml` and run `refilter`.
+- **Arch.**: archetype letter (A–F) of the CV sent; see `archetypes/`.
+- **Applied via**: `website` (the employer's or agency's career site or Platsbanken form), `email`, `referral` or `other`; details in Notes.
+- **Contact**: `Name <email>` of the contact person named in the ad, or as much of it as is known.
+- **Status**: `to_confirm` (not sure it was sent), `not_applying` (decided not to apply), `applied`, `interview`, `offer`, `rejected`, `withdrawn`.
+- **Updated**: `YYYY-MM-DD` of the last status change.
+
+| Date | Employer | Position | Consultancy | Arch. | Applied via | Contact | Status | Updated | Link | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-10-29 | Aurobay Sweden AB | Engineering Manager | no | A | website | Sebastian Rhodin <sebastian.rhodin@horse-powertrain.com> | applied | 2026-11-05 | https://arbetsformedlingen.se/platsbanken/annonser/31554718 | Aurobay leadership CV and cover letter; Horse Powertrain confirmation received 2026-10-29: application under review; they will contact the applicant about next steps. [Confirmation email](https://mail.google.com/mail/u/0/#all/1a1880036501b239). Status reported by user 2026-11-05. |
+| 2026-10-29 | Aurobay Sweden AB | Engineering Manager Diagnostic CORE and System Safety | no |  | website | Ferhat Kirdis <ferhat.kirdis@horse-powertrain.com> | applied | 2026-11-05 | https://arbetsformedlingen.se/platsbanken/annonser/31557139 | Horse Powertrain confirmation received 2026-10-29: application under review. User reports no later decision or interview invitation as of 2026-11-05. [Confirmation email](https://mail.google.com/mail/u/0/#all/1a18763a0935eb61). |
+| 2026-10-29 | Black Sheep Recruitment AB | Open Application > AI / ML Engineer | yes | D | website |  | applied | 2026-11-05 | https://arbetsformedlingen.se/platsbanken/annonser/31612843 | Recruitment agency open application; cover letter; ad names no contact. User confirmed receipt and awaiting review on 2026-11-05; agency aims to provide feedback within three weeks, around 2026-11-19 (indicative, not guaranteed). |
+| 2026-10-28 | Berg Propulsion AB | Software Developer, Propulsion Control Systems | no | B | referral | David | applied | 2026-10-29 | https://bergpropulsion.teamtailor.com/jobs/8511609-software-developer-propulsion-control-systems | Hönö; David sent the ad link, CV sent to David |
+| 2026-10-29 | Zool Engineering AB | Embedded SW developer | yes | B | email | Mattias Hedlund | applied | 2026-10-29 | https://arbetsformedlingen.se/platsbanken/annonser/31611817 | Part of HiQ; sent from Mpya email; offered employment or Mpya consultancy |
+| 2026-10-27 | Volvo Group | Lead Engineer Virtual Driver | no | B | website | Klara Oberhollenzer <klara.oberhollenzer@volvo.com> | applied | 2026-10-29 | https://jobs.volvogroup.com/job/G%C3%B6teborg-Lead-Engineer-Virtual-Driver-417-15/1370661455/ | Also on Platsbanken 31560797 |
+| 2026-10-30 | RISE Research Institutes of Sweden AB | Gruppchef inom automation med specialistansvar | no | F | website | Daniel Wiklund <daniel.wiklund@ri.se> | applied | 2026-10-30 | https://arbetsformedlingen.se/platsbanken/annonser/31655766 | Mölndal; Teamtailor form; RISE-specific control/automation CV with publications, cover letter |
+|  | CPAC Systems AB | Technical Project Managers - ECU Hardware & Software | no | F |  |  | rejected | 2026-11-05 | https://careers.cpacsystems.se/jobs/8469128-technical-project-managers-ecu-hardware-software | Mölndal; rejected 2026-11-05: they chose candidates whose experience and profiles better matched their current needs. [Rejection email](https://mail.google.com/mail/u/0/#all/1a1ac2a4bb3d80a2). Reported by user; application date and submission method not confirmed. |
+| | Procruitment AB | Mjukvaruutvecklare C++ | yes | B | | | to_confirm | 2026-10-29 | https://arbetsformedlingen.se/platsbanken/annonser/31624321 | Recruitment agency |
+| | Agile Resources AB | C++ Software Developer inom realtidssystem | yes | B | | | to_confirm | 2026-10-29 | https://arbetsformedlingen.se/platsbanken/annonser/31652316 | |
+| | Comatec Sweden AB | Erfarna Ingenjörer till Fordon, Försvar, Industri och Digitalisering | yes | B | | | to_confirm | 2026-10-29 | https://arbetsformedlingen.se/platsbanken/annonser/31521794 | Pool ad |

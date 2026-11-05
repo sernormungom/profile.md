@@ -1,6 +1,6 @@
 # Match card: Norberto Munoz Gomez
 
-Compressed from [profile.md](../profile.md) and [tracks A–E](../archetypes/Job%20Requirement%20Archetypes%20—%205%20CV%20Tracks.md) and [track F](../archetypes/archetype-f-engineering-manager.md) on 2026-10-29, for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
+Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/archetypes.md) on 2026-11-05 (profile of 2026-10-30; archetypes consolidated on 2026-11-05 without changing the track classifications), for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
 
 ## Conditions
 - Based in Gothenburg, Sweden. Onsite, hybrid and remote all work. Temporary travel of up to 3 months is fine; relocating away from Gothenburg is not.
@@ -17,7 +17,7 @@ Compressed from [profile.md](../profile.md) and [tracks A–E](../archetypes/Job
 - Everyday tools and practices (Volvo, Ericsson): Git, Gerrit, BitBucket, Jenkins CI, Jira, Confluence, VS Code, Linux and Cygwin as development environments, GoogleTest/Google Mock. Agile with SAFe at Volvo, Agile and DevOps at Ericsson. CAN vehicle communication with CANoe and CANalyzer.
 
 ## Degrees
-- PhD and DEA in Advanced Automation and Robotics (control theory, vision, large-scale optimisation), UPC Spain, 2007. Counts as meeting an "MSc or higher in control, mechatronics or electrical engineering" gate.
+- PhD and DEA in Advanced Automation and Robotics (control theory, vision, large-scale optimisation), UPC Spain, 2007; published from the thesis and earlier research (journal article, conference papers, technical reports, 2003–2008). Counts as meeting an "MSc or higher in control, mechatronics or electrical engineering" gate.
 - BEng in Electronic Engineering.
 - Not a CS or Data Science degree: score such gates as partial.
 - Coursera: Deep Learning and AI for Medicine specialisations.

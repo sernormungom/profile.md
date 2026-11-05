@@ -129,6 +129,15 @@ confirmed_history:
     support requests (ev_178ea872). Added team scope, resourcing, hiring (~10 hires, STAR interviewing), career-growth
     follow-up with one report promoted to team manager, performance handling, and reporting line/forums (ev_confirmed_ge_mgr_*).
     Recorded the 2014 move to Technical Software Lead as the owner''s own decision (role-group notes).'
+- gap_id: publication_petri_nets
+  status: resolved
+  description: 'Owner confirmed on 2026-10-30 authorship of the 2008 International Journal of Production Economics
+    article (co-authors Lusa and Corominas were the PhD supervisors), the ISATP 2003 Petri-net paper with Jan Rosell,
+    the IOC grasping literature review with Raúl Suárez, two CIO 2005 Gijón papers and an internal IOC Petri-net
+    report, supplying the list from an earlier CV. Fact-check: the old CV omitted co-authors of the CIO papers
+    (Corominas, Lusa, Muñoz) and the IJPE article, used US spelling for the IJPE title (published as "optimisation"
+    and "annualised"), and omitted ISATP pages 24–29. The UPC IOC/EOL congress list also shows a EURO XXI 2006
+    paper (Reykjavik) not on the old CV; owner confirmed it the same day.'
 evidence_merges:
 - retired_evidence_id: ev_f98ebbdf
   assignment: Volvo Group
@@ -311,6 +320,13 @@ schema_changes:
     supplied five-track document; detailed reconciliation deferred.
   compatibility: LLM/adapter consumers must retain role context; context does not establish personal leadership,
     tool proficiency, or delivery maturity.
+- date: '2026-10-30'
+  from_version: '1.6'
+  to_version: '1.6'
+  changes:
+  - Added top-level publications (publication_id, type, authors, title, optional title_en/language, venue or institution,
+    date or year, pages, doi/url, source_id). Additive; version unchanged.
+  - Added education[].supervisors.
 evidence_removals:
 - removed_evidence_id: ev_confirmed_cv_pilot_feedback
   assignment: Mpya Sci & Tech

@@ -10,6 +10,7 @@ batch-* commands below. Sources are configured in sources.toml; state lives in d
     python3 jobsearch.py batch-submit [--site SITE] [--limit N]
     python3 jobsearch.py batch-collect [--wait]
     python3 jobsearch.py report [--site SITE] [--since YYYY-MM-DD]
+    python3 jobsearch.py unapplied [--maybe] [--since YYYY-MM-DD]
 
 screen-cli screens ads with Claude Code in headless mode (claude -p), on the Claude
 subscription it is logged in with. The batch-* commands use the Claude Message Batches
@@ -830,7 +831,8 @@ def cmd_report(args):
     if excluded:
         reasons = collections.Counter(e["reason"].split()[0].rstrip(":") for e in excluded)
         labels = {"title": "by title", "employer": "by employer", "location": "outside the source's location",
-                  "text": "by ad-text requirements", "duplicate": "as duplicates"}
+                  "text": "by ad-text requirements", "duplicate": "as duplicates",
+                  "reviewed": "already screened and skipped (details removed)"}
         out += [f"## Filtered out before screening ({len(excluded)})", ""]
         out += [f"- {n} {labels.get(kind, kind)}" for kind, n in sorted(reasons.items())]
         out += ["", "The full list, with reasons, is in data/index.jsonl.", ""]
@@ -839,6 +841,27 @@ def cmd_report(args):
     path = REPORTS / f"{today()}{'-' + args.site if args.site else ''}.md"
     path.write_text("\n".join(out), encoding="utf-8")
     print(path.relative_to(ROOT))
+
+
+APPLICATIONS = ROOT / "applications" / "applications.md"
+
+
+def cmd_unapplied(args):
+    """Screened matches that have no row in the applications tracker, matched on the ad URL or ad id."""
+    tracked = "\n".join(line for line in APPLICATIONS.read_text(encoding="utf-8").splitlines()
+                        if line.startswith("|")) if APPLICATIONS.exists() else ""
+    verdicts = ("deep_match", "maybe") if args.maybe else ("deep_match",)
+    rows = []
+    for e in load_index().values():
+        result = load_triage(e["uid"]) if e["status"] == "new" else None
+        if (result and result["verdict"] in verdicts and (not args.since or e["first_seen"] >= args.since)
+                and e["url"] not in tracked and e["uid"].split(":", 1)[1] not in tracked):
+            rows.append((e, result))
+    rows.sort(key=lambda p: (VERDICTS[p[1]["verdict"]], -(p[1]["fit"] + p[1]["interest"]), p[0]["first_seen"]))
+    for e, r in rows:
+        print("\t".join([r["verdict"], f"fit {r['fit']}", f"interest {r['interest']}", r["archetype"],
+                         e["employer"] or "?", e["title"], e["url"], e["first_seen"]]))
+    print(f"{len(rows)} matches not in {APPLICATIONS.relative_to(ROOT)}", file=sys.stderr)
 
 
 def main():
@@ -872,6 +895,10 @@ def main():
     p.add_argument("--site")
     p.add_argument("--since", help="only ads first seen on or after this date (YYYY-MM-DD)")
     p.set_defaults(func=cmd_report)
+    p = sub.add_parser("unapplied", help="list screened matches with no row in applications/applications.md")
+    p.add_argument("--maybe", action="store_true", help="include 'maybe' verdicts, not only deep matches")
+    p.add_argument("--since", help="only ads first seen on or after this date (YYYY-MM-DD)")
+    p.set_defaults(func=cmd_unapplied)
     args = parser.parse_args()
     args.func(args)
 

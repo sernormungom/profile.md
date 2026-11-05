@@ -67,3 +67,5 @@ Use the available document/PDF tooling to create `cover-letters/<Employer> <Posi
 Only after those checks succeed, delete this application's editable `.md` draft and any temporary conversion files created for it. Keep only the final PDF for the application. If conversion or verification fails, preserve the editable draft, report the problem and fix it where possible; do not claim completion or delete the source prematurely. An explicit user request to retain the editable source overrides the cleanup default.
 
 Return a clickable link to the PDF and open it when supported. Writing or finalising a letter does not authorise submitting an application or contacting the employer.
+
+Then ask whether the user has sent the application, and update `job-search/applications/applications.md` from the answer (see "Application tracker" in CLAUDE.md). Record it as `applied` only after they confirm.

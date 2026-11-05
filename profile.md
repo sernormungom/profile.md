@@ -1,13 +1,13 @@
 # Consultant Profile - Norberto Munoz Gomez
 
-Factual expertise reference, updated 29 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
+Factual expertise reference, updated 30 October 2026. Open questions: `gaps`; history: [profile-audit.md](profile-audit.md); schema conventions: [README.md](README.md). Not yet imported into the CV adapter.
 
 ```yaml
 metadata:
   schema_version: '1.6'
   consultant_id: norberto.munoz
   created_at: '2026-09-09T13:45:39Z'
-  updated_at: '2026-10-29'
+  updated_at: '2026-10-30'
   as_of: 2026-10
 identity:
   full_name: Norberto Munoz Gomez
@@ -26,7 +26,7 @@ identity:
   - language: English
     proficiency: fluent
   - language: Swedish
-    proficiency: conversational
+    proficiency: advanced
   driving_licences:
   - country_code: SE
     categories: [AM, B]
@@ -60,6 +60,7 @@ education:
   ended: 2007-06
   description: 'Thesis: Multistage scenario optimization procedure to plan annualized working hours with uncertainty
     factors.'
+  supervisors: [Amaia Lusa, Albert Corominas]
   needs_review: false
 - education_id: e_e59a963b
   type: degree
@@ -197,6 +198,79 @@ education:
   type: training
   institution: Ericsson
   qualification: Software Architecture Basics (internal training)
+publications:
+- publication_id: pub_ijpe_2008_annualised_hours
+  type: journal_article
+  authors: [A. Lusa, A. Corominas, N. Muñoz]
+  title: A multistage scenario optimisation procedure to plan annualised working hours under demand uncertainty
+  venue: International Journal of Production Economics
+  volume: 113
+  issue: 2
+  pages: 957–968
+  date: 2008-06
+  doi: 10.1016/j.ijpe.2007.11.009
+  description: From the PhD thesis (e_4394c709); co-authors were the thesis supervisors.
+  source_id: s_publication_lookup
+- publication_id: pub_euro_2006_annualised_hours
+  type: conference_paper
+  authors: [A. Lusa, A. Corominas, N. Muñoz]
+  title: A Scenario Optimisation Procedure to Plan Annualised Working Hours under Demand Uncertainty
+  venue: 21st European Conference on Operational Research (EURO XXI), University of Iceland, Reykjavik
+  date: 2006-07
+  source_id: s_publication_lookup
+- publication_id: pub_cio_2005_capacity_service_level
+  type: conference_paper
+  authors: [A. Corominas, A. Lusa, N. Muñoz]
+  title: Cálculo de la capacidad necesaria para obtener un nivel de servicio predeterminado
+  title_en: Calculating the capacity needed to reach a predetermined service level
+  language: Spanish
+  venue: IX Congreso de Ingeniería de Organización, Gijón, Spain, 8–9 September 2005
+  date: 2005-09
+  url: http://www.adingor.es/Documentacion/CIO/cio2005/items/ponencias/81.pdf
+  description: Queueing theory to calculate the capacity needed in each period for a desired service level.
+  source_id: s_publication_lookup
+- publication_id: pub_cio_2005_multistage_annualised_hours
+  type: conference_paper
+  authors: [A. Corominas, A. Lusa, N. Muñoz]
+  title: Optimización multietápica mediante escenarios para el tratamiento de la incertidumbre de la demanda en
+    la planificación del tiempo de trabajo con jornada anualizada
+  title_en: Multistage scenario optimisation to handle demand uncertainty in annualised working-time planning
+  language: Spanish
+  venue: IX Congreso de Ingeniería de Organización, Gijón, Spain, 8–9 September 2005
+  date: 2005-09
+  source_id: s_publication_lookup
+- publication_id: pub_isatp_2003_petri_nets
+  type: conference_paper
+  authors: [J. Rosell, N. Muñoz, A. Gambin]
+  title: Robot tasks sequence planning using Petri nets
+  venue: IEEE International Symposium on Assembly and Task Planning (ISATP 2003)
+  pages: 24–29
+  year: 2003
+  doi: 10.1109/ISATP.2003.1217182
+  description: Near-optimal robot task sequence found by searching the reachability tree of a Petri net.
+  source_id: s_publication_lookup
+- publication_id: pub_ioc_2003_grasping_review
+  type: technical_report
+  authors: [N. Muñoz, R. Suárez]
+  title: 'Programación por demostración aplicada a aprehensión y manipulación: revisión bibliográfica'
+  title_en: 'Programming by demonstration applied to grasping and manipulation: a literature review'
+  language: Spanish
+  institution: Institut d'Organització i Control de Sistemes Industrials (IOC), Universitat Politecnica de Cataluna
+  report_number: IOC-DT-P-2003-04
+  pages: 36
+  date: 2003-06
+  description: Survey of robotic grasping and manipulation; English title is a translation.
+  source_id: s_publication_lookup
+- publication_id: pub_ioc_2003_petri_assembly
+  type: internal_report
+  authors: [N. Muñoz, J. Rosell]
+  title: Generación automática de secuencias y tareas de ensamblado de robot, mediante redes de Petri
+  title_en: Automatic generation of robot assembly sequences and tasks using Petri nets
+  language: Spanish
+  institution: IOC, Universitat Politecnica de Cataluna
+  date: 2003-06
+  description: Internal IOC research work; not found online.
+  source_id: s_owner_cv_publications
 career_history:
   role_groups:
   - role_group_id: rg_64d57607
@@ -902,4 +976,7 @@ sources:
   s_cv_workflows: Owner-supplied LLM workflow summary; repository not inspected.
   s_cv_safeguards: Owner-supplied LLM summary plus owner confirmation of final human review.
   s_handbook_skill: Owner-supplied Claude summary of current skill; implementation not independently inspected.
+  s_publication_lookup: Checked 2026-10-30 against Crossref (DOIs), Raúl Suárez's IOC technical-report index, the
+    UPC IOC/EOL congress list and the ADINGOR CIO 2005 proceedings; owner confirmed authorship of all.
+  s_owner_cv_publications: Owner's earlier CV publication list (supplied 2026-10-30); not independently found.
 ```

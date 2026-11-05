@@ -83,6 +83,8 @@ exclude_employer = [
   '(?i)\b(avl mtc|bertrandt|sigma embedded|framtiden i sverige|tech talents|syntronic|knowit|nexer|edag)\b',
   '(?i)\b(afry|infotiv|xlnt search|veritaz|avatron|techrytera|software by quokka)\b',
   '(?i)\b(m for solutions|astek|mcub|ictech|castra)\b',
+  # Consultancies the user has already sent a CV to (see applications/applications.md).
+  '(?i)\b(black sheep recruitment|zool engineering)\b',
 ]
 # Roles that are not engineering or software work. Tested on 208 screened ads: 34 hits, all skips.
 exclude_title = [
