@@ -3,7 +3,7 @@
 #
 # Every source needs: id (unique), site (ads with the same site and ad ID are the same ad,
 # even when two sources find them), type, and the fields that type uses:
-#   rss      feeds = [...]                fixed RSS URLs, and/or
+#   rss      feeds = [...]                fixed RSS URLs (SuccessFactors, Teamtailor /jobs.rss), and/or
 #            search_url, query,           a search feed ({q} = query); SuccessFactors caps each feed at
 #            split_terms = [...]          20 items, so a full feed is split on split_terms until complete
 #   pages    file = "inbox/....txt"       one ad URL per line; content_class = CSS class of the ad body
@@ -130,3 +130,34 @@ type = "pages"
 employer = "CPAC Systems"
 file = "inbox/cpac-links.txt"
 content_class = "prose"
+
+# Direct employer boards on Teamtailor (public RSS, no login). Added 2026-11-05 after the second-pass coverage
+# review (source-review.md): none of these employers' own ads appear on Platsbanken. Location comes from the
+# feed's <tt:city>. The employer filters of platsbanken-gbg do not apply here.
+[[source]]
+id = "polestar-teamtailor"
+site = "polestar"
+type = "rss"
+employer = "Polestar"
+feeds = ["https://polestar.teamtailor.com/jobs.rss"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|mölndal|partille|kungälv|lerum|härryda'
+
+[[source]]
+# careers.zeekr.eu is the EU sales/after-sales organisation (2026-11-05: no Göteborg or engineering ads).
+# Kept as a cheap tripwire in case engineering roles appear there.
+id = "zeekr-teamtailor"
+site = "zeekr"
+type = "rss"
+employer = "Zeekr"
+feeds = ["https://careers.zeekr.eu/jobs.rss"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|mölndal|partille|kungälv|lerum|härryda'
+
+[[source]]
+# Autoliv Sweden is based in Vårgårda (about 90 km from Gothenburg), which the owner excluded (2026-11-05), so this
+# source only yields ads if Autoliv advertises a Gothenburg-area role.
+id = "autoliv-sweden-teamtailor"
+site = "autoliv"
+type = "rss"
+employer = "Autoliv"
+feeds = ["https://careersweden.autoliv.com/jobs.rss"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|mölndal|partille|kungälv|lerum|härryda'

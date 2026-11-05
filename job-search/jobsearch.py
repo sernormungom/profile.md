@@ -163,11 +163,15 @@ def fetch_rss(src):
         for item in root.iter("item"):
             title = (item.findtext("title") or "").strip()
             link = (item.findtext("link") or "").strip().split("?")[0]
-            location = ""
-            m = re.match(r"(.*)\(([^()]*)\)\s*$", title)
-            if m:
+            # Teamtailor feeds give the place in <tt:location><tt:city>; then the title stays whole, since
+            # brackets in it are not a place ("Software Engineer (AUTOSAR)").
+            cities = [(c.text or "").strip() for c in item.iter("{https://teamtailor.com/locations}city")]
+            location = ", ".join(c for c in cities if c)
+            m = None if location else re.match(r"(.*)\(([^()]*)\)\s*$", title)
+            if m:  # SuccessFactors titles end in the place: "Title (Göteborg)"
                 title, location = m.group(1).strip(), m.group(2).strip()
-            id_match = re.search(r"/(\d+)/?$", link)
+            # SuccessFactors links end in the number; Teamtailor links look like /jobs/8311441-job-title.
+            id_match = re.search(r"/(\d+)/?$", link) or re.search(r"/jobs/(\d+)-[^/]*/?$", link)
             if not id_match:  # placeholder items such as "No jobs currently available"
                 continue
             published = item.findtext("pubDate") or ""

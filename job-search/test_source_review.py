@@ -51,6 +51,31 @@ class SourceReviewTests(unittest.TestCase):
         self.assertIn('Embedded ECU experience required.', ad['text'])
         self.assertIn('Swedish a plus.', ad['text'])
 
+    def test_teamtailor_rss_gives_stable_id_and_location(self):
+        feed = '''<rss version="2.0" xmlns:tt="https://teamtailor.com/locations"><channel>
+        <item><title>Vehicle Motion Development Engineer</title>
+        <link>https://example.teamtailor.com/jobs/8402783-vehicle-motion-development-engineer</link>
+        <pubDate>Fri, 18 Sep 2026 13:06:23 +0200</pubDate><description>&lt;p&gt;Tune chassis software.&lt;/p&gt;</description>
+        <tt:locations><tt:location><tt:city>Göteborg</tt:city><tt:country>Sweden</tt:country></tt:location></tt:locations></item>
+        <item><title>No jobs</title><link>https://example.teamtailor.com/jobs</link></item>
+        </channel></rss>'''
+        with patch.object(jobs, 'http_get', return_value=feed), patch.object(jobs.time, 'sleep'):
+            ads = list(jobs.fetch_rss({'feeds': ['https://example.teamtailor.com/jobs.rss'], 'employer': 'Example'}))
+        self.assertEqual(len(ads), 1)
+        self.assertEqual(ads[0]['id'], '8402783')
+        self.assertEqual(ads[0]['location'], 'Göteborg')
+        self.assertEqual(ads[0]['published'], '2026-09-18')
+        self.assertIn('Tune chassis software.', ads[0]['text'])
+
+    def test_teamtailor_bracketed_title_is_not_a_location(self):
+        feed = '''<rss version="2.0" xmlns:tt="https://teamtailor.com/locations"><channel>
+        <item><title>Software Engineer (AUTOSAR)</title><link>https://example.teamtailor.com/jobs/1-software-engineer</link>
+        <description>x</description><tt:locations><tt:location><tt:city>Göteborg</tt:city></tt:location></tt:locations></item>
+        </channel></rss>'''
+        with patch.object(jobs, 'http_get', return_value=feed), patch.object(jobs.time, 'sleep'):
+            ad = next(jobs.fetch_rss({'feeds': ['https://example.teamtailor.com/jobs.rss']}))
+        self.assertEqual((ad['title'], ad['location']), ('Software Engineer (AUTOSAR)', 'Göteborg'))
+
     def test_nested_folders_duplicates_and_original_urls(self):
         export = '''<DL><p><DT><H3>Bookmarks bar</H3><DL><p>
         <DT><H3>Careers</H3><DL><p>
