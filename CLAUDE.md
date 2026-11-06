@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The career data of one consultant (Norberto Munoz Gomez, Mpya Sci & Tech), and three workflows built on it:
 
-1. **CV tailoring.** Combine the facts in `profile.md` with the requirements of one track in `archetypes/archetypes.md` (six tracks, A–F) to write a CV for that track, or for one ad, in `cv-drafts/`. Use the `write-cv` skill. Its workflow is in `SKILL.md`; the user's style preferences and the Momang CV form are kept apart in its `references/` folder, so either can change without touching the workflow.
+1. **CV tailoring.** Combine the facts in `profile.md` with the requirements of one track in `archetypes/archetypes.md` (six tracks, A–F) to write a CV for that track, or for one ad, in `cv-drafts/`. Use the `write-cv` skill for any CV work, even a single section, and pick the track before tailoring. Its workflow is in `SKILL.md`; the user's style preferences and the Momang CV form are kept apart in its `references/` folder, so either can change without touching the workflow.
 2. **Job search funnel.** `job-search/` collects job ads, filters them, screens them with a small model against a compressed match card, and writes a ranked report. Use the `job-search` skill, which drives `job-search/jobsearch.py`.
 3. **Cover letters.** From a position URL or pasted description, `profile.md` and the user's current employment situation, write an editable draft in the gitignored `cover-letters/`. When the user says "go", export the latest draft to a PDF named after the employer and position, then remove the draft once the PDF is verified. Use the `write-cover-letter` skill, and keep its dated employment context current.
 

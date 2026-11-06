@@ -18,7 +18,15 @@ These are the user's style decisions for CVs, taken from their feedback and from
 
 - About 80–90 words, in 4–5 short sentences.
 - Make the track's one-line pitch with the consultant's real evidence. Name the degree, the honest year count, the domain, the most recent relevant role, and one line on how he works (leadership, AI or CI/CD).
+- **Order (added 2026-11-06, from the user's feedback):**
+  1. **Relevant domain depth first.** For embedded and control tracks, that means the GE work framed as marine and industrial turbine control, and the avionics flight management system (FMS). Don't frame the GE turbine work as power generation: the profile tags it with both industries, and marine and control is the framing the user wants. For other tracks, lead with the domain depth that track values most.
+  2. **Then Swedish working style**, through the Volvo and Ericsson assignments (for example cross-team collaboration, agile/SAFe and consensus-driven delivery, as far as the profile supports it).
+  3. **Then recent AI work**, keeping its pilot or in-development status.
 - Don't list every employer with its duration; the experience section already does that.
+
+## Length
+
+- **At most two pages** in the rendered template. Fit it by cutting bullets from the least relevant roles, not by giving every role a fixed number of bullets.
 
 ## Counting years and framing
 

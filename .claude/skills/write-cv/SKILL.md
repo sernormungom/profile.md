@@ -14,8 +14,10 @@ This skill is split into four files. Read the ones the task needs:
 - **[references/momang-schema.md](references/momang-schema.md)**: the Mpya Momang CV form, with field order and conventions. Read it before writing experience, education or language entries, and before writing anything into Momang.
 - **[references/handoff-template.md](references/handoff-template.md)**: the structure of a feedback file for the agent that maintains the Momang CV app.
 
+Use this skill for any CV work, including a single section such as the summary, the skill columns or one role's bullets. Always pick the track first, even for one section, and then tailor to the ad: the track decides the framing, the column headers and which evidence counts.
+
 There are two modes:
-- **Draft**: the user names a track, an ad or both, and wants a CV or a section of one. Go to "Draft workflow".
+- **Draft**: the user names a track, an ad or both, and wants a CV or a section of one. Go to "Draft workflow". For a single section, still do step 1 briefly, then write only that section.
 - **Review**: the user shares a rendered CV (usually a PDF) and asks for feedback. Go to "Review workflow".
 
 ## Sources
@@ -62,7 +64,7 @@ Rank every role block by relevance to this track or ad, and give each one a bull
 - Roles that only fill a timeline gap get 1 line.
 - Irrelevant roles get 0 bullets and are left out.
 
-Bullet count follows relevance, not recency or length of employment.
+Bullet count follows relevance, not recency or length of employment. The CV must fit on two pages (see preferences.md), so when it runs long, cut bullets from the least relevant roles first.
 
 Then check the timeline for gaps longer than about 6 months. If there is a gap, look for a profile entry that genuinely covers it (the 2020–2021 career break is recorded in the profile). If none does, write a short career-break entry in one honest line and ask the user what actually happened. Don't fill a gap with a role from a different period; past profile data has had wrong dates.
 
@@ -97,6 +99,16 @@ If the CV is for a specific position, end the turn by asking whether the user ha
 ### Rendering in Momang (only on request)
 
 The Momang CV app is used only occasionally, to render a CV. Write to it only when the user asks. Then use the Momang MCP tools: check the schema with `get_profile_schema` and compare it with momang-schema.md, prefer `create_tailored_profile` over changing the main profile, run with `dryRun` first, summarise the change, and give the user the Momang link. If the schema has drifted from momang-schema.md, tell the user and update that file.
+
+### Keeping an exported CV in step with its source
+
+Once a CV has been exported (a PDF or Word file from Momang's `export_profile`, or a PDF saved in `cv-drafts/`), any later edit to its source, whether the Markdown draft or the Momang profile, makes the export stale. After every such edit:
+
+1. Export the file again from the latest source.
+2. Check that it matches: read the new export and confirm that each edited passage appears exactly as in the source, and that it still fits on two pages.
+3. Only then say the CV is ready, and give the user the new file or link. Don't post Momang's download link anywhere else, because anyone holding it can download the file.
+
+If you cannot re-export (for example the edit was only to the Markdown draft and the user has not asked to write it into Momang), say clearly that the existing PDF or Word file is out of date. Never call it ready.
 
 ## Review workflow
 
