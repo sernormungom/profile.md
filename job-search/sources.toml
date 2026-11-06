@@ -55,15 +55,6 @@ query = "(Göteborg) -title:thesis -title:graduate -title:student -title:interns
 split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
 
 [[source]]
-# For the backlog the feeds cannot reach: paste ad links from jobs.volvogroup.com, one per line.
-id = "volvo-group-links"
-site = "volvo-group"
-type = "pages"
-employer = "Volvo Group"
-file = "inbox/volvo-links.txt"
-content_class = "jobdescription"
-
-[[source]]
 id = "platsbanken-gbg"
 site = "platsbanken"
 type = "jobtech"
@@ -83,6 +74,8 @@ exclude_employer = [
   '(?i)\b(avl mtc|bertrandt|sigma embedded|framtiden i sverige|tech talents|syntronic|knowit|nexer|edag)\b',
   '(?i)\b(afry|infotiv|xlnt search|veritaz|avatron|techrytera|software by quokka)\b',
   '(?i)\b(m for solutions|astek|mcub|ictech|castra)\b',
+  # Consultancies the user decided not to apply to (see applications/applications.md).
+  '(?i)\b(procruitment|agile resources|comatec)\b',
   # Consultancies the user has already sent a CV to (see applications/applications.md).
   '(?i)\b(black sheep recruitment|zool engineering)\b',
 ]
@@ -123,19 +116,6 @@ site = "manual"
 type = "folder"
 path = "inbox/manual"
 
-[[source]]
-# Manually curated ad URLs; this does not discover new listings automatically.
-# Verified public ad text and Mölndal location on 2026-10-29; review monthly.
-id = "cpac-links"
-site = "cpac-systems"
-type = "pages"
-employer = "CPAC Systems"
-file = "inbox/cpac-links.txt"
-content_class = "prose"
-
-# Direct employer boards on Teamtailor (public RSS, no login). Added 2026-11-05 after the second-pass coverage
-# review (source-review.md): none of these employers' own ads appear on Platsbanken. Location comes from the
-# feed's <tt:city>. The employer filters of platsbanken-gbg do not apply here.
 [[source]]
 id = "polestar-teamtailor"
 site = "polestar"

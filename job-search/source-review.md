@@ -8,6 +8,8 @@ Historical source-review snapshots and old generated reports were removed on 202
 
 ## Execution status
 
+**Source cleanup (owner request, 2026-11-05):** removed `volvo-group-links` and `cpac-links` and their saved URL lists, keeping general vacancy feeds and the reusable manual inbox. Cleared the four remaining manual input files. Collected ad identities, screening decisions and application history are preserved. References below to enabling the saved-link sources describe historical decisions; those sources are no longer configured.
+
 **First pass completed using `bookmarks_10_27_26.html` supplied on 2026-10-29.** All 148 bookmark occurrences are accounted for: 60 career/Malmö links (53 employer/portal groups), two LinkedIn bookmarks, two employer-discovery resources, one Mpya corporate bookmark, and 83 unrelated/administrative/recruiting-tool utilities. No unrelated bookmark pages were opened. Original export and complete annotated inventory stay gitignored in `inbox/bookmarks.html`, `data/bookmark-inventory.json`, and `data/bookmark-review.json`. B001–B148 below refer to export order; each original name, URL and folder is preserved in the local JSON.
 
 Six employer groups received live checks: Aurobay/Horse Powertrain, Cochlear, Kollmorgen, CPAC Systems, RISE and Volvo Cars. The remaining career sources have explicit deferred/covered/excluded dispositions; they have **not** all been live validated. Access labelled untested must not be mistaken for an authentication failure.
