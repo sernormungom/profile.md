@@ -1,6 +1,6 @@
 # Job-ad triage prompt
 
-The second stage of the search funnel: a fast screen of each job ad that has already passed the plain-code filters (location, duplicates, already seen). Ads that come back `deep_match` move on to the full-profile comparison and the `archetype-cv` skill.
+The second stage of the search funnel: a fast screen of each job ad that has already passed the plain-code filters (location, duplicates, already seen). Ads that come back `deep_match` move on to the full-profile comparison and, if wanted, a CV draft.
 
 Every screening mode reads this file: the Claude Code agents in the `job-search` skill, and `jobsearch.py screen-cli` and `batch-submit`, which take the "System" and "User" sections below verbatim. Keep those two headings.
 

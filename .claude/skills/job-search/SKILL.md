@@ -79,7 +79,7 @@ Before presenting the results, spot-check the deep matches against the triage ru
 
 ## 4. Next steps for a chosen ad
 
-When the user picks an ad, compare it with the full `profile.md`, not the card, and the matching archetype section, and produce a gap analysis graded by proof (Named, Applied, Owned, Taught). If they want a CV for it, use the `archetype-cv` skill.
+When the user picks an ad, compare it with the full `profile.md`, not the card, and the matching archetype section, and produce a gap analysis graded by proof (Named, Applied, Owned, Taught). If they want a CV for it, build it from `profile.md` and the matching archetype in `archetypes/archetypes.md`, following the existing drafts in `cv-drafts/`.
 
 ## Adding a site
 
