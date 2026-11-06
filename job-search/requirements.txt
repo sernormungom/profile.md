@@ -1,2 +1,4 @@
 # Only the batch-submit and batch-collect commands need this.
 anthropic
+# validate_profile.py (repo root) needs this to check profile.md after edits.
+pyyaml

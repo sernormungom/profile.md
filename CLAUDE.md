@@ -19,6 +19,10 @@ The skills' `SKILL.md` files hold the detailed rules for their workflows and are
 - `profile.md` is a Markdown wrapper around one YAML document (schema 1.6). Follow the conventions in `README.md` when reading or editing it. In short: read both role-level evidence (`blocks[].evidence_items`) and project-level evidence (`blocks[].projects[].evidence_items`); apply every `projects[].limitations` to that project's evidence; resolve each `source_id` against the top-level `sources`; treat a missing field as "unspecified", not "false"; keep IDs stable.
 - The profile records verified facts only. Leave out operational status such as backlogs or pending items, and do not treat requests, plans or reported safeguards as delivered work. Only open questions stay in `profile.md` (under `gaps`); resolved confirmations and evidence merges go to `profile-audit.md`.
 - When the user corrects a fact, edit only the corrected fields in `profile.md`.
+- IDs are stable keys that CVs, the audit and merges refer to. Never rename or change an existing ID; only add new ones.
+- Quote YAML strings that contain an apostrophe, a colon followed by a space, or a leading `#`, `-` or `[`. After every edit to `profile.md`, run `job-search/.venv/bin/python validate_profile.py` from the repo root. It checks that the YAML parses and that no ID appears twice. Fix any failure before reporting the edit as done.
+- When the user gives a list of items to add (courses, trainings, dates, roles), repeat every item back in your reply, saying where each one went, so a dropped or merged item is visible.
+- When asked to check a source file the user supplied (a bookmark export, a PDF, an email), read that file itself. Earlier reviews, inventories and ledgers summarise it but can be incomplete or out of date.
 - Never put a claim into a CV, cover letter, match card or triage that the profile does not support. You may rephrase, select and reorder what is true; never invent experience, customers, dates, certifications or skills. Reason: these documents go to employers under the user's name.
 
 ## Derived files and their contracts
@@ -40,7 +44,7 @@ The skills' `SKILL.md` files hold the detailed rules for their workflows and are
 The user works in this repo daily. Keep the tracker current in two ways:
 
 - **At the start of a session**, or when the user asks what to apply for, run `jobsearch.py unapplied` (deep matches with no tracker row; add `--maybe` when the user asks for more) and read the tracker's `to_confirm` rows. Tell the user briefly, with links, which good matches they haven't applied for yet and which applications they still need to confirm. If the session is plainly about something else and the user didn't ask, mention it in one line at most.
-- **When you produce application material** for a position (a CV draft for an ad, a cover letter, an email to a recruiter or hiring manager), end that turn by asking whether they have sent it. Don't record it as applied before they confirm. If they say yes, add or update the row with `applied` and the date sent (today unless they say otherwise). If not yet, add it as `to_confirm`. If they are not applying, use `not_applying` so it stops being suggested.
+- **When you produce application material** for a position (a CV draft for an ad, a cover letter, an email to a recruiter or hiring manager), end that turn by asking whether they have sent it. Don't record it as applied before they confirm. If they say yes, add or update the row with `applied` and the date sent (today unless they say otherwise). Never infer an application date from file timestamps (a CV's or PDF's modification time, for example); ask the user or use a date already in the tracker. If not yet, add it as `to_confirm`. If they are not applying, use `not_applying` so it stops being suggested.
 
 Consultancies, staffing and recruitment firms (`Consultancy` = `yes`): the user sends a CV only when one is interesting, and only once per firm. When they confirm a CV has gone to one, add the firm to `exclude_employer` in the `platsbanken-gbg` source in `sources.toml` (the line under the "already sent a CV to" comment). Then run `refilter --site platsbanken --dry-run` followed by `refilter`, so the firm's ads stop appearing in searches.
 
@@ -65,7 +69,7 @@ python3 -I -m unittest discover -s job-search -p 'test_*.py'
 python3 -I -m unittest discover -s job-search -p 'test_*.py' -k <test_name>   # a single test
 ```
 
-To add sources, follow `job-search/source-review.md` (the decision ledger) and the "Adding a site" section of the job-search skill. `job-search/bookmark_inventory.py` inventories a browser bookmark export locally, without fetching any URL.
+To add sources, follow `job-search/source-review.md` (the decision ledger) and the "Adding a site" section of the job-search skill. Adding a source is finished only when `sources.toml` is updated, a targeted `fetch --source <id>` works and the offline tests pass; then ask whether to commit it, because commits happen only when the user asks. `job-search/bookmark_inventory.py` inventories a browser bookmark export locally, without fetching any URL.
 
 ### Architecture
 
