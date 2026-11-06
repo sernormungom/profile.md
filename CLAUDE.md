@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The career data of one consultant (Norberto Munoz Gomez, Mpya Sci & Tech), and three workflows built on it:
 
-1. **CV tailoring.** Combine the facts in `profile.md` with the requirements of one track in `archetypes/archetypes.md` (six tracks, A–F) to write an archetype CV in `cv-drafts/`. There is no skill for this; follow the format of the existing drafts there.
+1. **CV tailoring.** Combine the facts in `profile.md` with the requirements of one track in `archetypes/archetypes.md` (six tracks, A–F) to write a CV for that track, or for one ad, in `cv-drafts/`. Use the `write-cv` skill. Its workflow is in `SKILL.md`; the user's style preferences and the Momang CV form are kept apart in its `references/` folder, so either can change without touching the workflow.
 2. **Job search funnel.** `job-search/` collects job ads, filters them, screens them with a small model against a compressed match card, and writes a ranked report. Use the `job-search` skill, which drives `job-search/jobsearch.py`.
 3. **Cover letters.** From a position URL or pasted description, `profile.md` and the user's current employment situation, write an editable draft in the gitignored `cover-letters/`. When the user says "go", export the latest draft to a PDF named after the employer and position, then remove the draft once the PDF is verified. Use the `write-cover-letter` skill, and keep its dated employment context current.
 
@@ -26,7 +26,7 @@ The skills' `SKILL.md` files hold the detailed rules for their workflows and are
 - `job-search/match-card.md` is a compressed copy of the profile and the archetypes, used only for screening, and dated at the top. If `profile.md` or `archetypes/archetypes.md` changed after that date, regenerate the card before screening (same structure, facts only from those two files) and tell the user that earlier results may be stale. Never use the card as a source for CVs.
 - `job-search/triage-prompt.md` is read by every screening mode. `jobsearch.py` splits it on the literal headings `## System` and `## User` and substitutes `{{MATCH_CARD}}` and `{{AD_TEXT}}`, so keep those headings and placeholders exactly as they are. Text above `## System` is a description for people and is never sent to the model.
 - The triage JSON shape is defined in two places that must stay in sync: the output schema described in `triage-prompt.md`, and `TRIAGE_SCHEMA`, `REQUIRED_KEYS` and `VERDICTS` in `jobsearch.py`. A triage file that fails validation in `load_triage` counts as still pending, so a mismatch makes ads look unscreened. `TriagePromptContractTests` in `job-search/test_source_review.py` checks the headings, placeholders, schema keys and verdicts; run the tests after editing either file.
-- CV drafts are named `cv-drafts/<consultant_id>-archetype-<letter>.md` (gitignored). The separate Momang CV app is used only occasionally to render a CV; it is not part of the normal CV workflow.
+- CV drafts are named `cv-drafts/<consultant_id>-archetype-<letter>.md`, with `-<employer-slug>` appended for a CV aimed at one ad (gitignored). The separate Momang CV app is used only occasionally to render a CV; it is not part of the normal CV workflow.
 
 ## Application tracker
 
