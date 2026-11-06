@@ -136,5 +136,31 @@ class SourceReviewTests(unittest.TestCase):
             self.assertTrue(jobs.exclusion_reason({**ad, "text": text}, src, config.get("filters", {})))
 
 
+class TriagePromptContractTests(unittest.TestCase):
+    """triage-prompt.md and jobsearch.py must agree on headings, placeholders and the triage JSON shape."""
+
+    def setUp(self):
+        prompt = (ROOT / "triage-prompt.md").read_text(encoding="utf-8")
+        self.assertIn("\n## System\n", prompt)
+        self.assertIn("\n## User\n", prompt)
+        self.system_section = prompt.split("\n## System\n", 1)[1].split("\n## User\n", 1)[0]
+        self.user_section = prompt.split("\n## User\n", 1)[1]
+
+    def test_placeholders_are_where_the_code_substitutes_them(self):
+        self.assertIn("{{MATCH_CARD}}", self.system_section)
+        self.assertIn("{{AD_TEXT}}", self.user_section)
+        system, user = jobs.triage_prompts()
+        self.assertNotIn("{{MATCH_CARD}}", system)
+        self.assertIn("{{AD_TEXT}}", user)
+
+    def test_prompt_describes_every_schema_key_and_verdict(self):
+        self.assertLessEqual(jobs.REQUIRED_KEYS, set(jobs.TRIAGE_SCHEMA["required"]))
+        for key in jobs.TRIAGE_SCHEMA["required"]:
+            self.assertIn(key, self.system_section, f"schema key {key!r} missing from the prompt")
+        for verdict in jobs.VERDICTS:
+            self.assertIn(verdict, self.system_section, f"verdict {verdict!r} missing from the prompt")
+        self.assertEqual(jobs.TRIAGE_SCHEMA["properties"]["verdict"]["enum"], list(jobs.VERDICTS))
+
+
 if __name__ == "__main__":
     unittest.main()
