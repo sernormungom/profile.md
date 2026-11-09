@@ -10,13 +10,17 @@
 #   jobtech  queries = [...]              Platsbanken free-text queries (JobTech JobSearch API)
 #            params = { ... }             extra API parameters sent with every query, e.g. municipality
 #                                         codes (a list repeats the parameter)
+#   workday  api_url, careers_url          public CXS tenant/site API and public careers base URL;
+#            applied_facets = { ... }     listing facets verified against the official board
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
 # exclude_employer = [...] (regexes on the advertiser's name), exclude_text = [...] with text_exceptions
 # (regexes on the ad body; a match next to an exception word, e.g. "meriterande", is ignored). The exclude_*
 # lists are also allowed under [filters]. After changing any filter, run `refilter` to apply it to ads already
 # in the index (fetch only filters ads it has not seen before).
+# Missing locality remains unspecified and goes to screening; a known out-of-area locality is excluded.
 # incremental = true (jobtech only: fetch only ads published since the last successful run),
+# id_overrides = { "numeric-id" = "historical-id" } (rss only: preserve saved-page identities),
 # enabled = false.
 #
 # Each site has its own query syntax, so the query is written here in the site's own terms and the
@@ -110,6 +114,19 @@ queries = [
 # no other query found, and 55 of them were skips.
 
 [[source]]
+id = "cpac-teamtailor"
+site = "cpac-systems"
+type = "rss"
+employer = "CPAC Systems"
+feeds = ["https://careers.cpacsystems.se/jobs.rss"]
+# These two previously collected pages keep their original UIDs and screening decisions.
+id_overrides = { "8469128" = "https://careers.cpacsystems.se/jobs/8469128-technical-project-managers-ecu-hardware-software", "7985969" = "https://careers.cpacsystems.se/jobs/7985969-system-design-engineer" }
+# Missing feed locality stays unspecified; the complete body remains available for screening.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|mölndal|partille|kungälv|lerum|härryda'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
 # Consultant assignments and other ads that only arrive by email or PDF: save each as a .md file here.
 id = "manual"
 site = "manual"
@@ -143,3 +160,62 @@ type = "rss"
 employer = "Autoliv"
 feeds = ["https://careersweden.autoliv.com/jobs.rss"]
 location_regex = '(?i)g(ö|o)teborg|gothenburg|mölndal|partille|kungälv|lerum|härryda'
+
+[[source]]
+id = "infimotion-teamtailor"
+site = "infimotion"
+type = "rss"
+employer = "InfiMotion Technology"
+feeds = ["https://career.infimotion.com/jobs.rss"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "kollmorgen-teamtailor"
+site = "kollmorgen"
+type = "rss"
+employer = "Kollmorgen"
+feeds = ["https://career-agv.kollmorgen.com/jobs.rss"]
+# Keep the standing invitation indexed without screening it as a dated vacancy.
+exclude_title = ['(?i)^open application$']
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "consilium-teamtailor"
+site = "consilium"
+type = "rss"
+employer = "Consilium Safety"
+feeds = ["https://careers.consiliumsafety.com/jobs.rss"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "volvo-cars-rss"
+site = "volvo-cars"
+type = "rss"
+employer = "Volvo Cars"
+# English Gothenburg matches the current public listings; Göteborg returns a placeholder.
+# Full-text search also returns a US posting mentioning Gothenburg; locality is filtered below.
+search_url = "https://jobs.volvocars.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "Gothenburg"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "magna-workday"
+site = "magna"
+type = "workday"
+employer = "Magna"
+# Official Sweden careers route replaced the retired Teamtailor board (404).
+api_url = "https://wd3.myworkdaysite.com/wday/cxs/magna/Magna"
+careers_url = "https://wd3.myworkdaysite.com/en-US/recruiting/magna/Magna"
+applied_facets = { Country = ["6a800a4736884df5826858d435650f45"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'

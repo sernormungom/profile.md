@@ -87,6 +87,7 @@ For a bookmark export or several candidate sites, first follow `job-search/sourc
 
 Add a `[[source]]` block to `sources.toml`. The comments at the top of that file list the fields. Choose the type:
 1. **The site has an RSS feed or a public API.** Use `rss` (SuccessFactors career sites use `/services/rss/job/?locale=en_GB&keywords=<word>`), or `jobtech` for Platsbanken. Prefer this.
+   For a verified public Workday CXS board, use `workday` with `api_url`, `careers_url` and `applied_facets` as documented in `sources.toml`. It collects paginated listings and full details; an arbitrary JSON API is not an RSS source. Preserve any existing saved-page IDs with source-local RSS `id_overrides` rather than importing duplicate numeric identities.
 2. **Ad pages contain the text in their HTML, but the list is built with JavaScript.** Use `pages` with a links file. Find the CSS class of the ad body (`content_class`) by fetching one ad page.
 3. **No usable pages,** because of a login or because everything is rendered by JavaScript. Ask the user to save the ads with the browser (Claude in Chrome works) as files in `inbox/manual/`.
 4. **A new kind of site that recurs.** Write a new adapter function in `jobsearch.py` that yields the same fields as the others, and register it in `ADAPTERS`.
@@ -94,6 +95,8 @@ Add a `[[source]]` block to `sources.toml`. The comments at the top of that file
 Don't get around a login, a paywall or an API that refuses access (401 or 403). Use option 3 instead.
 
 Run `fetch --source <new id>` once, and check the counts and a few ad files before screening.
+
+Repeat the targeted fetch to check stable identities. `FAILED` includes unresolved feed caps and partial or malformed responses; these do not advance the source's success watermark. A valid empty board can be accepted, with live body validation pending its first vacancy. Missing locality remains unspecified and needs screening; it is never an inferred employer location. The six sources validated on 2026-11-09 and their coverage limits are recorded in `source-review.md`.
 
 ## Keep the card current
 

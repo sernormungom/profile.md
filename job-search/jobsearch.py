@@ -69,6 +69,15 @@ def http_get(url, accept=None):
         return resp.read().decode("utf-8", "replace")
 
 
+def http_post_json(url, value):
+    body = json.dumps(value).encode("utf-8")
+    req = urllib.request.Request(url, data=body, headers={
+        "User-Agent": USER_AGENT, "Accept": "application/json", "Content-Type": "application/json",
+    })
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
 def safe_name(uid):
     return re.sub(r"[^A-Za-z0-9_.-]", "_", uid.replace(":", "__"))
 
@@ -130,6 +139,14 @@ def html_to_text(markup, target_class=None):
 # ---------------------------------------------------------------- adapters
 # Each adapter yields dicts with: id, title, employer, location, url, published, text.
 
+def rss_items(markup):
+    """Reject error/login pages rather than reporting a successful empty board."""
+    root = ET.fromstring(markup)
+    if root.tag != "rss" or root.find("channel") is None:
+        raise ValueError("expected RSS with a channel; response is not a vacancy feed")
+    return root.findall("./channel/item")
+
+
 def complete_feeds(src):
     """Feed URLs that together return every match of src["query"], despite the feed's item cap.
 
@@ -138,43 +155,53 @@ def complete_feeds(src):
     The AND term must come first: appended after the exclusions it loosens the whole query.
     """
     cap = src.get("feed_cap", 20)
+    incomplete = []
 
     def expand(query, terms):
         url = src["search_url"].replace("{q}", urllib.parse.quote(query))
-        count = http_get(url).count("<item>")
+        count = len(rss_items(http_get(url)))
         time.sleep(1)
         if count < cap:
             return [url]
         if not terms:
-            print(f"{src['id']}: still {count} items after splitting, some ads may be missing: {query}",
-                  file=sys.stderr)
+            incomplete.append(query)
             return [url]
         return expand(f"{terms[0]} AND {query}", terms[1:]) + expand(f"{query} -{terms[0]}", terms[1:])
 
-    return expand(src["query"], src.get("split_terms", []))
+    yield from expand(src["query"], src.get("split_terms", []))
+    if incomplete:
+        raise ValueError("incomplete RSS coverage: feed cap still reached for " + "; ".join(incomplete))
 
 
 def fetch_rss(src):
     """RSS feeds, e.g. SuccessFactors career sites (/services/rss/job/?keywords=...)."""
-    feeds = [(url, url) for url in src.get("feeds", [])]
-    if "query" in src:
-        feeds += [(url, src["query"]) for url in complete_feeds(src)]
-    for feed, query in feeds:
-        root = ET.fromstring(http_get(feed))
-        for item in root.iter("item"):
+    def feeds():
+        yield from ((url, url) for url in src.get("feeds", []))
+        if "query" in src:
+            yield from ((url, src["query"]) for url in complete_feeds(src))
+
+    for feed, query in feeds():
+        markup = http_get(feed)
+        for item in rss_items(markup):
             title = (item.findtext("title") or "").strip()
             link = (item.findtext("link") or "").strip().split("?")[0]
             # Teamtailor feeds give the place in <tt:location><tt:city>; then the title stays whole, since
             # brackets in it are not a place ("Software Engineer (AUTOSAR)").
             cities = [(c.text or "").strip() for c in item.iter("{https://teamtailor.com/locations}city")]
-            location = ", ".join(c for c in cities if c)
-            m = None if location else re.match(r"(.*)\(([^()]*)\)\s*$", title)
+            location = ", ".join(dict.fromkeys(c for c in cities if c))
+            teamtailor = "https://teamtailor.com/locations" in markup or re.search(r"/jobs/\d+-", link)
+            m = None if teamtailor else re.match(r"(.*)\(([^()]*)\)\s*$", title)
             if m:  # SuccessFactors titles end in the place: "Title (Göteborg)"
                 title, location = m.group(1).strip(), m.group(2).strip()
             # SuccessFactors links end in the number; Teamtailor links look like /jobs/8311441-job-title.
             id_match = re.search(r"/(\d+)/?$", link) or re.search(r"/jobs/(\d+)-[^/]*/?$", link)
-            if not id_match:  # placeholder items such as "No jobs currently available"
-                continue
+            if not id_match:
+                if re.search(r"\bno (?:jobs|(?:open )?positions|vacancies)\b", title, re.I):
+                    continue  # explicit empty-board placeholder, not an unrecognised vacancy
+                raise ValueError(f"unrecognised RSS vacancy link: {link or '(missing)'}")
+            body = html_to_text(item.findtext("description") or "")
+            if not title or not body:
+                raise ValueError(f"incomplete RSS vacancy: missing title or description for {link}")
             published = item.findtext("pubDate") or ""
             if published:
                 try:
@@ -182,13 +209,13 @@ def fetch_rss(src):
                 except (TypeError, ValueError):
                     pass
             yield {
-                "id": id_match.group(1),
+                "id": src.get("id_overrides", {}).get(id_match.group(1), id_match.group(1)),
                 "title": title,
                 "employer": src.get("employer", ""),
                 "location": location,
                 "url": link,
                 "published": published,
-                "text": html_to_text(item.findtext("description") or ""),
+                "text": body,
                 "query": query,
             }
         time.sleep(1)
@@ -278,6 +305,70 @@ def fetch_jobtech(src):
             time.sleep(1)
 
 
+def fetch_workday(src):
+    """Read the public Workday CXS listing and each posting's full detail."""
+    base = src["api_url"].rstrip("/")
+    careers = src["careers_url"].rstrip("/")
+    offset, total = 0, None
+    paths, ids = set(), set()
+    while total is None or offset < total:
+        page = http_post_json(base + "/jobs", {
+            "appliedFacets": src.get("applied_facets", {}), "limit": 20,
+            "offset": offset, "searchText": "",
+        })
+        if not isinstance(page, dict) or type(page.get("total")) is not int or page["total"] < 0:
+            raise ValueError("invalid Workday listing total")
+        if total is None:
+            total = page["total"]
+        elif page["total"] != total:
+            raise ValueError("Workday listing total changed during pagination")
+        rows = page.get("jobPostings")
+        if not isinstance(rows, list) or len(rows) > 20 or offset + len(rows) > total:
+            raise ValueError("invalid Workday listing page")
+        if not rows and offset < total:
+            raise ValueError("incomplete Workday listing: empty page before total")
+        for row in rows:
+            if not isinstance(row, dict):
+                raise ValueError("invalid Workday posting")
+            path = row.get("externalPath")
+            if not isinstance(path, str) or not path.startswith("/job/") or path in paths:
+                raise ValueError("invalid or duplicate Workday posting path")
+            paths.add(path)
+            detail = json.loads(http_get(base + path, "application/json"))
+            info = detail.get("jobPostingInfo") if isinstance(detail, dict) else None
+            if not isinstance(info, dict):
+                raise ValueError("invalid Workday posting detail")
+            posting_id, title, description = (info.get(k) for k in ("id", "title", "jobDescription"))
+            if any(not isinstance(v, str) or not v.strip() for v in (posting_id, title, description)):
+                raise ValueError("incomplete Workday posting detail")
+            if posting_id in ids:
+                raise ValueError("duplicate Workday posting ID")
+            ids.add(posting_id)
+            text = html_to_text(description)
+            if not text:
+                raise ValueError("empty Workday posting description")
+            primary = info.get("location", "")
+            additional = info.get("additionalLocations", [])
+            if not isinstance(primary, str) or not isinstance(additional, list) or any(
+                    not isinstance(location, str) for location in additional):
+                raise ValueError("invalid Workday posting locations")
+            location = ", ".join(dict.fromkeys(place.strip() for place in [primary, *additional] if place.strip()))
+            published = info.get("startDate", "")
+            if not isinstance(published, str):
+                raise ValueError("invalid Workday posting date")
+            if published:
+                try:
+                    dt.date.fromisoformat(published)
+                except ValueError as exc:
+                    raise ValueError("invalid Workday posting date") from exc
+            url = info.get("externalUrl") or careers + path
+            if not isinstance(url, str) or urllib.parse.urlparse(url).scheme not in {"http", "https"} or not urllib.parse.urlparse(url).netloc:
+                raise ValueError("invalid Workday posting URL")
+            yield {"id": posting_id, "title": title.strip(), "employer": src.get("employer", ""),
+                   "location": location, "url": url, "published": published, "text": text, "query": ""}
+        offset += len(rows)
+
+
 def fetch_folder(src):
     """Ads saved by hand as .md or .txt files, e.g. consultant assignments from a broker email or PDF."""
     folder = ROOT / src["path"]
@@ -297,7 +388,8 @@ def fetch_folder(src):
         }
 
 
-ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech, "folder": fetch_folder}
+ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech,
+            "workday": fetch_workday, "folder": fetch_folder}
 
 
 # ---------------------------------------------------------------- state
