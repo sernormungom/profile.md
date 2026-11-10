@@ -12,6 +12,8 @@
 #                                         codes (a list repeats the parameter)
 #   workday  api_url, careers_url          public CXS tenant/site API and public careers base URL;
 #            applied_facets = { ... }     listing facets verified against the official board
+#   successfactors search_url             fixed server-rendered search URL; discovers every result,
+#                                         paginates startrow and reads full microdata job pages
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
 # exclude_employer = [...] (regexes on the advertiser's name), exclude_text = [...] with text_exceptions
@@ -99,6 +101,7 @@ exclude_text = [
   '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen',
 ]
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
 queries = [
   "embedded",
   "simulink",
@@ -293,5 +296,31 @@ api_url = "https://husqvarnagroup.wd3.myworkdayjobs.com/wday/cxs/husqvarnagroup/
 careers_url = "https://husqvarnagroup.wd3.myworkdayjobs.com/en-US/External_Career_Site"
 applied_facets = { locationCountry = ["6a800a4736884df5826858d435650f45"] }
 location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke|jonsered'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "skf-successfactors"
+site = "skf"
+type = "successfactors"
+employer = "SKF"
+# Keyword RSS misses a multi-location manager whose primary city is Berlin.
+# This source covers the verified Gothenburg location search, not all SKF boards.
+search_url = "https://career.skf.com/search/?q=&locationsearch=Gothenburg"
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|jonsered|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "skf-rss-supplement"
+site = "skf"
+type = "rss"
+employer = "SKF"
+# Complements location-search metadata: a Houten-labelled ad explicitly offers
+# Gothenburg in its body. No primary-city filter here; screening checks full text.
+# Shared site/numeric IDs deduplicate the two routes without identity migration.
+search_url = "https://career.skf.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "Gothenburg"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'

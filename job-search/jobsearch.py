@@ -381,6 +381,217 @@ def fetch_workday(src):
             raise ValueError("Workday listing total changed during pagination")
 
 
+SF_MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+SF_DATE = re.compile(r"^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) ([A-Z][a-z]{2}) (\d{2}) \d{2}:\d{2}:\d{2} UTC (\d{4})$")
+SF_LABEL = re.compile(r"^Results\s+(\d+)\s*[–-]\s*(\d+)\s+of\s+(\d+)$")
+SF_EMPTY_SENTENCE = "There are currently no open positions matching"
+
+
+def successfactors_date(value):
+    """The live microdata date, e.g. "Tue Nov 03 00:00:00 UTC 2026", as YYYY-MM-DD. Anything else is an error."""
+    match = SF_DATE.match(value.strip())
+    if not match or match.group(1) not in SF_MONTHS:
+        raise ValueError(f"invalid SuccessFactors posting date: {value!r}")
+    try:
+        return dt.date(int(match.group(3)), SF_MONTHS.index(match.group(1)) + 1, int(match.group(2))).isoformat()
+    except ValueError:
+        raise ValueError(f"invalid SuccessFactors posting date: {value!r}") from None
+
+
+class SuccessFactorsListing(HTMLParser):
+    """Result links, pagination labels and the empty-search container of one SuccessFactors search page."""
+
+    def __init__(self, base_url):
+        super().__init__(convert_charrefs=True)
+        self.base_url = base_url
+        self.links, self.labels = [], []
+        self.noresults = None  # becomes {"text": [...], "message": bool} when a #noresults container exists
+        self.has_noresults_message = False
+        self._noresults_depth = self._table_depth = self._label_depth = 0
+        self._label_parts = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        classes = (attrs.get("class") or "").split()
+        if attrs.get("id") == "noresults-message":
+            self.has_noresults_message = True
+        if tag == "div":
+            if self._noresults_depth:
+                self._noresults_depth += 1
+                if attrs.get("id") == "noresults-message":
+                    self.noresults["message"] = True
+            elif attrs.get("id") == "noresults" and self.noresults is None:
+                self.noresults = {"text": [], "message": False}
+                self._noresults_depth = 1
+        elif tag == "table":
+            if self._table_depth:
+                self._table_depth += 1
+            elif attrs.get("id") == "searchresults":
+                self._table_depth = 1
+        elif tag == "a":
+            if self._table_depth and "jobTitle-link" in classes and attrs.get("href"):
+                self.links.append(urllib.parse.urljoin(self.base_url, attrs["href"]))
+        elif tag == "span":
+            if self._label_depth:
+                self._label_depth += 1
+            elif "paginationLabel" in classes:
+                self._label_depth, self._label_parts = 1, []
+
+    def handle_endtag(self, tag):
+        if tag == "div" and self._noresults_depth:
+            self._noresults_depth -= 1
+        elif tag == "table" and self._table_depth:
+            self._table_depth -= 1
+        elif tag == "span" and self._label_depth:
+            self._label_depth -= 1
+            if not self._label_depth:
+                self.labels.append(" ".join("".join(self._label_parts).split()))
+
+    def handle_data(self, data):
+        if self._noresults_depth:
+            self.noresults["text"].append(data)
+        if self._label_depth:
+            self._label_parts.append(data)
+
+    def is_empty_board(self):
+        """True only for the #noresults container that holds #noresults-message and the explicit sentence."""
+        found = self.noresults
+        return bool(found and found["message"] and SF_EMPTY_SENTENCE in " ".join("".join(found["text"]).split()))
+
+
+class SuccessFactorsJobPage(HTMLParser):
+    """The schema.org microdata of one SuccessFactors job page: title, date, every location and the full description.
+
+    The title is the span with itemprop="title"; the description is the span with class "jobdescription",
+    read through its nested tags. Nothing outside those two scopes becomes ad text.
+    """
+
+    SCOPES = ("title", "body")
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.is_posting = False
+        self.dates, self.places, self.title_parts = [], [], []
+        self.body = TextExtractor()
+        self.state = dict.fromkeys(self.SCOPES, "unseen")  # unseen, open or closed
+        self.depth = dict.fromkeys(self.SCOPES, 0)  # span nesting inside the scope
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if (attrs.get("itemtype") or "").rstrip("/") in ("http://schema.org/JobPosting", "https://schema.org/JobPosting"):
+            self.is_posting = True
+        if tag == "meta" and self.is_posting:
+            if attrs.get("itemprop") == "datePosted":
+                self.dates.append(attrs.get("content") or "")
+            elif attrs.get("itemprop") in ("streetAddress", "addressLocality"):
+                self.places.append(attrs.get("content") or "")
+        for name in self.SCOPES:
+            if self.state[name] == "open":
+                if tag == "span":
+                    self.depth[name] += 1
+                if name == "body":
+                    self.body.handle_starttag(tag, attrs.items())
+        if tag == "span" and self.is_posting:
+            if attrs.get("itemprop") == "title" and self.state["title"] == "unseen":
+                self.state["title"], self.depth["title"] = "open", 1
+            elif "jobdescription" in (attrs.get("class") or "").split() and self.state["body"] == "unseen":
+                self.state["body"], self.depth["body"] = "open", 1
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in TextExtractor.VOID:
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        for name in self.SCOPES:
+            if self.state[name] == "open":
+                if name == "body":
+                    self.body.handle_endtag(tag)
+                if tag == "span":
+                    self.depth[name] -= 1
+                    if not self.depth[name]:
+                        self.state[name] = "closed"
+
+    def handle_data(self, data):
+        if self.state["title"] == "open":
+            self.title_parts.append(data)
+        if self.state["body"] == "open":
+            self.body.handle_data(data)
+
+    def result(self):
+        """(title, text, published, location), or ValueError when the page is not a complete job posting."""
+        if not self.is_posting:
+            raise ValueError("not a SuccessFactors JobPosting microdata page")
+        if any(state != "closed" for state in self.state.values()):
+            raise ValueError("job title or description scope missing or unterminated")
+        title = " ".join("".join(self.title_parts).split())
+        text = self.body.text()
+        if not title or not text:
+            raise ValueError("empty job title or description")
+        if len(set(self.dates)) != 1:
+            raise ValueError("job posting date missing or conflicting")
+        published = successfactors_date(self.dates[0])
+        # Every location is a meta tag; the one shown first on the page is only the primary one.
+        # A posting with no place stays unspecified instead of failing.
+        places = dict.fromkeys(place.strip() for place in self.places if place.strip())
+        return title, text, published, "; ".join(places)
+
+
+def successfactors_listing(src):
+    """Map numeric ad id to URL for every result of the fixed search, checked against the declared total."""
+    parts = urllib.parse.urlsplit(src["search_url"])
+    query = [(k, v) for k, v in urllib.parse.parse_qsl(parts.query, keep_blank_values=True) if k != "startrow"]
+    found, offset, total = {}, 0, None
+    while total is None or offset < total:
+        url = urllib.parse.urlunsplit(parts._replace(query=urllib.parse.urlencode(query + [("startrow", offset)])))
+        page = SuccessFactorsListing(url)
+        markup = http_get(url)
+        page.feed(markup)
+        page.close()
+        if (page.noresults is not None or page.has_noresults_message
+                or SF_EMPTY_SENTENCE in html_to_text(markup)):
+            # The empty search page also lists unrelated recommended jobs: never read them as matches.
+            if total is None and page.is_empty_board():
+                return {}
+            raise ValueError(f"unexpected SuccessFactors no-results page at startrow={offset}")
+        if len(set(page.labels)) != 1 or not SF_LABEL.match(page.labels[0]):
+            raise ValueError("SuccessFactors listing has no single result count; not a vacancy list")
+        start, end, declared = map(int, SF_LABEL.match(page.labels[0]).groups())
+        links = {}
+        for link in page.links:
+            link = link.split("#")[0].split("?")[0]
+            target = urllib.parse.urlsplit(link)
+            id_match = re.search(r"/job/[^/]+/(\d+)/?$", target.path)
+            if (target.scheme != parts.scheme or target.netloc != parts.netloc or not id_match
+                    or links.setdefault(id_match.group(1), link) != link):
+                raise ValueError(f"invalid SuccessFactors vacancy link: {link}")  # desktop and mobile copies must agree
+        if total is None:
+            total = declared
+        if declared != total or start != offset + 1 or end > total or end < start or len(links) != end - start + 1:
+            raise ValueError(f"incomplete or inconsistent SuccessFactors listing at startrow={offset}")
+        if found.keys() & links.keys():
+            raise ValueError("duplicate SuccessFactors vacancy across pages")
+        found.update(links)
+        offset = end
+        time.sleep(1)
+    return found
+
+
+def fetch_successfactors(src):
+    """SuccessFactors career site: paginated server-rendered search, then each page's schema.org microdata."""
+    for ad_id, url in successfactors_listing(src).items():
+        job = SuccessFactorsJobPage()
+        job.feed(http_get(url))
+        job.close()
+        try:
+            title, text, published, location = job.result()
+        except ValueError as exc:
+            raise ValueError(f"{exc}: {url}") from exc
+        yield {"id": ad_id, "title": title, "employer": src.get("employer", ""), "location": location,
+               "url": url, "published": published, "text": text, "query": ""}
+        time.sleep(1)
+
+
 def fetch_folder(src):
     """Ads saved by hand as .md or .txt files, e.g. consultant assignments from a broker email or PDF."""
     folder = ROOT / src["path"]
@@ -401,7 +612,7 @@ def fetch_folder(src):
 
 
 ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech,
-            "workday": fetch_workday, "folder": fetch_folder}
+            "workday": fetch_workday, "successfactors": fetch_successfactors, "folder": fetch_folder}
 
 
 # ---------------------------------------------------------------- state
