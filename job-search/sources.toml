@@ -219,3 +219,79 @@ applied_facets = { Country = ["6a800a4736884df5826858d435650f45"] }
 location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "horse-powertrain-teamtailor"
+site = "horse-powertrain"
+type = "rss"
+employer = "Horse Powertrain"
+feeds = ["https://jobs.horse-powertrain.com/jobs.rss"]
+# 2026-11-10: 28 of 28 items complete, none in the Gothenburg area. Enabled only to discover future local ads.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+enabled = true
+
+[[source]]
+id = "rise-teamtailor"
+site = "rise"
+type = "rss"
+employer = "RISE"
+feeds = ["https://career.ri.se/jobs.rss"]
+# 2026-11-10: 22 of 22 items complete. Borås and Lund stay outside the local regex.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+enabled = true
+
+[[source]]
+id = "zenseact-teamtailor"
+site = "zenseact"
+type = "rss"
+employer = "Zenseact"
+feeds = ["https://career.zenseact.com/jobs.rss"]
+# 2026-11-10: 5 of 5 items complete. The feed city is "Gothenburg, Sweden"; a Lund-only ad fails the regex.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+enabled = true
+
+[[source]]
+id = "kognic-teamtailor"
+site = "kognic"
+type = "rss"
+employer = "Kognic"
+feeds = ["https://careers.kognic.com/jobs.rss"]
+# 2026-11-10: valid empty feed agrees with "No open positions". Live body and location checks await the first vacancy.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+enabled = true
+
+[[source]]
+id = "cochlear-workday"
+site = "cochlear"
+type = "workday"
+employer = "Cochlear"
+enabled = true
+# Verified Goteborg facet; no country facet is exposed. Sweden Remote is outside this source.
+api_url = "https://cochlear.wd3.myworkdayjobs.com/wday/cxs/cochlear/Cochlear_Careers"
+careers_url = "https://cochlear.wd3.myworkdayjobs.com/en-US/Cochlear_Careers"
+applied_facets = { locations = ["132788a5b8bb10016e7594ab27100000"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "husqvarna-workday"
+site = "husqvarna"
+type = "workday"
+employer = "Husqvarna Group"
+enabled = true
+# Verified Sweden country facet; include primary and additional locations. Jonsered is within the existing Gothenburg-area scope.
+api_url = "https://husqvarnagroup.wd3.myworkdayjobs.com/wday/cxs/husqvarnagroup/External_Career_Site"
+careers_url = "https://husqvarnagroup.wd3.myworkdayjobs.com/en-US/External_Career_Site"
+applied_facets = { locationCountry = ["6a800a4736884df5826858d435650f45"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke|jonsered'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'

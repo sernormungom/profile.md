@@ -310,6 +310,7 @@ def fetch_workday(src):
     base = src["api_url"].rstrip("/")
     careers = src["careers_url"].rstrip("/")
     offset, total = 0, None
+    omitted_total = False
     paths, ids = set(), set()
     while total is None or offset < total:
         page = http_post_json(base + "/jobs", {
@@ -320,6 +321,10 @@ def fetch_workday(src):
             raise ValueError("invalid Workday listing total")
         if total is None:
             total = page["total"]
+        elif page["total"] == 0 and offset:
+            # Some public CXS boards omit the count on later pages. Keep the
+            # original bound, then verify it again before accepting the fetch.
+            omitted_total = True
         elif page["total"] != total:
             raise ValueError("Workday listing total changed during pagination")
         rows = page.get("jobPostings")
@@ -367,6 +372,13 @@ def fetch_workday(src):
             yield {"id": posting_id, "title": title.strip(), "employer": src.get("employer", ""),
                    "location": location, "url": url, "published": published, "text": text, "query": ""}
         offset += len(rows)
+    if omitted_total:
+        check = http_post_json(base + "/jobs", {
+            "appliedFacets": src.get("applied_facets", {}), "limit": 20,
+            "offset": 0, "searchText": "",
+        })
+        if not isinstance(check, dict) or type(check.get("total")) is not int or check["total"] != total:
+            raise ValueError("Workday listing total changed during pagination")
 
 
 def fetch_folder(src):

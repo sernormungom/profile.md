@@ -35,6 +35,27 @@ def detail(number, **overrides):
 
 
 class WorkdayTests(unittest.TestCase):
+    def test_later_zero_total_uses_original_bound_and_rechecks_count(self):
+        first = {"total": 21, "jobPostings": [row(i) for i in range(20)]}
+        last = {"total": 0, "jobPostings": [row(20)]}
+        with patch.object(jobs, "http_post_json", side_effect=[first, last, first]) as post, \
+             patch.object(jobs, "http_get", side_effect=[detail(i) for i in range(21)]):
+            self.assertEqual(len(list(jobs.fetch_workday(SOURCE))), 21)
+        self.assertEqual([c.args[1]["offset"] for c in post.call_args_list], [0, 20, 0])
+
+    def test_later_zero_total_cannot_hide_missing_rows_or_changed_count(self):
+        first = {"total": 2, "jobPostings": [row(1)]}
+        cases = [
+            [first, {"total": 0, "jobPostings": []}],
+            [first, {"total": 0, "jobPostings": [row(2)]}, {"total": 1}],
+            [first, {"total": 0, "jobPostings": [row(2)]}, {"total": False}],
+        ]
+        for pages in cases:
+            with self.subTest(pages=pages), patch.object(jobs, "http_post_json", side_effect=pages), \
+                 patch.object(jobs, "http_get", side_effect=[detail(1), detail(2)]):
+                with self.assertRaises(ValueError):
+                    list(jobs.fetch_workday(SOURCE))
+
     def test_pagination_detail_and_distinct_ids(self):
         pages = [{"total": 21, "jobPostings": [row(i) for i in range(20)]},
                  {"total": 21, "jobPostings": [row(20)]}]
