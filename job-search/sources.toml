@@ -324,3 +324,43 @@ query = "Gothenburg"
 split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "beyond-gravity-rss"
+site = "beyond-gravity"
+type = "rss"
+employer = "Beyond Gravity"
+# Verified Gothenburg feed and public listing agree; normal declared-location filtering applies.
+search_url = "https://careers.beyondgravity.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "Gothenburg"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "abb-workday"
+site = "abb"
+type = "workday"
+employer = "ABB"
+# Official ABB career page links this Workday board; verified Gothenburg facet.
+# Other/future local facets need review; structured additional locations are preserved.
+api_url = "https://abb.wd3.myworkdayjobs.com/wday/cxs/abb/External_Career_Page"
+careers_url = "https://abb.wd3.myworkdayjobs.com/External_Career_Page"
+applied_facets = { locations = ["9b7397e105ea1001fa43f2216fc70000"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "vector-rss"
+site = "vector"
+type = "rss"
+employer = "Vector"
+# Public SuccessFactors keyword feed; explicit empty Gothenburg result validated 2026-11-10.
+search_url = "https://join.vector.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "Gothenburg"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
