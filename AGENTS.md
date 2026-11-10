@@ -4,6 +4,8 @@ Instructions for coding agents working in this repository.
 
 [CLAUDE.md](CLAUDE.md) is the full guide and applies to every agent, not only Claude Code: read it before working here. The skills it names live in `.claude/skills/<name>/SKILL.md`; follow their rules even if your tool does not load skills automatically.
 
+For adding/reviewing job sources, use [add-job-sources](.claude/skills/add-job-sources/SKILL.md). Codex also discovers the same skill through `.agents/skills/add-job-sources`; keep that directory a symlink to the canonical Claude-compatible skill, not a second copy.
+
 The two rules agents miss most often:
 
 - **`profile.md` is the only source of facts.** Never put a claim in a CV, cover letter, card or triage that the profile does not support.

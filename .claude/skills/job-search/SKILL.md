@@ -1,6 +1,10 @@
 ---
 name: job-search
-description: Run the consultant's job-search funnel. Collects job ads from the sites in job-search/sources.toml (Volvo Group careers, Platsbanken, saved consultant assignments), filters them, screens each new ad against job-search/match-card.md with the triage prompt, and writes a ranked report. Use it when the user wants to search for jobs or assignments, check a site for new positions, screen job ads they have saved or pasted, or add a new job site to search. Also use it when they share a PDF or email of assignments and ask which ones fit.
+description: >-
+  Run the existing job-search funnel: collect from sources.toml, filter, screen
+  against the match card and write a ranked report. Use for job searches, checking
+  configured sources and screening saved ads, PDFs or assignment emails. Use
+  add-job-sources for reviewing or integrating new collection sources.
 ---
 
 # Job search
@@ -83,21 +87,11 @@ When the user picks an ad, compare it with the full `profile.md`, not the card, 
 
 ## Adding a site
 
-For a bookmark export or several candidate sites, first follow `job-search/source-review.md` (repo-relative). Run `python3 -I bookmark_inventory.py inbox/bookmarks.html` from `job-search/` to inventory the original export locally. Test incremental coverage against the index and targeted JobTech checks before adding sources; keep every decision in the ledger. Never substitute guessed screenshot URLs for the export. Keep unrelated/private bookmarks in gitignored inputs/inventory. The first pass reviews at most six employer groups and adds no adapters. Pilot queries separately, validate extracted ads and deduplication, and screen at most 20 newly discovered ads on the subscription. `pages` requires supplied links, not automatic listing discovery. A public API requires an implemented compatible adapter; `rss` does not collect arbitrary JSON APIs.
-
-Add a `[[source]]` block to `sources.toml`. The comments at the top of that file list the fields. Choose the type:
-1. **The site has an RSS feed or a public API.** Use `rss` (SuccessFactors career sites use `/services/rss/job/?locale=en_GB&keywords=<word>`), or `jobtech` for Platsbanken. Prefer this.
-   For a verified public Workday CXS board, use `workday` with `api_url`, `careers_url` and `applied_facets` as documented in `sources.toml`. It collects paginated listings and full details; an arbitrary JSON API is not an RSS source. Preserve any existing saved-page IDs with source-local RSS `id_overrides` rather than importing duplicate numeric identities.
-   When a SuccessFactors keyword feed misses verified location-search results, use `successfactors` with the full `search_url`. Validate the server-rendered count, pagination, microdata dates, every job-page location and complete descriptions. An empty search can contain unrelated recommendations: accept only the validated empty-search structure; ambiguous signals must fail visibly. SKF's Gothenburg search is the first validated source; other sites need their own compatibility checks.
-2. **Ad pages contain the text in their HTML, but the list is built with JavaScript.** Use `pages` with a links file. Find the CSS class of the ad body (`content_class`) by fetching one ad page.
-3. **No usable pages,** because of a login or because everything is rendered by JavaScript. Ask the user to save the ads with the browser (Claude in Chrome works) as files in `inbox/manual/`.
-4. **A new kind of site that recurs.** Write a new adapter function in `jobsearch.py` that yields the same fields as the others, and register it in `ADAPTERS`.
-
-Don't get around a login, a paywall or an API that refuses access (401 or 403). Use option 3 instead.
-
-Run `fetch --source <new id>` once, and check the counts and a few ad files before screening.
-
-Repeat the targeted fetch to check stable identities. `FAILED` includes unresolved feed caps and partial or malformed responses; these do not advance the source's success watermark. A valid empty board can be accepted, with live body validation pending its first vacancy. Missing locality remains unspecified and needs screening; it is never an inferred employer location. The six sources validated on 2026-11-09 and their coverage limits are recorded in `source-review.md`.
+Use [add-job-sources](../add-job-sources/SKILL.md), shared by Codex and Claude Code,
+for source selection, platform investigation, integration and validation. It owns
+that procedure; this skill owns routine collection, screening and reporting.
+Keep source outcomes in `job-search/source-review.md` (repo-relative). Do not add
+collection complexity to compensate for employer posting errors.
 
 ## Keep the card current
 
