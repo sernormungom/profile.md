@@ -124,6 +124,19 @@ education:
   qualification: Extend Codex Workflows
   needs_review: false
   ended: 2026-10
+- education_id: e_bluedot_future_of_ai
+  type: course
+  institution: BlueDot Impact
+  qualification: Future of AI
+  description: Current AI systems, possible paths towards AGI, and the societal implications of AI.
+  needs_review: false
+  ended: 2026-11
+- education_id: e_bluedot_agi_strategy
+  type: course
+  institution: BlueDot Impact
+  qualification: AGI Strategy
+  description: In progress as of 2026-11-10; not yet completed.
+  needs_review: false
 - education_id: e_volvo_iso26262
   type: training
   institution: Volvo Group
