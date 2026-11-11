@@ -305,6 +305,73 @@ def fetch_jobtech(src):
             time.sleep(1)
 
 
+def fetch_eightfold(src):
+    """Read the public Eightfold PCS search and each position's full description."""
+    base = src["api_url"].rstrip("/")
+
+    def data_at(url):
+        envelope = json.loads(http_get(url, "application/json"))
+        if (not isinstance(envelope, dict) or type(envelope.get("status")) is not int
+                or envelope["status"] != 200 or not isinstance(envelope.get("data"), dict)):
+            raise ValueError("invalid Eightfold response")
+        error = envelope.get("error")
+        if not isinstance(error, dict) or error.get("message") or error.get("body"):
+            raise ValueError("Eightfold response reports an error")
+        return envelope["data"]
+
+    offset, total, seen = 0, None, set()
+    while total is None or offset < total:
+        params = {"domain": src["domain"], "query": src.get("query", ""),
+                  "location": src["search_location"], "start": offset, "sort_by": "relevance"}
+        page = data_at(base + "/search?" + urllib.parse.urlencode(params))
+        count, rows = page.get("count"), page.get("positions")
+        if type(count) is not int or count < 0:
+            raise ValueError("invalid Eightfold listing total")
+        if total is None:
+            total = count
+        elif count != total:
+            raise ValueError("Eightfold listing total changed during pagination")
+        if not isinstance(rows, list) or offset + len(rows) > total:
+            raise ValueError("invalid Eightfold listing page")
+        if not rows and offset < total:
+            raise ValueError("incomplete Eightfold listing: empty page before total")
+        for row in rows:
+            posting_id = row.get("id") if isinstance(row, dict) else None
+            if type(posting_id) is not int or posting_id <= 0 or posting_id in seen:
+                raise ValueError("invalid or duplicate Eightfold posting ID")
+            seen.add(posting_id)
+            detail = data_at(base + "/position_details?" + urllib.parse.urlencode({
+                "position_id": posting_id, "domain": src["domain"], "hl": "en",
+            }))
+            if type(detail.get("id")) is not int or detail["id"] != posting_id:
+                raise ValueError("Eightfold detail ID does not match listing")
+            title, description = detail.get("name"), detail.get("jobDescription")
+            if any(not isinstance(value, str) or not value.strip() for value in (title, description)):
+                raise ValueError("incomplete Eightfold posting detail")
+            text = html_to_text(description)
+            if not text:
+                raise ValueError("empty Eightfold posting description")
+            locations = detail.get("locations")
+            if not isinstance(locations, list) or any(not isinstance(place, str) for place in locations):
+                raise ValueError("invalid Eightfold posting locations")
+            location = "; ".join(dict.fromkeys(place.strip() for place in locations if place.strip()))
+            stamp = detail.get("postedTs")
+            if type(stamp) is not int or stamp <= 0:
+                raise ValueError("invalid Eightfold posting date")
+            try:
+                published = dt.datetime.fromtimestamp(stamp, dt.timezone.utc).date().isoformat()
+            except (ValueError, OverflowError, OSError) as exc:
+                raise ValueError("invalid Eightfold posting date") from exc
+            url = detail.get("publicUrl")
+            if (not isinstance(url, str) or urllib.parse.urlparse(url).scheme not in {"http", "https"}
+                    or not urllib.parse.urlparse(url).netloc):
+                raise ValueError("invalid Eightfold posting URL")
+            yield {"id": str(posting_id), "title": title.strip(), "employer": src.get("employer", ""),
+                   "location": location, "url": url, "published": published, "text": text,
+                   "query": src.get("query", "")}
+        offset += len(rows)
+
+
 def fetch_workday(src):
     """Read the public Workday CXS listing and each posting's full detail."""
     base = src["api_url"].rstrip("/")
@@ -612,7 +679,7 @@ def fetch_folder(src):
 
 
 ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech,
-            "workday": fetch_workday, "successfactors": fetch_successfactors, "folder": fetch_folder}
+            "eightfold": fetch_eightfold, "workday": fetch_workday, "successfactors": fetch_successfactors, "folder": fetch_folder}
 
 
 # ---------------------------------------------------------------- state

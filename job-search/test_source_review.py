@@ -25,6 +25,78 @@ bookmarks = module("bookmark_inventory")
 jobs = module("jobsearch")
 
 
+class EightfoldFetchTests(unittest.TestCase):
+    SRC = {"api_url": "https://jobs.ericsson.com/api/pcsx", "domain": "ericsson.com",
+           "search_location": "Göteborg,Sweden", "employer": "Ericsson"}
+
+    @staticmethod
+    def envelope(data, **changes):
+        return json.dumps({"status": 200, "error": {"message": "", "body": ""},
+                           "data": data, **changes})
+
+    @staticmethod
+    def detail(posting_id=563121777443049, **changes):
+        # Representative field names/types from the public Ericsson PCS detail response.
+        return {"id": posting_id, "name": "CI CD DevOps Engineer",
+                "locations": ["Göteborg,Västra Götaland,Sweden", "Stockholm,Stockholm,Sweden"],
+                "postedTs": 1793287582,
+                "publicUrl": f"https://jobs.ericsson.com/careers/job/{posting_id}",
+                "jobDescription": "<p>Join our Team</p><p>Fluent English, both written and spoken.</p>",
+                **changes}
+
+    def test_full_details_pagination_and_all_declared_locations(self):
+        first, second = 563121777443049, 563121777432060
+        responses = [self.envelope({"count": 2, "positions": [{"id": first, "name": "Listing summary"}]}),
+                     self.envelope(self.detail(first)),
+                     self.envelope({"count": 2, "positions": [{"id": second}]}),
+                     self.envelope(self.detail(second))]
+        with patch.object(jobs, 'http_get', side_effect=responses) as get:
+            ads = list(jobs.fetch_eightfold(self.SRC))
+        self.assertEqual([ad['id'] for ad in ads], [str(first), str(second)])
+        self.assertEqual(ads[0]['title'], 'CI CD DevOps Engineer')
+        self.assertEqual(ads[0]['published'], '2026-10-29')
+        self.assertIn('Göteborg,Västra Götaland,Sweden', ads[0]['location'])
+        self.assertIn('Stockholm,Stockholm,Sweden', ads[0]['location'])
+        self.assertIn('Fluent English, both written and spoken.', ads[0]['text'])
+        self.assertIn('start=1', get.call_args_list[2].args[0])
+        self.assertIn('position_id=' + str(first), get.call_args_list[1].args[0])
+
+    def test_valid_empty_listing(self):
+        with patch.object(jobs, 'http_get', return_value=self.envelope({'count': 0, 'positions': []})) as get:
+            self.assertEqual(list(jobs.fetch_eightfold(self.SRC)), [])
+        self.assertEqual(get.call_count, 1)
+
+    def test_bad_envelopes_and_incomplete_listing_fail(self):
+        bad = [self.envelope({}, status=500), self.envelope({}, error={'message': 'failed', 'body': ''}),
+               self.envelope(None), self.envelope({'count': True, 'positions': []}),
+               self.envelope({'count': 1, 'positions': []}),
+               self.envelope({'count': 0, 'positions': [{'id': 1}]}),
+               self.envelope({'count': 1, 'positions': [{'id': True}]})]
+        for response in bad:
+            with self.subTest(response=response), patch.object(jobs, 'http_get', return_value=response):
+                with self.assertRaises(ValueError):
+                    list(jobs.fetch_eightfold(self.SRC))
+
+    def test_changed_total_and_duplicate_id_fail(self):
+        posting_id = 563121777443049
+        for last in [{'count': 3, 'positions': [{'id': 563121777432060}]},
+                     {'count': 2, 'positions': [{'id': posting_id}]}, {'count': 2, 'positions': []}]:
+            responses = [self.envelope({'count': 2, 'positions': [{'id': posting_id}]}),
+                         self.envelope(self.detail()), self.envelope(last)]
+            with self.subTest(last=last), patch.object(jobs, 'http_get', side_effect=responses):
+                with self.assertRaises(ValueError):
+                    list(jobs.fetch_eightfold(self.SRC))
+
+    def test_incomplete_or_mismatched_detail_fails(self):
+        for changes in [{'id': 12}, {'jobDescription': ''}, {'jobDescription': '<script>hidden</script>'},
+                        {'name': None}, {'locations': 'Göteborg'}, {'postedTs': True}, {'publicUrl': '/relative'}]:
+            responses = [self.envelope({'count': 1, 'positions': [{'id': 563121777443049}]}),
+                         self.envelope(self.detail(**changes))]
+            with self.subTest(changes=changes), patch.object(jobs, 'http_get', side_effect=responses):
+                with self.assertRaises(ValueError):
+                    list(jobs.fetch_eightfold(self.SRC))
+
+
 class SourceReviewTests(unittest.TestCase):
     def test_report_does_not_label_clearance_exclusions_as_location(self):
         index = {"test:1": {"uid": "test:1", "status": "excluded", "site": "test",

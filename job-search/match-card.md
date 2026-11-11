@@ -1,6 +1,6 @@
 # Match card: Norberto Munoz Gomez
 
-Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/archetypes.md) on 2026-11-05 (profile of 2026-10-30; archetypes consolidated on 2026-11-05 without changing the track classifications), for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
+Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/archetypes.md) on 2026-11-11 (profile updated 2026-11-10; archetypes of 2026-11-05), for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
 
 ## Conditions
 - Based in Gothenburg, Sweden. Onsite, hybrid and remote all work. Temporary travel of up to 3 months is fine; relocating away from Gothenburg is not.
@@ -21,6 +21,7 @@ Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/arc
 - BEng in Electronic Engineering.
 - Not a CS or Data Science degree: score such gates as partial.
 - Coursera: Deep Learning and AI for Medicine specialisations.
+- BlueDot Impact: Future of AI completed November 2026; AGI Strategy in progress as of 2026-11-10, not completed. These courses do not establish production AI or model-training experience.
 - Six Sigma Green Belt (General Electric): recorded in the profile but not yet verified, so treat a Green Belt gate as partial.
 
 ## Strongest evidence (Owned or Taught)

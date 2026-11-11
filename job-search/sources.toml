@@ -14,6 +14,8 @@
 #            applied_facets = { ... }     listing facets verified against the official board
 #   successfactors search_url             fixed server-rendered search URL; discovers every result,
 #                                         paginates startrow and reads full microdata job pages
+#   eightfold api_url, domain,            public PCS listing/detail API, company domain and
+#            search_location              ordinary location-search string (optional query)
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
 # exclude_employer = [...] (regexes on the advertiser's name), exclude_text = [...] with text_exceptions
@@ -364,3 +366,30 @@ split_terms = ["title:engineer", "title:manager", "title:software", "title:lead"
 location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "nvidia-workday"
+site = "nvidia"
+type = "workday"
+employer = "NVIDIA"
+# Verified official Gothenburg facet includes primary and additional declared locations.
+api_url = "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite"
+careers_url = "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"
+applied_facets = { locations = ["c18da66b8c3f01e4f8939069de3534f8"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+
+[[source]]
+id = "ericsson-eightfold"
+site = "ericsson"
+type = "eightfold"
+employer = "Ericsson"
+# Official public career API; location search uses the board's ordinary matching.
+api_url = "https://jobs.ericsson.com/api/pcsx"
+domain = "ericsson.com"
+search_location = "Göteborg,Sweden"
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
