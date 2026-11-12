@@ -372,6 +372,75 @@ def fetch_eightfold(src):
         offset += len(rows)
 
 
+def fetch_verama(src):
+    """Collect Verama's public consultant requests using its ordinary location search."""
+    base = src["api_url"].rstrip("/")
+    page, total, seen = 0, None, set()
+    while total is None or len(seen) < total:
+        params = {"page": page, "size": 20, "sort": "firstDayOfApplications,DESC",
+                  **src["params"]}
+        listing = json.loads(http_get(base + "?" + urllib.parse.urlencode(params), "application/json"))
+        if not isinstance(listing, dict):
+            raise ValueError("invalid Verama listing")
+        count, rows = listing.get("totalElements"), listing.get("content")
+        if type(count) is not int or count < 0 or not isinstance(rows, list):
+            raise ValueError("invalid Verama listing total/content")
+        if total is None:
+            total = count
+        if count != total or listing.get("number") != page:
+            raise ValueError("Verama pagination changed total or page")
+        if len(seen) + len(rows) > total or (not rows and len(seen) < total):
+            raise ValueError("incomplete Verama pagination")
+        for row in rows:
+            posting_id = row.get("id") if isinstance(row, dict) else None
+            if type(posting_id) is not int or posting_id <= 0 or posting_id in seen:
+                raise ValueError("invalid or duplicate Verama posting ID")
+            seen.add(posting_id)
+            detail = json.loads(http_get(f"{base}/{posting_id}", "application/json"))
+            if not isinstance(detail, dict) or detail.get("id") != posting_id:
+                raise ValueError("Verama detail ID does not match listing")
+            title, description = detail.get("title"), detail.get("description")
+            if any(not isinstance(v, str) or not v.strip() for v in (title, description)):
+                raise ValueError("incomplete Verama posting detail")
+            text = html_to_text(description)
+            if not text:
+                raise ValueError("empty Verama description")
+            places = detail.get("locations")
+            if not isinstance(places, list) or any(not isinstance(p, dict) for p in places):
+                raise ValueError("invalid Verama locations")
+            location = "; ".join(dict.fromkeys(
+                p.get("name") or ", ".join(filter(None, [p.get("city"), p.get("country")]))
+                for p in places))
+            # These structured fields add requirements and conditions absent from the prose.
+            for label, key in [("Requirements", "requirements"), ("Start date", "startDate"),
+                               ("End date", "endDate"), ("Application deadline", "lastDayOfApplications"),
+                               ("Hours per week", "hoursPerWeek"), ("Seniority", "level")]:
+                value = detail.get(key)
+                if value is not None:
+                    text += f"\n\n{label}: {html_to_text(str(value))}"
+            for item in detail.get("skills") or []:
+                text += f"\nSkill ({item['priority']}): {item['skill']['name']}"
+            for item in detail.get("languages") or []:
+                text += f"\nLanguage ({item['level']}): {item['language']}"
+            for item in detail.get("questions") or []:
+                text += f"\nQuestion ({'mandatory' if item['mandatory'] else 'optional'}): {item['question']}"
+            fee = detail.get("brokerFee") or {}
+            if fee.get("description"):
+                text += "\n\nBroker fee: " + fee["description"]
+            if detail.get("remoteness") is not None:
+                text += f"\n\nRemote work: {detail['remoteness']}%"
+            # Use the public card's advertiser; do not expose an unpromoted end client.
+            employer_keys = (["legalEntityClient", "client"] if detail.get("promoteClient") else [])
+            employer_keys += ["administratorLegalEntityClient", "origin"]
+            employer = next(((detail.get(key) or {}).get("name") for key in employer_keys
+                             if (detail.get(key) or {}).get("name")), "")
+            yield {"id": str(posting_id), "title": title.strip(), "employer": employer,
+                   "location": location, "url": f"{src['careers_url'].rstrip('/')}/{posting_id}",
+                   "published": detail.get("firstDayOfApplications") or "", "text": text,
+                   "query": src["params"].get("location.city", "")}
+        page += 1
+
+
 def fetch_workday(src):
     """Read the public Workday CXS listing and each posting's full detail."""
     base = src["api_url"].rstrip("/")
@@ -679,6 +748,7 @@ def fetch_folder(src):
 
 
 ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech,
+            "verama": fetch_verama,
             "eightfold": fetch_eightfold, "workday": fetch_workday, "successfactors": fetch_successfactors, "folder": fetch_folder}
 
 

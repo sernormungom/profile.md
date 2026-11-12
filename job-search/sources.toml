@@ -17,6 +17,7 @@
 #   eightfold api_url, domain,            public PCS listing/detail API, company domain and
 #            search_location              ordinary location-search string (optional query)
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
+#   verama   api_url, careers_url, params public listing/detail API and dotted location filters
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
 # exclude_employer = [...] (regexes on the advertiser's name), exclude_text = [...] with text_exceptions
 # (regexes on the ad body; a match next to an exception word, e.g. "meriterande", is ignored). The exclude_*
@@ -137,6 +138,18 @@ id = "manual"
 site = "manual"
 type = "folder"
 path = "inbox/manual"
+
+[[source]]
+# Owner-requested consulting-assignment exception, 2026-11-12; other sources retain their scope.
+id = "verama-gothenburg"
+site = "verama"
+type = "verama"
+api_url = "https://app.verama.com/api/public/job-requests"
+careers_url = "https://app.verama.com/job-requests"
+params = { "location.city" = "Gothenburg", "location.country" = "Sweden", "location.countryCode" = "SWE", "location.locationId" = "here:cm:namedplace:20298983", "location.radius" = 20000 }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
 
 [[source]]
 id = "polestar-teamtailor"
@@ -393,3 +406,28 @@ search_location = "Göteborg,Sweden"
 location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+
+[[source]]
+id = "sentient-teamtailor"
+site = "sentient"
+type = "rss"
+employer = "Sentient"
+feeds = ["https://career.sentientplus.com/jobs.rss"]
+# Official hiring page links this board; valid empty feed/listing on 2026-11-11.
+# Validate the first live vacancy's full body and declared location when it appears.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+
+[[source]]
+id = "aptiv-workday"
+site = "aptiv"
+type = "workday"
+employer = "Aptiv"
+# Official Aptiv Sweden search links this Workday board; verified Sweden country facet.
+api_url = "https://aptiv.wd5.myworkdayjobs.com/wday/cxs/aptiv/APTIV_CAREERS"
+careers_url = "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS"
+applied_facets = { Country = ["6a800a4736884df5826858d435650f45"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'

@@ -1,0 +1,134 @@
+{
+  "id": 86094,
+  "title": "Vehicle Dynamics Engineer - Ride & Handling",
+  "description": "<p>For our client, we&#39;re looking for a <strong>Vehicle Dynamics Engineer - Ride &amp; Handling</strong></p><p></p><p><strong>Description</strong>\nYou will be part of the Chassis &amp; Vehicle dynamics team and be responsible for the vehicle&#39;s chassis character and road-going composure.\n\n- Chassis Targeting &amp; Brand DNA: Support of Attribute Leader in definition of technical requirements for the vehicle&#39;s chassis behavior, including steering feel, roll gradients and the specific balance between primary and secondary ride comfort.\n- Subjective Assessment: Vehicle evaluation through rigorous testing using the VSR (Vehicle Subjective Rating) scale.\n- Chassis &amp; Kinematics Calibration: Refinement of hardware and software components - such as damper tuning, bushing compliance and EPAS - in car and driving simulator.\n- System Integration: Oversee the synergy between the vehicle&#39;s tires, suspension geometry, and braking system.\n- Teamwork: Close cooperation with chassis concept team to align suspension system performance and target setting for future chassis platform concepts.\n- Risk Mitigation: Identification and communication of potential conflicts that could impact the final vehicle dynamics or target fulfillment.\n<strong>\nRequired Skills</strong>\n- Degree in mechanical, mechatronics or automotive engineering.\n- Minimum 3 years of Chassis in-car tuning.\n- Driving license B.\n- Advanced test driver license from known test tracks.\n- Advanced CANape tool knowledge.\n- Excellent technical project- and time management.\n- Possibilities for regular business travel.\n- Ability to work collaboratively with diverse teams in a high-performance environment.\n\n<strong>Personal attributes</strong></p><p>• Positive, creative and “find a way” attitude.</p><p>• Fast adapting.</p><p>• Self-driven.</p><p>• Strong analytical and problem-solving skills.</p><p>• Service minded but also not afraid to ask for help if needed.</p><p>• Eager to learn and apply new ways of working.</p><p>• Excellent communication skills.</p><p>• Able to collaborate in a team but also able to work independent.</p><p>• Interested in new technologies.</p><p>• Openness and awareness of Asian, European, and foreign cultures.</p><p></p><p><strong>This assignment includes travel; </strong></p><p><strong>China: approximately 6-8 trips per year (2-3 weeks each)</strong></p><p><strong>Europe: approximately 2 trips per year </strong></p>",
+  "requirements": null,
+  "locations": [
+    {
+      "city": "Gothenburg",
+      "country": "Sweden",
+      "countryCode": "SWE",
+      "suggestedPhoneCode": "SE",
+      "name": "Gothenburg, Sweden",
+      "locationId": "here:cm:namedplace:20298983",
+      "coordinates": {
+        "lat": 57.70068,
+        "lon": 11.96822
+      }
+    }
+  ],
+  "startDate": "2026-12-01",
+  "endDate": "2027-05-31",
+  "lastDayOfApplications": "2026-11-17T23:59:00+01:00",
+  "firstDayOfApplications": "2026-11-11T16:29:25.233465+01:00",
+  "hoursPerWeek": 40.0,
+  "level": "REGULAR",
+  "promoteClient": false,
+  "client": null,
+  "brokerFee": {
+    "description": "For the duration of this assignment Ework Services (0,9 %) will be deducted from the total amount invoiced.",
+    "percentage": 0.9
+  },
+  "origin": {
+    "name": "Ework Group AB"
+  },
+  "skills": [
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Mechanical Engineering Degree"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Technical project management"
+      }
+    },
+    {
+      "priority": "PREFERRED",
+      "skill": {
+        "name": "Team Center Automotive"
+      }
+    },
+    {
+      "priority": "PREFERRED",
+      "skill": {
+        "name": "Advanced Test Driver License"
+      }
+    },
+    {
+      "priority": "PREFERRED",
+      "skill": {
+        "name": "CAD (Catia)"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Advanced CANape tool"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Vehicle subjective rating (VSR)"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Chassis In-Car Tuning"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Chassis & kinematics calibration"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "Driving License B"
+      }
+    },
+    {
+      "priority": "REQUIRED",
+      "skill": {
+        "name": "System integration"
+      }
+    }
+  ],
+  "languages": [
+    {
+      "level": "GOOD_KNOWLEDGE",
+      "language": "EN"
+    }
+  ],
+  "questions": [
+    {
+      "mandatory": true,
+      "question": "Do you have at least 3 years of hands-on experience with chassis in-car tuning, including ride & handling development?"
+    },
+    {
+      "mandatory": true,
+      "question": "Have you worked with vehicle dynamics calibration activities such as damper tuning, steering feel (EPAS), suspension setup, or kinematics optimization?"
+    },
+    {
+      "mandatory": true,
+      "question": "Do you hold a valid Category B driving license and an advanced test driver certification from a recognized proving ground or test track?"
+    },
+    {
+      "mandatory": true,
+      "question": "Are you available for frequent international travel, including 6-8 trips to China per year (typically 2-3 weeks each) and occasional travel within Europe?"
+    }
+  ],
+  "remoteness": 0,
+  "legalEntityClient": {
+    "name": "Geely Technology Europe AB"
+  },
+  "administratorLegalEntityClient": {
+    "name": "Ework Group AB"
+  }
+}
