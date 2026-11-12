@@ -445,6 +445,19 @@ class TriagePromptContractTests(unittest.TestCase):
             self.assertIn(verdict, self.system_section, f"verdict {verdict!r} missing from the prompt")
         self.assertEqual(jobs.TRIAGE_SCHEMA["properties"]["verdict"]["enum"], list(jobs.VERDICTS))
 
+    def test_automotive_tenure_guidance_survives_card_substitution(self):
+        system, _ = jobs.triage_prompts()
+        # The card previously overrode adjacent-evidence guidance with an automatic failure.
+        self.assertNotIn('Any "N+ years in automotive" gate with N ≥ 3 fails', system)
+        self.assertIn('An automotive-years requirement alone must not force `fail`', system)
+        self.assertIn('use `partial` when the card supports relevant safety-critical', system)
+        self.assertIn('not subject to the adjacent-role half-of-N rule', system)
+        self.assertIn('never relabel other-industry years as automotive', system)
+        self.assertIn('specific technical gates separate', system)
+        self.assertIn('Management of DO-178 teams does not establish hands-on', system)
+        self.assertIn('Direct automotive: about 1.7 years', system)
+        self.assertIn('CF34 aviation recertification support', system)
+
 
 if __name__ == "__main__":
     unittest.main()
