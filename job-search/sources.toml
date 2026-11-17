@@ -16,6 +16,7 @@
 #                                         paginates startrow and reads full microdata job pages
 #   eightfold api_url, domain,            public PCS listing/detail API, company domain and
 #            search_location              ordinary location-search string (optional query)
+#   talentsoft search_url               public TalentSoft listing, following normal pagination/full details
 #   folder   path = "inbox/..."           .md/.txt files, one ad per file, saved by hand
 #   verama   api_url, careers_url, params public listing/detail API and dotted location filters
 # Optional: employer, location_regex (drop ads whose location does not match), exclude_title = [...],
@@ -428,6 +429,42 @@ employer = "Aptiv"
 api_url = "https://aptiv.wd5.myworkdayjobs.com/wday/cxs/aptiv/APTIV_CAREERS"
 careers_url = "https://aptiv.wd5.myworkdayjobs.com/APTIV_CAREERS"
 applied_facets = { Country = ["6a800a4736884df5826858d435650f45"] }
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "alstom-rss"
+site = "alstom"
+type = "rss"
+employer = "Alstom"
+search_url = "https://jobsearch.alstom.com/services/rss/job/?locale=en_GB&keywords={q}"
+query = "Gothenburg"
+split_terms = ["title:engineer", "title:manager", "title:software", "title:lead", "title:data", "title:specialist", "title:developer"]
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "qualcomm-eightfold"
+site = "qualcomm"
+type = "eightfold"
+employer = "Qualcomm"
+api_url = "https://careers.qualcomm.com/api/pcsx"
+domain = "qualcomm.com"
+search_location = "Gothenburg,Sweden"
+# Valid empty public location search; validate live ad details on first arrival.
+location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
+exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
+text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'
+
+[[source]]
+id = "toyota-talentsoft"
+site = "toyota-material-handling"
+type = "talentsoft"
+employer = "Toyota Material Handling Europe"
+# Official Europe vacancy page links this TalentSoft board; verified Sweden country facet.
+search_url = "https://tmhe-cand.talent-soft.com/job/list-of-all-jobs.aspx?changefacet=1&facet_JobCountry=175"
 location_regex = '(?i)g(ö|o)teborg|gothenburg|hisings backa|torslanda|mölndal|partille|kungälv|lerum|härryda|mölnlycke'
 exclude_text = ['(?i)säkerhetsprövning|säkerhetsklass|säkerhetsskydd|försvarssekretess|skyddsklass|security clearance|säkerhetsprövad|registerkontroll', '(?i)svenskt medborgarskap|svensk medborgare|swedish citizen']
 text_exceptions = '(?i)meriterande|\bplus\b|advantage|bonus|önskvärt|nice to have|preferred|fördel|vid behov'

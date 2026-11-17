@@ -728,6 +728,136 @@ def fetch_successfactors(src):
         time.sleep(1)
 
 
+class TalentsoftPage(HTMLParser):
+    """Capture advertised vacancy links, pagination and labelled detail fields."""
+    VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.links = []
+        self.next = None
+        self.fields = {}
+        self.active = []
+        self.depth = 0
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        ident = attrs.get('id', '')
+        key = None
+        if ident.endswith('Pagination_TotalOffers'):
+            key = 'total'
+        elif ident.endswith('divOfferReference'):
+            key = 'reference'
+        elif ident.endswith('divMajDate'):
+            key = 'published'
+        elif ident in {'contenu-ficheoffre', 'fldjobdescription_jobtitle',
+                       'fldjobdescription_description1', 'fldlocation_joblocation'}:
+            key = ident
+        if tag == 'a':
+            classes = attrs.get('class', '').split()
+            if 'ts-offer-card__title-link' in classes:
+                href = attrs.get('href', '')
+                if not re.search(r'/job/job-[^/?]+_(\d+)\.aspx$', href):
+                    raise ValueError('unrecognised TalentSoft vacancy link')
+                self.links.append(href)
+            if attrs.get('title', '').lower() == 'next page of results':
+                self.next = attrs.get('href')
+        raw = self.get_starttag_text()
+        for _, _, parts in self.active:
+            parts.append(raw)
+        if key:
+            if key in self.fields or any(k == key for k, _, _ in self.active):
+                raise ValueError('duplicate TalentSoft detail field')
+            self.active.append((key, self.depth, []))
+        if tag not in self.VOID:
+            self.depth += 1
+
+    def handle_endtag(self, tag):
+        if tag in self.VOID:
+            return
+        self.depth -= 1
+        remaining = []
+        for key, depth, parts in self.active:
+            if depth == self.depth:
+                self.fields[key] = ''.join(parts)
+            else:
+                parts.append('</' + tag + '>')
+                remaining.append((key, depth, parts))
+        self.active = remaining
+
+    def handle_data(self, text):
+        # Re-escape data so html_to_text does not interpret literal '<' as markup.
+        text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        for _, _, parts in self.active:
+            parts.append(text)
+
+
+def talentsoft_parse_page(markup):
+    page = TalentsoftPage()
+    page.feed(markup)
+    if page.active:
+        raise ValueError('incomplete TalentSoft HTML')
+    return page
+
+
+def fetch_talentsoft(src):
+    """Discover one configured country/listing scope and fetch complete public details."""
+    url = src['search_url']
+    origin = urllib.parse.urlparse(url).netloc
+    total, seen, visited = None, set(), set()
+    while url:
+        if url in visited or urllib.parse.urlparse(url).netloc != origin:
+            raise ValueError('invalid TalentSoft pagination URL')
+        visited.add(url)
+        page = talentsoft_parse_page(http_get(url))
+        count = re.fullmatch(r'(\d+) vacancy\(s\)', html_to_text(page.fields.get('total', '')).strip())
+        if not count:
+            raise ValueError('missing TalentSoft listing total')
+        count = int(count.group(1))
+        if total is None:
+            total = count
+        if count != total:
+            raise ValueError('TalentSoft listing total changed during pagination')
+        if len(seen) + len(page.links) > total or (not page.links and len(seen) < total):
+            raise ValueError('incomplete TalentSoft listing')
+        for href in page.links:
+            posting_id = re.search(r'_(\d+)\.aspx$', href).group(1)
+            if posting_id in seen:
+                raise ValueError('duplicate TalentSoft posting ID')
+            seen.add(posting_id)
+            detail_url = urllib.parse.urljoin(url, href)
+            if urllib.parse.urlparse(detail_url).netloc != origin:
+                raise ValueError('invalid TalentSoft detail URL')
+            fields = talentsoft_parse_page(http_get(detail_url)).fields
+            text = lambda key: html_to_text(fields.get(key, '')).strip()
+            title, description, body = (text(k) for k in ('fldjobdescription_jobtitle',
+                                        'fldjobdescription_description1', 'contenu-ficheoffre'))
+            reference = re.search(r'\b\d{4}-(\d+)\b', text('reference'))
+            if not reference or reference.group(1) != posting_id:
+                raise ValueError('TalentSoft detail ID does not match listing')
+            if not title or not description or not body:
+                raise ValueError('incomplete TalentSoft posting detail')
+            stamp = re.search(r'\b(\d{2}/\d{2}/\d{4})\b', text('published'))
+            if not stamp:
+                raise ValueError('missing TalentSoft publication date')
+            published = dt.datetime.strptime(stamp.group(1), '%d/%m/%Y').date().isoformat()
+            yield {'id': posting_id, 'title': title, 'employer': src.get('employer', ''),
+                   'location': text('fldlocation_joblocation'), 'url': detail_url,
+                   'published': published, 'text': body, 'query': src['search_url']}
+        next_url = urllib.parse.urljoin(url, page.next) if page.next else None
+        if next_url:
+            # TalentSoft omits country facets from next-page links, relying on
+            # browser state. Keep the configured scope for stateless requests.
+            parts = urllib.parse.urlsplit(next_url)
+            params = urllib.parse.parse_qs(urllib.parse.urlsplit(src['search_url']).query)
+            params.update(urllib.parse.parse_qs(parts.query))
+            next_url = urllib.parse.urlunsplit(parts._replace(
+                query=urllib.parse.urlencode(params, doseq=True)))
+        if (len(seen) < total) != bool(next_url):
+            raise ValueError('incomplete TalentSoft pagination')
+        url = next_url
+
+
 def fetch_folder(src):
     """Ads saved by hand as .md or .txt files, e.g. consultant assignments from a broker email or PDF."""
     folder = ROOT / src["path"]
@@ -748,7 +878,7 @@ def fetch_folder(src):
 
 
 ADAPTERS = {"rss": fetch_rss, "pages": fetch_pages, "jobtech": fetch_jobtech,
-            "verama": fetch_verama,
+            "verama": fetch_verama, "talentsoft": fetch_talentsoft,
             "eightfold": fetch_eightfold, "workday": fetch_workday, "successfactors": fetch_successfactors, "folder": fetch_folder}
 
 
