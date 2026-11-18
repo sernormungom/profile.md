@@ -369,7 +369,8 @@ career_history:
             matching. AI-assisted software development: LLMs generated most code/tests under developer direction.'
         - evidence_id: ev_confirmed_cv_pilot_observations
           type: artifact
-          text: 'Pilot use: 2 Talent Advisors, 3 consultants. Informal timings: ~15 minutes from job description
+          text: 'Pilot use (as of 2026-11, growing): 2 Talent Advisors and 4 consultants, including the owner and
+            another consultant who also act as administrators. Informal timings: ~15 minutes from job description
             to generated CV; one colleague took ~30 minutes to enter a LinkedIn base CV and produce a job-specific
             Mpya-format CV.'
         - evidence_id: ev_confirmed_cv_collaboration_handover
@@ -633,6 +634,63 @@ career_history:
           personal goal management.'
       collaboration:
         context: [multicultural]
+  - role_group_id: rg_personal_projects
+    organization:
+      name: Personal projects
+      country_code: SE
+    display_role_title: Personal projects
+    started: 2026-08
+    employment_type: other
+    blocks:
+    - block_id: b_photo_sorting
+      role_title: Photo-library sorting (Spec Kit trial)
+      started: 2026-08
+      ended: 2026-09
+      block_type: technical_delivery
+      domains: [spec-driven development, AI-assisted software development, file and metadata processing]
+      languages: [Python]
+      tools: [GitHub Spec Kit, Claude Code, ExifTool, IrfanView, SQLite, FastAPI, Click, pytest, ruff]
+      projects:
+      - project_id: p_photo_sorting
+        name: Photo-library sorting on a home NAS
+        stack: [Python, ExifTool, SQLite, xxHash, FastAPI, Click, pytest]
+        limitations: Personal project, built to trial GitHub Spec Kit with Claude Code; split of code written by
+          owner versus coding agents unspecified. NAS model differs between sources (owner recalls WD My Cloud; repository
+          notes say WD My Book Live). Two setup tasks (SMB dialect check, tool-installation check) and one review-presentation
+          task remain open. Measured results against the spec's success criteria (for example dating accuracy) not
+          recorded. Commit history 2026-08-09 to 2026-09-16.
+        evidence_items:
+        - evidence_id: ev_photo_sorting_pipeline
+          type: artifact
+          text: 'Python CLI and local FastAPI review UI that ingest photo/video sets from any source folder (used with
+            a Mac mini, an old MacBook, a phone and an old hard disk) into a year/month library on a home NAS. Runs
+            preview by default, journal every change append-only and resume after interruption.'
+          source_id: s_photo_sort_repo
+        - evidence_id: ev_photo_sorting_nas
+          type: artifact
+          text: 'NAS constraints: treated the old Western Digital NAS as a plain file store, with hashing, metadata
+            extraction and the SQLite index on the Windows client. Inbox-to-library moves are same-share renames that
+            change only file-system metadata, so no data crosses the network.'
+          source_id: s_photo_sort_repo
+        - evidence_id: ev_photo_sorting_legacy
+          type: artifact
+          text: 'Date inference for media back to 1995: ranked evidence from ExifTool (batch mode), sidecar files,
+            filename and folder patterns and modification time; rejects camera-reset dates; infers dates from neighbouring
+            photos; sends unresolved files to a human review queue. Legacy-format inventory classifies which old
+            formats open in IrfanView.'
+          source_id: s_photo_sort_repo
+        - evidence_id: ev_photo_sorting_review
+          type: artifact
+          text: 'Duplicate and damage handling: tiered content identity (size, quick fingerprint, xxHash); duplicate
+            purge and corrupted-file repair only with per-group human approval, moving files to a local quarantine
+            instead of deleting. Generates chronological IrfanView playlists for visual review.'
+          source_id: s_photo_sort_repo
+        - evidence_id: ev_photo_sorting_spec_driven
+          type: artifact
+          text: 'Spec-driven delivery: project constitution with safety invariants (protected library, refuse on
+            doubt, test-first for file operations), specification, plan and requirement-to-test traceability matrix;
+            100 of 103 tasks complete, 71 test files (contract, integration, unit).'
+          source_id: s_photo_sort_repo
   - role_group_id: rg_confirmed_career_break_sweden
     organization:
       name: Career break (relocation to Sweden)
@@ -991,5 +1049,7 @@ sources:
   s_handbook_skill: Owner-supplied Claude summary of current skill; implementation not independently inspected.
   s_publication_lookup: Checked 2026-10-30 against Crossref (DOIs), Raúl Suárez's IOC technical-report index, the
     UPC IOC/EOL congress list and the ADINGOR CIO 2005 proceedings; owner confirmed authorship of all.
+  s_photo_sort_repo: Public repository github.com/sernormungom/photo_sort, inspected 2026-11-18 (README, constitution,
+    technical notes, tasks, placement and dating modules, test tree); tool names confirmed by owner.
   s_owner_cv_publications: Owner's earlier CV publication list (supplied 2026-10-30); not independently found.
 ```
