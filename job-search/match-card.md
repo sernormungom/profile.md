@@ -1,6 +1,6 @@
 # Match card: Norberto Munoz Gomez
 
-Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/archetypes.md) on 2026-11-12 (profile updated 2026-11-10; archetypes of 2026-11-05), for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
+Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/archetypes.md) on 2026-11-24 (profile updated 2026-11-18; archetypes of 2026-11-05), for the job-ad triage step only. It is not a source of facts for CVs. When the profile or any archetype changes, regenerate this card and update the date. Search scope: direct employment, with selective technical people-management roles (owner instruction, 2026-10-29); this is a search preference, not a profile fact.
 
 ## Conditions
 - Based in Gothenburg, Sweden. Onsite, hybrid and remote all work. Temporary travel of up to 3 months is fine; relocating away from Gothenburg is not.
@@ -45,9 +45,10 @@ Compressed from [profile.md](../profile.md) and [tracks A–F](../archetypes/arc
   - Innovation and AI-adoption lead for 3 embedded teams; patent coordination.
 - **Ericsson:** embedded C++ on Digital Units, GoogleTest and Gerrit CI, root-cause analysis on complex configuration.
 - **Applied AI (2026):**
-  - Built a CV-tailoring platform (FastAPI, PostgreSQL, Docker, GitHub Actions CI, AWS ECS/ECR, Terraform changes) that combines LLM generation with deterministic matching. Piloted by 5 users.
+  - Built a CV-tailoring platform (FastAPI, PostgreSQL, Docker, GitHub Actions CI, AWS ECS/ECR, Terraform changes) that combines LLM generation with deterministic matching. Pilot use as of 2026-11, growing: 2 Talent Advisors and 4 consultants.
   - Built source-grounded handbook generation/review workflows using coding agents, review gates, budgets and resumable ledgers. Workflow details are owner-supplied reports, not independently verified implementation; chat/CLI orchestration remains experimental. No production orchestration platform or technically enforced human approval is established.
   - Did AI-adoption roadmap work and ran a DPIA for privacy.
+  - Personal project (Aug–Sep 2026): photo-library sorting tool in Python (FastAPI, Click, SQLite, ExifTool, pytest) built with GitHub Spec Kit and Claude Code, spec-driven with a requirement-to-test traceability matrix. Personal trial, not professional experience; the split between his code and the coding agents' is unspecified.
 
 ## Known gaps (do not score these as met)
 - No in-vehicle or rig calibration; no TargetLink or Embedded Coder hands-on (generated code was only integrated into builds); no INCA or dSPACE.
