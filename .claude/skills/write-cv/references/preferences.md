@@ -57,6 +57,7 @@ Starting headers per track. Adapt them when the ad stresses something else, and 
 "Used in a draft" means the header appeared in a draft, but the user has not explicitly approved it.
 
 Column rules:
+- **Write the columns as rows, not a table (added 2026-11-24, from the user's feedback).** In drafts and in chat, give each column as one line: the header in bold, a colon, then its items separated by commas, for example `**Embedded Software:** Embedded C, Embedded C++, Fail-operational SW`. The rendered CV still shows three columns; this only changes how drafts present them.
 - **Nine items per column.** Equal counts give equal column heights in the template.
 - **Each item fits on one rendered line.** Wrapped items once made one column twice as tall as the others. Aim for 19 characters or fewer. Items of 20–22 characters fit only without a long word: in the Momang template "Interface specs (IRS)" fitted but "Requirement breakdown" wrapped. Prefer abbreviations ("Req. breakdown") to wrapping.
 - **Use the same product spelling** in the columns and the tools lines (for example "GoogleTest / gMock" in both).
